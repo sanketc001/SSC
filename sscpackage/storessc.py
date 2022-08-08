@@ -23,7 +23,7 @@ class StoreSSC:
                         CREATE TABLE {tname} (
                         {tablevarbody}
                         );
-                        """.format(tname=tname, tablevarbody=tablevarbody)
+                        """.format(tname=tablename, tablevarbody=args)
         dbtbl_create = """
                         USE sscdb;
                         CREATE TABLE {0} (

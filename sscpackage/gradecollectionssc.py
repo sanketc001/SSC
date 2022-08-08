@@ -1,14 +1,12 @@
 import time
 import datetime as dt
-import fetchlogssc
-import sys
 import json
-import os
-import os.path
-import fetchshelfssc_mod
-import gradeincomessc
+import gradesectiononessc
+import gradesectiontwossc
+import gradesectionthreessc
+import storessc
 
-class GradeCollection:
+class GradeCollectionSSC:
     """
     Grade Process
     1. Create dictionary of all parse shelves
@@ -17,10 +15,22 @@ class GradeCollection:
     3. Financial Ratio Grading - Balance Sheet Metrics
 
     """
-    def __init__(self):
-        self.totalpoints = 0
-        self.points = 0
-        self.gradeincome = gradeincomessc.GradeIncomeSSC()
+    def __init__(self, ticker, parsecombossc, uniqueidssc):
+        self.totalpointsssc = 0
+        self.pointsssc = 0
+        self.ticker = ticker
+        self.parsecombossc = parsecombossc
+        self.uniqueidssc = uniqueidssc
+        self.gradesectionone = gradesectiononessc.GradeOneSSC()
+        self.gradesectiontwo = gradesectiontwossc.GradeTwoSSC()
+        self.gradesectionthree = gradesectionthreessc.GradeThreeSSC()
+
+    def gradecollectionssc(self):
+        GSONESSC = self.gradesectionone.gradeonessc(self.ticker, self.parsecombossc, self.uniqueidssc)
+        GSTWOSSC = self.gradesectiontwo.gradetwossc(self.ticker, self.parsecombossc, self.uniqueidssc)
+        GSTHREESSC = self.gradesectionthree.gradethreessc(self.ticker, self.parsecombossc, self.uniqueidssc)
+
+
 
 class GradeSSC:
     def __init__(self):

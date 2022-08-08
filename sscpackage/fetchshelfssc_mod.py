@@ -1,4 +1,5 @@
 import shelve
+import fetchlogssc
 
 class FetchShelfSSC:
     """
@@ -26,6 +27,9 @@ class FetchShelfSSC:
         filedb[fetchstorename] = fetch_data
         filedb.close()
         self.fetchstorename = fetchstorename
+        FS_SSC = fetchlogssc.FetchLogSSC()
+        FS_SSC.ssc_fetchlogwrite(self.fetchstorename)
+        del FS_SSC
         return fetchstorename
 
     def fetchdbpull(self, *args, **kwargs):
