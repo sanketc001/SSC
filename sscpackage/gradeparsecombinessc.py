@@ -1,5 +1,5 @@
 """
-Class combines all parsed data into a dictionary for access by all grading classes.  Instatiated as a
+Class combines all parsed data into a dictionary for access by all grading classes.  Instantiated as a
 GradeCollectionSSC.attribute
 """
 import parsearssc
@@ -8,8 +8,10 @@ import parseincomessc
 import parseindssc
 import parsesectorssc
 import parsevalssc
+import time
 
-class GradeParseCombineSSC():
+
+class GradeParseCombineSSC:
     def gradeparsecombinessc(self, ticker, logfileidssc):
         PAR = parsearssc.ParseAr()
         PBAL = parsebalancessc.ParseBalance()
@@ -31,15 +33,19 @@ class GradeParseCombineSSC():
         parsecombo = {}
 
         def incbalqualssc(datadictssc):
-            returndictqualssc = []
+            returndictqualssc = {}
             for key in datadictssc.keys():
-                for val in datadictssc[key]:
-                    if val != 0:
+                templist = []
+                for val in range(len(datadictssc[key])):
+                    if datadictssc[key][val] != 0:
                         continue
                     else:
-                        returndictqualssc.append({str(key) + " " + str(datadictssc[key].index(val)):
-                                                  str(datadictssc[key].index(val))})
+                        templist.append(val)
                         continue
+                if templist:
+                    returndictqualssc[key] = templist
+                else:
+                    continue
 
             return returndictqualssc
 
@@ -54,9 +60,9 @@ class GradeParseCombineSSC():
                                            isinstance(datadictssc[key][x], str)]
             return returndictratiossc
 
-
-
         incasratiodict = ratiolisterssc(incdat)
+
+
 
 
         parsecombo[corekeycombo] = {"AR": ardat, "baldat": baldat, "incdat": incdat,
@@ -67,6 +73,5 @@ class GradeParseCombineSSC():
         return parsecombo
 
 
-
-
-
+if __name__ == "__main__":
+    testlogvaridssc = 'NVDA__Y8bdxbfeWiliz3B'

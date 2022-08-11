@@ -14,5 +14,6 @@ class GradeSectionSSC:
     def gradesectionprinter(self, metricid, result):
         pass
 
-    def increasingaward
+    def increasingaward(self):
+        pass
 
