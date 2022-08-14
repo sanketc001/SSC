@@ -1,10 +1,12 @@
 import time
 import datetime as dt
 import json
-import gradesectiononessc
+import grade_gtltyoyssc
 import gradesectiontwossc
 import gradesectionthreessc
+import awardsystemssc
 import storessc
+
 
 class GradeCollectionSSC:
     """
@@ -15,21 +17,29 @@ class GradeCollectionSSC:
     3. Financial Ratio Grading - Balance Sheet Metrics
 
     """
+
     def __init__(self, ticker, parsecombossc, uniqueidssc):
         self.totalpointsssc = 0
         self.pointsssc = 0
         self.ticker = ticker
         self.parsecombossc = parsecombossc
         self.uniqueidssc = uniqueidssc
-        self.gradesectionone = gradesectiononessc.GradeOneSSC()
+        self.gradesectionone = grade_gtltyoyssc.GTLTYoYSSC()
         self.gradesectiontwo = gradesectiontwossc.GradeTwoSSC()
         self.gradesectionthree = gradesectionthreessc.GradeThreeSSC()
+        self.awardsystem = awardsystemssc.AwardSystemSSC().fetchawardsystem(industry=self.parsecombossc["Industry"],
+                                                                            sector=self.parsecombossc["Sector"])
 
     def gradecollectionssc(self):
-        GSONESSC = self.gradesectionone.gradeonessc(self.ticker, self.parsecombossc, self.uniqueidssc)
-        GSTWOSSC = self.gradesectiontwo.gradetwossc(self.ticker, self.parsecombossc, self.uniqueidssc)
-        GSTHREESSC = self.gradesectionthree.gradethreessc(self.ticker, self.parsecombossc, self.uniqueidssc)
+        pointbin = []
+        pointbin.append(self.gradesectionone.gtltmetricsgradessc(self.ticker, self.parsecombossc, self.uniqueidssc,
+                                                                 self.awardsystem))
 
+        pointbin.append(self.gradesectiontwo.gradetwossc(self.ticker, self.parsecombossc, self.uniqueidssc,
+                                                         self.awardsystem))
+
+        pointbin.append(self.gradesectionthree.gradethreessc(self.ticker, self.parsecombossc, self.uniqueidssc,
+                                                             self.awardsystem))
 
 
 class GradeSSC:
@@ -865,7 +875,7 @@ class GradeSSC:
             ar_gr_denom = 0
             ar_gr_final = 0
 
-            with open("../ardata.json", 'r') as arsheets:
+            with open("obsolete/ardata.json", 'r') as arsheets:
                 ardata = json.load(arsheets)
                 ardata_dict = ardata
                 ar_lists.append([ardata_dict["pageViews"][keys] for keys in ardata_dict["pageViews"] if

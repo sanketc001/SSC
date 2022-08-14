@@ -1,7 +1,6 @@
 """
 Create 'hand-made' list of ratios from income statements and balance sheet elements, e.g. "Current Ratio"
 """
-import gradeparsecombinessc
 
 class ParseRatioCreateSSC:
     def parseratiocreatesssc(self, incomedictssc, balancedictssc, incdatqual, baldatqual):
@@ -25,7 +24,7 @@ class ParseRatioCreateSSC:
 
         dictratiosscverbal = {
             "Current Ratio": ["Total Current Assets", "Total Current Liabilities"],
-            "Acid Test Ratio": ["]Total Current Assets", "Inventory", "Total Current Liabilities"],
+            "Acid Test Ratio": ["Total Current Assets", "Inventory", "Total Current Liabilities"],
             "Cash Ratio": ["Cash", "Total Current Liabilities"],
             "Debt Ratio": ["Total Liabilities", "Total Assets"],
             "Debt To Equity Ratio": ["Total Stockholder Equity", "Total Liabilities"],
@@ -36,35 +35,56 @@ class ParseRatioCreateSSC:
                                      "Common Stock"],
         }
 
+        finalratiodictssc = {}
+        interimratiodictssc = {}
+
+        varnamepulltemplist = {}
         for key in dictratiossclamb.keys():
-            calctempdict = {}
-            calctemplist = []
-            varnamepulltemplist = {}
-            flag = False
+            calctemplistforzipper = []
             for varname in dictratiosscverbal[key]:
                 if varname in incomedictssc.keys():
                     datatemplistssc = incomedictssc[varname]
-                    if incdatqual[varname]:
+                    if varname in incdatqual.keys():
                         qualtemplistssc = incdatqual[varname]
-                        varnamepulltemplist[varname]: [datatemplistssc, qualtemplistssc]
-                        flag = True
+                        varnamepulltemplist[str(varname)] = [datatemplistssc, qualtemplistssc]
+                        calctemplistforzipper.append(varnamepulltemplist[varname])
                         continue
                     else:
-                        varnamepulltemplist[varname]: [datatemplistssc]
+                        varnamepulltemplist[str(varname)] = [datatemplistssc]
+                        calctemplistforzipper.append(datatemplistssc)
                         continue
                 elif varname in balancedictssc.keys():
                     datatempballistssc = balancedictssc[varname]
-
-                    if baldatqual[varname]:
+                    if varname in baldatqual.keys():
                         qualbaltemplistssc = baldatqual[varname]
-                        varnamepulltemplist[varname]: [datatempballistssc, qualbaltemplistssc]
-                        flag = True
+                        calctemplistforzipper.append([datatempballistssc, qualbaltemplistssc])
+                        varnamepulltemplist[str(varname)] = [datatempballistssc, qualbaltemplistssc]
                         continue
                     else:
-                        varnamepulltemplist[varname]: [datatempballistssc]
-            for varname in dictratiosscverbal:
-                if flag:
-                    calctempdict[varname] = list(map(dictratiossclamb[varname], ))
+                        varnamepulltemplist[str(varname)] = [datatempballistssc]
+                        calctemplistforzipper.append(list(datatempballistssc))
+                        continue
+            interimratiodictssc[key] = calctemplistforzipper
+
+        for ratio in dictratiossclamb.keys():
+            resssc = []
+            for iteration in list(zip(*interimratiodictssc[ratio])):
+                resssc.append(dictratiossclamb[ratio](*iteration))
+            finalratiodictssc[ratio] = resssc
+
+        return finalratiodictssc
 
 
 if __name__ == "__main__":
+    import gradeparsecombinessc
+    ticker = 'NVDA'
+    logidssc = 'Y8bdxbfeWiliz3B'
+    GS = gradeparsecombinessc.GradeParseCombineSSC()
+    parsecombo = GS.gradeparsecombinessc(ticker, logidssc)['NVDA__Y8bdxbfeWiliz3B']
+    PS = ParseRatioCreateSSC()
+    incomedictssc = parsecombo["incdat"]
+    balancedictssc = parsecombo["baldat"]
+    incqualdat = parsecombo["incdatqual"]
+    baldatqual = parsecombo["baldatqual"]
+    restestssc = PS.parseratiocreatesssc(incomedictssc=incomedictssc, balancedictssc=balancedictssc,
+                                         incdatqual=incqualdat,  baldatqual=baldatqual)

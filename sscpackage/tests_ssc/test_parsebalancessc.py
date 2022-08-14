@@ -1,6 +1,6 @@
 import unittest
 import parsebalancessc
-import shelfpeekssc
+import shelverssc
 import shelve
 
 
@@ -8,7 +8,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_parsebalancesssc(self):
         PBSSC_test = parsebalancessc.ParseBalance()
-        SPEEK_SSC = shelfpeekssc.FetchPeekSSC()
+        SPEEK_SSC = shelfpeekssc.ShelverSSC()
         namevar = "test__test2__test3__test4"
         pbalancepath = r'C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\parsebalanceshelf'
         testval1 = str(('2021-06-30', '2020-06-30', '2019-06-30', '2018-06-30'))

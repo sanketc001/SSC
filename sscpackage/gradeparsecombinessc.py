@@ -2,13 +2,14 @@
 Class combines all parsed data into a dictionary for access by all grading classes.  Instantiated as a
 GradeCollectionSSC.attribute
 """
+import gradeparsecombinessc
 import parsearssc
 import parsebalancessc
 import parseincomessc
 import parseindssc
 import parsesectorssc
 import parsevalssc
-import time
+import parseratiocreatessc
 
 
 class GradeParseCombineSSC:
@@ -62,13 +63,15 @@ class GradeParseCombineSSC:
 
         incasratiodict = ratiolisterssc(incdat)
 
-
+        PRC = parseratiocreatessc.ParseRatioCreateSSC()
+        finratiodict = PRC.parseratiocreatesssc(incomedictssc=incdat, balancedictssc=baldat, incdatqual=incdatqual,
+                                                baldatqual=baldatqual)
 
 
         parsecombo[corekeycombo] = {"AR": ardat, "baldat": baldat, "incdat": incdat,
                                     "Industry": inddat, "Sector": secdat, "valdat": valdat,
                                     "baldatqual": baldatqual, "incdatqual": incdatqual,
-                                    "incasratiodict": incasratiodict}
+                                    "incasratiodict": incasratiodict, "finratiodict": finratiodict}
 
         return parsecombo
 
