@@ -126,3 +126,7 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
             if len(valueholderlist) == 3:
                 increasinggtltssc(*valueholderlist)
 
+
+if __name__ == "__main__":
+# TODO: add testing
+
