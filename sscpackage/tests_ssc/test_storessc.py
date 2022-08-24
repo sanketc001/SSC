@@ -41,6 +41,7 @@ class Test_StoreSSC(unittest.TestCase):
         self.assertEqual(connect_calls, mock_methodvar.method_calls)
 
         assert mock_parse is sscpackage.storessc.sscp.GradeSSC
+        # TODO: fix reference to GradeSSC need to start at 'storessc' and use gradecollectionssc
         assert mock_json is sscpackage.storessc.json
         assert mock_methodvar is sscpackage.storessc.mysql.connector
 
