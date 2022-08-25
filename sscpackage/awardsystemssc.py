@@ -91,7 +91,6 @@ class AwardSystemSSC(shelverssc.ShelverSSC):
         self.add_shelvesubelement(self.shelvename, systemkeywordssc=awardsystemname_ssc,
                                   coremetricssc=metricgroupkeyword, data=data)
 
-# TODO: create separate unittest for awardsystemssc
 if __name__ == "__main__":
     AWssc = AwardSystemSSC()
     print(AWssc.awardsystemsprimer())

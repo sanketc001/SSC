@@ -13,7 +13,7 @@ class MyTestCase(unittest.TestCase):
         testkeyfalse = "KEYFALSETEST"
         testpath = r'C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\test_shelfpeekssc'
 
-        SHELFPEEKSSC = shelverssc.ShelverSSC()
+        SHELFPEEKSSC = shelfpeekssc.ShelverSSC()
         testres1 = SHELFPEEKSSC.fetchpeek(path=testpath, keysearch=testkeytrue)
         self.assertTrue(testres1)
         testres2 = SHELFPEEKSSC.fetchpeek(path=testpath, keysearch=testkeyfalse)
