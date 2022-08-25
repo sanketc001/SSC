@@ -28,21 +28,30 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
         def isenoughdatassc(nameval):
             if nameval in localavoidmetricgtltinc.keys():
                 inlinecount = len(localavoidmetricgtltinc[nameval])
-                if inlinecount > 2:
-                    return False
+                if inlinecount >= 2:
+                    return nameval, inlinecount, "incdat"
                 else:
-                    return True, inlinecount, "incdat"
+                    return False
             elif nameval in localavoidmetricgtltbal.keys():
                 inlinecount = len(localavoidmetricgtltbal[nameval])
-                if inlinecount > 2:
-                    return False
+                if inlinecount >= 2:
+                    return nameval, inlinecount, "baldat"
                 else:
-                    return True, inlinecount, "baldat"
+                    return False
+            elif nameval in localincdatssc:
+                inlinecount = len(localincdatssc[nameval])
+                return nameval, inlinecount, "incdat"
+            elif nameval in localbaldatssc.keys():
+                inlinecount = len(localbaldatssc[nameval])
+                return nameval, inlinecount, "baldat"
             else:
-                return False, False, False
+                return False
 
         def increasinggtltssc(nameval, count, statement):
-            pointsper, weightind = localawardsectiongtlt[nameval]
+            pointsper = int(localawardsectiongtlt[nameval]["points"])
+            weightind = int(localawardsectiongtlt[nameval]["weight"])
+            print(pointsper)
+            print(weightind)
             respointrunner = 0
             if statement == "incdat":
                 stringerbegin = """
@@ -118,16 +127,23 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
                               "Weight = {weightind}".format(nameval=nameval, pointsper=pointsper, respointrunner=respointrunner, weightind=weightind)
                 stringertotal = stringerbegin + stringermid + stringerend
                 runningtotalgtlt[nameval] = {"Base Points": restotpoints, "Current Points": respointrunner}
-                return stringertotal
+                return stringertotal, runningtotalgtlt
 
+        outputstoressc = {}
         for nameval in self.increasingsections:
-            valueholderlist = []
-            valueholderlist.append(isenoughdatassc(nameval))
-            if len(valueholderlist) == 3:
-                increasinggtltssc(*valueholderlist)
+            print(nameval)
+            print(isenoughdatassc(nameval))
+            if isenoughdatassc(nameval):
+                valueholderlist = [*isenoughdatassc(nameval)]
+                print(valueholderlist)
+                if len(valueholderlist) == 3:
+                    outputstoressc[nameval] = [increasinggtltssc(*valueholderlist)]
+            else:
+                continue
 
-
+        return outputstoressc
 
 if __name__ == "__main__":
-    #  TODO: add testing
+    pass
 
+    # TODO: add testing
