@@ -92,6 +92,7 @@ class StoreSSC:
         except mysql.connector.Error as e:
             print("Error in ssc_st - TRY1: " + str(e))
 
+# TODO: fix store process, GradeSSC is no longer the default location for stored info.  Use gradecollectionssc.
     def log_entry(self, ticker_entry="MSFT", res_json="DEFAULTJSON"):
         self.insert_db_table = "INSERT INTO logentry (ticker, fetchdata, idict, bdict, grade, elist, arlist) VALUES(" + '"' \
                                + str(ticker_entry) + '",' + json.dumps(res_json) + ',' \
