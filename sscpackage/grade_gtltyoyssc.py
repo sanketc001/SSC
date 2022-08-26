@@ -100,7 +100,7 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
                 stringermid = ""
                 sourcevalsbal = localbaldatssc[nameval]
                 for indexno in range(count-1, 0, -1):
-                    if sourcevalsbal[indexno+1] > sourcevalsbal[indexno]:
+                    if sourcevalsbal[indexno-1] > sourcevalsbal[indexno]:
                         stringermid += "\nYear {indexnoplus}: {indexnoplusvalue} is '>' Year {indexnoval}" \
                                        " :: Year {indexno} ---* + {pointsper} Point".format(indexnoplus= indexno-1,
                                                                                             indexnoplusvalue=sourcevalsbal[indexno-1],
