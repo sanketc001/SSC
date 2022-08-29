@@ -2,7 +2,7 @@ import time
 import datetime as dt
 import json
 import grade_gtltyoyssc
-import gradesectiontwossc
+import grade_gtltratioyoyssc
 import gradesectionthreessc
 import awardsystemssc
 import storessc
@@ -25,7 +25,7 @@ class GradeCollectionSSC:
         self.parsecombossc = parsecombossc
         self.uniqueidssc = uniqueidssc
         self.gradesectionone = grade_gtltyoyssc.GTLTYoYSSC()
-        self.gradesectiontwo = gradesectiontwossc.GradeTwoSSC()
+        self.gradesectiontwo = grade_gtltratioyoyssc.GTLTYoYRatioSSC()
         self.gradesectionthree = gradesectionthreessc.GradeThreeSSC()
         self.awardsystem = awardsystemssc.AwardSystemSSC().fetchawardsystem(industry=self.parsecombossc["Industry"],
                                                                             sector=self.parsecombossc["Sector"])
@@ -35,8 +35,8 @@ class GradeCollectionSSC:
         pointbin.append(self.gradesectionone.gtltmetricsgradessc(self.ticker, self.parsecombossc, self.uniqueidssc,
                                                                  self.awardsystem))
 
-        pointbin.append(self.gradesectiontwo.gradetwossc(self.ticker, self.parsecombossc, self.uniqueidssc,
-                                                         self.awardsystem))
+        pointbin.append(self.gradesectiontwo.grade_gtltyoyratiossc(self.ticker, self.parsecombossc, self.uniqueidssc,
+                                                                   self.awardsystem))
 
         pointbin.append(self.gradesectionthree.gradethreessc(self.ticker, self.parsecombossc, self.uniqueidssc,
                                                              self.awardsystem))

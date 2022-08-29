@@ -11,8 +11,6 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
         self.increasingsections = ["Total Revenue", "Net Income", "Gross Margin", "Operating Margin", "Net Margin",
                                    "Gross Profit", "EBIT", "Operating Income", "Net Income From Continuing Ops",
                                    "Income Before Tax", "Research & Development", "Total Assets", "Retained Earnings"]
-        self.decreasingsections = ["Selling, General & Administrative", "Other Operating Expenses", "Interest Expense",
-                                   "Total Operating Expenses", "Cost Of Revenue", "Total Other Income Expense Net"]
         self.printerdictssc = {}
         self.gradestore = {}
 
@@ -106,65 +104,6 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
                 runningtotalgtlt[nameval] = {"Base Points": restotpoints, "Current Points": respointrunner}
 
             return runningtotalgtlt
-
-        def decreasinggtltssc(nameval, count, statement):
-            pointsper = int(localawardsectiongtlt[nameval]["points"])
-            weightind = int(localawardsectiongtlt[nameval]["weight"])
-            print(pointsper)
-            print(weightind)
-            respointrunner = 0
-            if statement == "incdat":
-                sourcevalsinc = localincdatssc[nameval]
-                for indexno in range(count-1, 0, -1):
-                    keyforprint = "{nameval} - Year {yearnew} | Year {yearold}".format(nameval=nameval,
-                                                                                       yearnew=indexno - 1,
-                                                                                       yearold=indexno)
-                    if sourcevalsinc[indexno-1] < sourcevalsinc[indexno]:
-                        respointrunner += pointsper
-                        inlinesymbol = ">"
-                    else:
-                        inlinesymbol = "<"
-
-                    valueforprint = "{yearnew} {inlinesymbol} {yearold} POINTS " \
-                                    "{respointrunner} POINTVAL {pointsper}".format(yearnew=sourcevalsinc[indexno-1],
-                                                                                   inlinesymbol=inlinesymbol,
-                                                                                   yearold=sourcevalsinc[indexno],
-                                                                                   respointrunner=respointrunner,
-                                                                                   pointsper=pointsper).split(" ")
-                    self.printerdictssc[str(keyforprint)] = valueforprint
-
-                respointrunner *= weightind
-                restotpoints = 1 * (count-1)
-                restotpoints *= weightind
-                runningtotalgtlt[nameval] = {"Base Points": restotpoints, "Current Points": respointrunner}
-
-            elif statement == "baldat":
-                sourcevalsbal = localbaldatssc[nameval]
-                for indexno in range(count-1, 0, -1):
-                    keyforprint = "{nameval} - Year {yearnew} | Year {yearold}".format(nameval=nameval,
-                                                                                       yearnew=indexno - 1,
-                                                                                       yearold=indexno)
-                    if sourcevalsbal[indexno-1] < sourcevalsbal[indexno]:
-                        respointrunner += pointsper
-                        inlinesymbol = ">"
-                    else:
-                        inlinesymbol = "<"
-
-                    valueforprint = "{yearnew} {inlinesymbol} {yearold} POINTS " \
-                                    "{respointrunner} POINTVAL {pointsper}".format(yearnew=sourcevalsbal[indexno-1],
-                                                                                   inlinesymbol=inlinesymbol,
-                                                                                   yearold=sourcevalsbal[indexno],
-                                                                                   respointrunner=respointrunner,
-                                                                                   pointsper=pointsper).split(" ")
-                    self.printerdictssc[keyforprint] = valueforprint
-
-                respointrunner *= weightind
-                restotpoints = 1 * (count-1)
-                restotpoints *= weightind
-                runningtotalgtlt[nameval] = {"Base Points": restotpoints, "Current Points": respointrunner}
-
-            return runningtotalgtlt
-
 
         outputstoressc = {}
         for nameval in self.increasingsections:
