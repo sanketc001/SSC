@@ -25,6 +25,8 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
         runindustryssc = parsecombossc["Industry"]
         self.printprimer(self.sectionname, ticker, uniqueidssc, runsectorssc, runindustryssc)
 
+
+
         def isenoughdatassc(nameval):
             if nameval in localavoidmetricgtltinc.keys():
                 inlinecount = len(localavoidmetricgtltinc[nameval])
