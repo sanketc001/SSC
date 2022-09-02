@@ -3,6 +3,7 @@ Grade the Income Statements
 """
 import grade_gtltyoyssc
 import gradesheetprintssc
+import itertools
 
 class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
     def __init__(self):
@@ -50,6 +51,9 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
                 return False
 
         def increasinggtltssc(nameval, count, statement):
+            print(nameval)
+            print(count)
+            print(statement)
             pointsper = int(localawardsectiongtlt[nameval]["points"])
             weightind = int(localawardsectiongtlt[nameval]["weight"])
             print(pointsper)
@@ -57,22 +61,21 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
             respointrunner = 0
             if statement == "incdat":
                 sourcevalsinc = localincdatssc[nameval]
-                for indexno in range(count-1, 0, -1):
-                    keyforprint = "{nameval} - Year {yearnew} | Year {yearold}".format(nameval=nameval,
-                                                                                       yearnew=indexno - 1,
-                                                                                       yearold=indexno)
-                    if sourcevalsinc[indexno-1] > sourcevalsinc[indexno]:
+                for oldyear, newyear in itertools.pairwise(reversed(localincdatssc[nameval])):
+                    print(newyear)
+                    print(oldyear)
+                    keyforprint = [nameval, "Year", str(sourcevalsinc.index(newyear)), "|", "Year",
+                                   str(sourcevalsinc.index(oldyear))]
+
+                    if newyear > oldyear:
                         respointrunner += pointsper
                         inlinesymbol = ">"
                     else:
                         inlinesymbol = "<"
 
-                    valueforprint = "{yearnew} {inlinesymbol} {yearold} POINTS " \
-                                    "{respointrunner} POINTVAL {pointsper}".format(yearnew=sourcevalsinc[indexno-1],
-                                                                                   inlinesymbol=inlinesymbol,
-                                                                                   yearold=sourcevalsinc[indexno],
-                                                                                   respointrunner=respointrunner,
-                                                                                   pointsper=pointsper).split(" ")
+                    valueforprint = [newyear, inlinesymbol, oldyear, "POINTS", respointrunner, "POINTVAL",
+                                     pointsper]
+
                     self.printerdictssc[str(keyforprint)] = valueforprint
 
                 respointrunner *= weightind
@@ -82,23 +85,20 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
 
             elif statement == "baldat":
                 sourcevalsbal = localbaldatssc[nameval]
-                for indexno in range(count-1, 0, -1):
-                    keyforprint = "{nameval} - Year {yearnew} | Year {yearold}".format(nameval=nameval,
-                                                                                       yearnew=indexno - 1,
-                                                                                       yearold=indexno)
-                    if sourcevalsbal[indexno-1] > sourcevalsbal[indexno]:
+                for oldyear, newyear in itertools.pairwise(localbaldatssc[nameval]):
+                    keyforprint = [nameval, "Year", str(sourcevalsbal.index(newyear)), "|", "Year",
+                                   str(sourcevalsbal.index(oldyear))]
+
+                    if newyear > oldyear:
                         respointrunner += pointsper
                         inlinesymbol = ">"
                     else:
                         inlinesymbol = "<"
 
-                    valueforprint = "{yearnew} {inlinesymbol} {yearold} POINTS " \
-                                    "{respointrunner} POINTVAL {pointsper}".format(yearnew=sourcevalsbal[indexno-1],
-                                                                                   inlinesymbol=inlinesymbol,
-                                                                                   yearold=sourcevalsbal[indexno],
-                                                                                   respointrunner=respointrunner,
-                                                                                   pointsper=pointsper).split(" ")
-                    self.printerdictssc[keyforprint] = valueforprint
+                    valueforprint = [newyear, inlinesymbol, oldyear, "POINTS", respointrunner, "POINTVAL",
+                                     pointsper]
+
+                    self.printerdictssc[str(keyforprint)] = valueforprint
 
                 respointrunner *= weightind
                 restotpoints = 1 * (count-1)

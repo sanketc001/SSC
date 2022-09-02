@@ -14,22 +14,23 @@ class GTLTYoYRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
     def grade_gtltyoyratiossc(self, ticker, parsecombo, uniqueid, awardsystem):
         runningtotalgtlt = {}
         localawardsectiongtlt = awardsystem['GTLT']
-        localratiodict = parsecombo['incasratiodcit']
+        localratiodict = parsecombo['incasratiodict']
 
 
         for rationame in self.asratioincreasingsections:
             pointsper = localawardsectiongtlt[rationame]["Points"]
-            for recentv, b in itertools.pairwise(reversed(localratiodict[rationame])):
+            for recenty, oldyear in itertools.pairwise(reversed(localratiodict[rationame])):
                 respointrunner = 0
 
-                if a > b:
+                if recenty > oldyear:
                     respointrunner += pointsper
                     inlinesymbol = ">"
                 else:
                     inlinesymbol = "<"
 
-                    valueforprint = [str(a), inlinesymbol, str(b), "POINTS", str(respointrunner), "POINTVAL",
+                    valueforprint = [str(recenty), inlinesymbol, str(oldyear), "POINTS", str(respointrunner), "POINTVAL",
                                      str(pointsper)]
+
 
 
 
