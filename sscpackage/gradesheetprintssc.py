@@ -14,6 +14,13 @@ class GradeSheetPrintSSC():
         self.instancepath = ""
         self.logfilename = ""
 
+    def setsheetnamesscgr(self, ticker):
+        curdatessc = datetime.datetime.today().strftime("%d_%m_%y")
+        self.sheetnamesscgr = ticker + "__" + curdatessc
+
+    def setinstancepath(self, ticker, uniquerunid):
+        self.instancepath = self.permpathtoexcelssc + str(ticker) + "__" + str(uniquerunid) + '.xlsx'
+
     def printprimer(self, sectionname, ticker, uniquerunid, sectorssc, industryssc):
         curdatessc = datetime.datetime.today().strftime("%d_%m_%y")
         self.gradesheetprinterprimer.update({"Ticker": str(ticker), "Unique Run ID": str(uniquerunid),
@@ -57,5 +64,7 @@ class GradeSheetPrintSSC():
             wssscgr.append(rowitem)
 
         wb.save(self.instancepath)
+
+        return localpoint, localtotal
 
 

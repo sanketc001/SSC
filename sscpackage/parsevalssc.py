@@ -24,10 +24,11 @@ class ParseVal:
         datadict = val_dict["historical valuation measures"]
         listcollection = []
 
-        keylist = [data_key for data_key in datadict[0].keys()]
+        keylist = [data_key for data_key in datadict[0].keys() if data_key != "Date"]
 
         for indexer in range(len(datadict)):
-            listcollection.append([datadict[indexer][key] for key in datadict[indexer].keys()])
+            listcollection.append([datadict[indexer][key] for key in datadict[indexer].keys() if
+                                  datadict[indexer][key] != "Date"])
 
         ziplistcollect = list(map(list, zip(*[line for line in listcollection])))
 

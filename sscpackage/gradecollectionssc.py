@@ -6,6 +6,7 @@ import grade_gtltratioyoyssc
 import gradesectionthreessc
 import awardsystemssc
 import storessc
+import grade_valratiossc
 
 
 class GradeCollectionSSC:
@@ -22,11 +23,11 @@ class GradeCollectionSSC:
         self.totalpointsssc = 0
         self.pointsssc = 0
         self.ticker = ticker
-        self.parsecombossc = parsecombossc
         self.uniqueidssc = uniqueidssc
+        self.parsecombossc = parsecombossc[ticker + "__" + uniqueidssc]
         self.gradesectionone = grade_gtltyoyssc.GTLTYoYSSC()
         self.gradesectiontwo = grade_gtltratioyoyssc.GTLTYoYRatioSSC()
-        self.gradesectionthree = gradesectionthreessc.GradeThreeSSC()
+        self.gradesectionthree = grade_valratiossc.GradeValRatioSSC()
         self.awardsystem = awardsystemssc.AwardSystemSSC().fetchawardsystem(industry=self.parsecombossc["Industry"],
                                                                             sector=self.parsecombossc["Sector"])
 
@@ -38,7 +39,7 @@ class GradeCollectionSSC:
         pointbin.append(self.gradesectiontwo.grade_gtltyoyratiossc(self.ticker, self.parsecombossc, self.uniqueidssc,
                                                                    self.awardsystem))
 
-        pointbin.append(self.gradesectionthree.gradethreessc(self.ticker, self.parsecombossc, self.uniqueidssc,
+        pointbin.append(self.gradesectionthree.grade_valratiossc(self.ticker, self.parsecombossc, self.uniqueidssc,
                                                              self.awardsystem))
 
 
@@ -1005,3 +1006,13 @@ class GradeSSC:
         f.close()
 
         return gv
+
+if __name__ == "__main__":
+    testlogvaridssc = 'NVDA__Y8bdxbfeWiliz3B'
+    ticker, uniqueid = testlogvaridssc.split("__")
+    import gradeparsecombinessc
+    GS = gradeparsecombinessc.GradeParseCombineSSC()
+    passindict = GS.gradeparsecombinessc(ticker, uniqueid)
+    Gcollect = GradeCollectionSSC(ticker, passindict, uniqueid)
+
+

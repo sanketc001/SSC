@@ -44,14 +44,16 @@ class AwardSystemSSC(shelverssc.ShelverSSC):
 
             #INCASRATIO Metrics
             temp_sscaward = {}
-            defincasratiometrics = ["Research & Development", "Income Before Tax", "Minortiy Interest",
-                                    "Effect of Accounting Charges", "Net Income", "Selling, General & Administrative",
-                                    "Gross Profit", "EBIT", "Operating Income", "Other Operating Expenses",
-                                    "Interest Expense", "Extraordinary Items", "Non Recurring", "Other Items",
-                                    "Income Tax Expense", "Total Revenue", "Total Operating Expenses", "Cost Of Revenue",
-                                    "Total Other Income Expense Net", "Discontinued Operations",
-                                    "Net Income From Continuing Ops", "Net Income Applicable To Common Shares",
-                                    "Gross Margin", "Operating Margin", "Net Margin"]
+            defincasratiometrics = ["Total Revenue", "Net Income", "Gross Margin", "Operating Margin",
+                                              "Net Margin",
+                                              "Gross Profit", "EBIT", "Operating Income",
+                                              "Net Income From Continuing Ops",
+                                              "Income Before Tax", "Research & Development",
+                                              "Selling, General & Administrative",
+                                              "Other Operating Expenses",
+                                              "Interest Expense",
+                                              "Total Operating Expenses", "Cost Of Revenue",
+                                              "Total Other Income Expense Net"]
 
             for metric in defincasratiometrics:
                 temp_sscaward[metric] = {"points": 1, "weight":1}

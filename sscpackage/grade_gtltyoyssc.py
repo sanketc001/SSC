@@ -118,9 +118,9 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
 
         self.gradeprinterssc(**self.printerdictssc)
         self.sectionprinttoexcel()
-        self.sectionendprinttoexcel(**self.gradestore)
 
-        return outputstoressc
+
+        return self.sectionendprinttoexcel(**self.gradestore)
 
 
 

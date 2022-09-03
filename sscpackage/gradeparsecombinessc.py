@@ -77,6 +77,5 @@ class GradeParseCombineSSC:
 
         return parsecombo
 
-
 if __name__ == "__main__":
     testlogvaridssc = 'NVDA__Y8bdxbfeWiliz3B'
