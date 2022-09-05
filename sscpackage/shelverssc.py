@@ -41,7 +41,7 @@ class ShelverSSC:
             sscshelvemanager.close()
             return templist
 
-    def add_shelvecoreelementssc(self, shelvename: 'str', keywordssc: 'str', data, *args, **kwargs):
+    def add_shelvecoreelementssc(self, shelvename: str, keywordssc: str, data, *args, **kwargs):
         with shelve.open(self.permstorpathssc + shelvename) as sscshelvemanager:
             sscshelvemanager[keywordssc] = data
             sscshelvemanager.close()

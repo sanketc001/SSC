@@ -9,6 +9,13 @@ class AwardSystemSSC(shelverssc.ShelverSSC):
         self.permstorpathssc = r'C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\\'
         self.awardsystemcontainerssc = {}
 
+    def deleteawardsystem(self, keynamedel):
+        self.del_shelvecoreelementssc(self.shelvename, keynamedel)
+
+
+
+
+
     def awardsystemsprimer(self):
         defaultawardnamessc = "DEFAULT"
 

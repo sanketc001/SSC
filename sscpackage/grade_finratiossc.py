@@ -65,13 +65,13 @@ class GradeFinRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
             pb = awardsystem['FINRATIOS'][rationame]['pointsbad']
 
             for yearindex in reversed(range(len(localvardict[rationame]))):
-                localpoints = fingradedict[rationame](*localvardict[rationame][yearindex])
+                localpoints = fingradedict[rationame](localvardict[rationame][yearindex])
                 finratpoints += localpoints
                 fintotpoints = pg * len(localvardict[rationame])
 
                 keystatement = [rationame, "|", yearindex, "|", localvardict[rationame][yearindex]]
                 valstatement = ["POINTS AWARDED", localpoints, *statementdict[rationame]]
-                printerdictssc[keystatement] = valstatement
+                printerdictssc[str(keystatement)] = valstatement
 
             runningtotalbin[rationame] = {'Base Points': fintotpoints, 'Current Points': finratpoints}
 
@@ -91,7 +91,7 @@ if __name__ == '__main__':
     awardsystempassin = AWS.fetchawardsystem("Industry", "Sector")
 
     GPSSC = gradeparsecombinessc.GradeParseCombineSSC()
-    gradeparsecombo = GPSSC.gradeparsecombinessc(ticker, uniqueid)['NVDA__Y8bdxbfeWiliz3B']
+    gradeparsecombo = GPSSC.gradeparsecombinessc(ticker, uniqueid)
 
     GFIN = GradeFinRatioSSC()
     GFIN.printprimer("FINRATIO", ticker, uniqueid, "SECTOR", "INDUSTRY")
