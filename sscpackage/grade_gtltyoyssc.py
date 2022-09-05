@@ -51,13 +51,8 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
                 return False
 
         def increasinggtltssc(nameval, count, statement):
-            print(nameval)
-            print(count)
-            print(statement)
             pointsper = int(localawardsectiongtlt[nameval]["points"])
             weightind = int(localawardsectiongtlt[nameval]["weight"])
-            print(pointsper)
-            print(weightind)
             respointrunner = 0
             if statement == "incdat":
                 sourcevalsinc = localincdatssc[nameval]
@@ -137,6 +132,5 @@ if __name__ == "__main__":
 
     GTLT = grade_gtltyoyssc.GTLTYoYSSC()
     GTLT.gtltmetricsgradessc(ticker, gradeparsecombo, uniqueid, awardsystempassin)
-
 
     # TODO: add testing

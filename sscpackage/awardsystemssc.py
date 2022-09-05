@@ -38,7 +38,7 @@ class AwardSystemSSC(shelverssc.ShelverSSC):
                                          "Book Value Per Share"]
 
             for metric in defaultfinratiosscmetrics:
-                temp_sscaward[metric] = {"points": 1, "weight": 1}
+                temp_sscaward[metric] = {"pointsgood": 1, "pointsneutral": .5, "pointsbad": 0, "weight": 1}
 
             awardsystemdict["FINRATIOS"] = temp_sscaward
 

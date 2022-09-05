@@ -12,10 +12,8 @@ import grade_valratiossc
 class GradeCollectionSSC:
     """
     Grade Process
-    1. Create dictionary of all parse shelves
-    1. Income Statement YoY grading - Key Metrics
-    2. Financial Ratio Grading % of Revenue
-    3. Financial Ratio Grading - Balance Sheet Metrics
+        *Note: Work In Progress
+        Different Grading Algorithms
 
     """
 
@@ -35,12 +33,18 @@ class GradeCollectionSSC:
         pointbin = []
         pointbin.append(self.gradesectionone.gtltmetricsgradessc(self.ticker, self.parsecombossc, self.uniqueidssc,
                                                                  self.awardsystem))
+        print("ONE")
 
         pointbin.append(self.gradesectiontwo.grade_gtltyoyratiossc(self.ticker, self.parsecombossc, self.uniqueidssc,
                                                                    self.awardsystem))
 
+        print("TWO")
         pointbin.append(self.gradesectionthree.grade_valratiossc(self.ticker, self.parsecombossc, self.uniqueidssc,
                                                              self.awardsystem))
+
+        print(pointbin)
+
+        return pointbin
 
 
 class GradeSSC:
@@ -1014,5 +1018,6 @@ if __name__ == "__main__":
     GS = gradeparsecombinessc.GradeParseCombineSSC()
     passindict = GS.gradeparsecombinessc(ticker, uniqueid)
     Gcollect = GradeCollectionSSC(ticker, passindict, uniqueid)
+    Gcollect.gradecollectionssc()
 
 

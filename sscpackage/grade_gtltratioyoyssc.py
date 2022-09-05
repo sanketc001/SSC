@@ -25,7 +25,6 @@ class GTLTYoYRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
                 binser = self.asratiodecreasingsections
 
             for rationame in binser:
-                print(rationame)
                 respointrunner = 0
                 pointsper = localawardsectiongtlt[rationame]["points"]
                 ratioweight = localawardsectiongtlt[rationame]["weight"]
