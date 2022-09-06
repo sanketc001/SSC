@@ -25,4 +25,5 @@ class GradeArSSC(gradesheetprintssc.GradeSheetPrintSSC):
     def grade_arssc(self, ticker, parsecombo, uniqueid, awardsystemssc):
         localardict = parsecombo[ticker + "__" + uniqueid]
 
+
         pass
