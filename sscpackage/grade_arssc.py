@@ -50,7 +50,8 @@ class GradeArSSC(gradesheetprintssc.GradeSheetPrintSSC):
         self.setsheetnamesscgr(ticker)
         self.gradeprinterssc(**printer_sourcebin)
         self.sectionprinttoexcel()
-        self.sectionendprinttoexcel(**total_count_dict)
+
+        return self.sectionendprinttoexcel(**total_count_dict)
 
 if __name__ == "__main__":
     import gradeparsecombinessc

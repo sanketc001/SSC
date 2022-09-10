@@ -1,4 +1,5 @@
 import mysql.connector
+from mysql.connector.cursor import MySQLCursorPrepared
 #from mysql.connector import connect, Error
 import json
 import os
@@ -67,39 +68,26 @@ class StoreSSC:
                 WHERE TABLE_NAME = {tablename}"""
 
                 dbtbl_create = """
-                CREATE DATABASE sscdb;
+                CREATE DATABASE IF NOT EXISTS sscdb;
                 USE sscdb;
-                CREATE TABLE logentry (
+                CREATE TABLE IF NOT EXISTS logentry (
                     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     ticker VARCHAR(5),
                     logTime DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    fetchdata LONGBLOB,
-                    idict JSON,
-                    bdict JSON,
                     grade VARCHAR(2),
-                    elist JSON,
-                    arlist JSON
+                    parsecombo JSON
                 );"""
 
                 with connection.cursor(buffered=True) as cursor:
-                    cursor.execute(db_check)
-                    if cursor.fetchone()[0] == 1:
-                        return True
-                    else:
-                        cursor.execute(dbtbl_create)
-                        cursor.commit()
+                    cursor.execute(dbtbl_create)
 
         except mysql.connector.Error as e:
             print("Error in ssc_st - TRY1: " + str(e))
 
 # TODO: fix store process, GradeSSC is no longer the default location for stored info.  Use gradecollectionssc.
-    def log_entry(self, ticker_entry="MSFT", res_json="DEFAULTJSON"):
-        self.insert_db_table = "INSERT INTO logentry (ticker, fetchdata, idict, bdict, grade, elist, arlist) VALUES(" + '"' \
-                               + str(ticker_entry) + '",' + json.dumps(res_json) + ',' \
-                               + "'" + json.dumps(sscp.GradeSSC.idict) + "'" + ',' \
-                               + "'" + json.dumps(sscp.GradeSSC.bdict) + "'" + "," + "'" + sscp.GradeSSC.grade + "'" \
-                               + "," + "'" + json.dumps(sscp.GradeSSC.erlist) + "'" + "," + "'" \
-                               + json.dumps(sscp.GradeSSC.ar_dict_strip) + "'" + ")"
+    def log_entry(self, parsecombo, grade_ssc, ticker_entry="MSFT"):
+        self.insert_db_table = "INSERT INTO logentry (ticker, grade, parsecombo) VALUES (%s, %s, %s)"
+
         """
         This function is taking the ticker symbol, fetch data from API, parse data
         and the rest of the information and storing it in a local mysql db with the
@@ -122,11 +110,10 @@ class StoreSSC:
 
                 # The following code is mySQL
 
-
                 show_db_ticker = "SELECT * FROM logentry"
 
-                with connection.cursor(buffered=True) as cursor:
-                    cursor.execute(self.insert_db_table)
+                with connection.cursor(buffered=True, cursor_class=MySQLCursorPrepared) as cursor:
+                    cursor.execute(self.insert_db_table, (ticker_entry, grade_ssc, parsecombo))
                     connection.commit()
                     connection.close()
 
@@ -152,7 +139,7 @@ class StoreSSC:
                     database="sscdb",
             ) as connection:
                 show_db_ticker = "SELECT * FROM logentry"
-                with connection.cursor() as cursor:
+                with connection.cursor(cursor_class=MySQLCursorPrepared) as cursor:
                     cursor.execute(show_db_ticker)
                     results = cursor.fetchall()
                     connection.commit()
@@ -165,34 +152,6 @@ class StoreSSC:
 
         return results
 
-    def export_excel(self):
-        """
-        2/4/22 - GD
-        This function pulls stock grade information from database sscdb -> 'logentry'.
-
-        It uses Pandas data frame to format the sql query stream into row/column format and outputs it to SSC.xlsx
-        :return:
-        """
-        try:
-            with mysql.connector.connect(
-                    host="localhost",
-                    user=str(os.getenv("DB_USER")),
-                    password=str(os.getenv("DB_PASS")),
-                    database="sscdb"
-            ) as connection:
-
-                query = """
-                SELECT id, ticker, logTime, grade FROM logentry"""
-                with connection.cursor(buffered=True) as cursor:
-                    df = pd.read_sql(query, connection)
-                    df.head()
-                    df.to_excel('SSC.xlsx', sheet_name='DATA', index=False)
-
-        except mysql.connector.Error as e:
-            print("Error in ssc_st - 'def export_excel'  :  " + str(e))
-
-        finally:
-            connection.close()
 
 if __name__ == '__main__':
     S_SSC = StoreSSC()

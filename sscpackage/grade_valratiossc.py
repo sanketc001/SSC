@@ -30,15 +30,11 @@ class GradeValRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
             valratiopointbook[rationame] = {'Base Points': (pointsper * (len(localvalratiodict)-1))*weightval,
                                             'Current Points': respointrunner*weightval}
 
-        for key, value in valratiopointbook.items():
-            print(f'KEY: {key} VALUE: {value}')
-
-
         self.setinstancepath(ticker, uniqueid)
         self.setsheetnamesscgr(ticker)
         self.gradeprinterssc(**self.gradeprinterdict)
         self.sectionprinttoexcel()
-        self.sectionendprinttoexcel(**valratiopointbook)
+        return self.sectionendprinttoexcel(**valratiopointbook)
 
 if __name__ == "__main__":
     import gradeparsecombinessc

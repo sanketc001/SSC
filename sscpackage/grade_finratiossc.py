@@ -28,7 +28,7 @@ class GradeFinRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
         #   Value under 1 could indicate undervalued stock
 
         finlogname = ticker + "__" + uniqueid
-        localvardict = parsecombo[finlogname]['finratiodict']
+        localvardict = parsecombo['finratiodict']
         runningtotalbin = {}
 
         fingradedict = {
@@ -79,7 +79,7 @@ class GradeFinRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
         self.setsheetnamesscgr(ticker)
         self.gradeprinterssc(**printerdictssc)
         self.sectionprinttoexcel()
-        self.sectionendprinttoexcel(**runningtotalbin)
+        return self.sectionendprinttoexcel(**runningtotalbin)
 
 
 if __name__ == '__main__':

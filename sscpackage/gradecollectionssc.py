@@ -3,12 +3,14 @@ import datetime as dt
 import json
 
 import grade_arssc
+import grade_finratiossc
 import grade_gtltyoyssc
 import grade_gtltratioyoyssc
 import gradesectionthreessc
 import awardsystemssc
 import storessc
 import grade_valratiossc
+import grade_finalssc
 
 
 class GradeCollectionSSC:
@@ -21,6 +23,7 @@ class GradeCollectionSSC:
     def __init__(self, ticker, parsecombossc, uniqueidssc):
         self.totalpointsssc = 0
         self.pointsssc = 0
+        self.storeclass = storessc.StoreSSC()
         self.ticker = ticker
         self.uniqueidssc = uniqueidssc
         self.parsecombossc = parsecombossc[ticker + "__" + uniqueidssc]
@@ -28,12 +31,17 @@ class GradeCollectionSSC:
         self.gradesectiontwo = grade_gtltratioyoyssc.GTLTYoYRatioSSC()
         self.gradesectionthree = grade_valratiossc.GradeValRatioSSC()
         self.gradesectionfour = grade_arssc.GradeArSSC()
+        self.gradesectionfive = grade_finratiossc.GradeFinRatioSSC()
+        self.finalgrade = grade_finalssc.GradeFinalSSC()
         self.awardsystem = awardsystemssc.AwardSystemSSC().fetchawardsystem(industry=self.parsecombossc["Industry"],
                                                                             sector=self.parsecombossc["Sector"])
 
     def gradecollectionssc(self):
         pointbin = []
         pointbin.append(self.gradesectionone.gtltmetricsgradessc(self.ticker, self.parsecombossc, self.uniqueidssc,
+                                                                 self.awardsystem))
+
+        pointbin.append(self.gradesectionfive.grade_finratiossc(self.ticker, self.parsecombossc, self.uniqueidssc,
                                                                  self.awardsystem))
 
         pointbin.append(self.gradesectiontwo.grade_gtltyoyratiossc(self.ticker, self.parsecombossc, self.uniqueidssc,
@@ -45,8 +53,9 @@ class GradeCollectionSSC:
         pointbin.append(self.gradesectionfour.grade_arssc(self.ticker, self.parsecombossc, self.uniqueidssc,
                                                           self.awardsystem))
 
+        self.storeclass.db_chksetup()
+        self.storeclass.log_entry(self.parsecombossc, self.finalgrade.grade_final_ssc(pointbin), self.ticker)
 
-        return pointbin
 
 
 class GradeSSC:
@@ -84,9 +93,7 @@ class GradeSSC:
         self.grade_tool.ar_dict_strip = []  # this stores the ar - analyst ratings dictionaries wrapped in a list to store or pull to analyze
 
         bdict = bsheets_dict
-        idict = isheets_dict
-
-        self.grade_tool.g = 0  # This may be redundant as well, using a function attribute to store the following gv variable
+        idict = isheets_dictratiores = 0  # This may be redundant as well, using a function attribute to store the following gv variable
 
         gv = 0  # GV is going to be the variable that increments the awarded points
 
@@ -870,8 +877,7 @@ class GradeSSC:
 
             f.write(brl + "\nBEGINNING SECTION 5: ANALYST UPGRADE/DOWNGRADE" + brn + brl + (brn * 2))
 
-            # Storing gv in a function attribute grade_tool.gv
-            self.grade_tool.gv = gv
+            # Storing gv in a function attribute grade_tool.gvratioresv = gv
 
             # This is the weighted value of the grade at 75% of the total possible grade
 
@@ -977,41 +983,17 @@ class GradeSSC:
                 if dec_gr >= .64:
                     dec_gr -= .05
 
-            # grade here will store the decimal value of the fraction gv/tp
-            self.grade_tool.g = dec_gr
+            # grade here will store the decimal value of the fraction gv/tpratiores = dec_gr
             self.grade_tool.erlist = erlist
 
             # I am creating this variable to house the A, B, C value until I pass it to the functions attribute
             tg = []
 
             # Overall Grade Scale
-            if int(self.grade_tool.g) >= .94:
-                tg.append("A")
-            elif int(self.grade_tool.g) < .94 and self.grade_tool.g >= .90:
-                tg.append("AB")
-            elif int(self.grade_tool.g) < .90 and self.grade_tool.g >= .84:
-                tg.append("B")
-            elif int(self.grade_tool.g) < .84 and self.grade_tool.g >= 80:
-                tg.append("BC")
-            elif int(self.grade_tool.g) < .80 and self.grade_tool.g >= .74:
-                tg.append("C")
-            elif int(self.grade_tool.g) < .74 and self.grade_tool.g >= .70:
-                tg.append("CD")
-            elif int(self.grade_tool.g) < .70 and self.grade_tool.g >= 64:
-                tg.append("D")
-            elif int(self.grade_tool.g) < .64:
-                tg.append("F")
 
-            self.grade_tool.grade = tg[0]
 
-            f.write((brn * 2) + ((brl + brn) * 2))
-            f.write(brn)
-            f.write("GRADE IS: ::::: " + str(tg[0]) + brn + brn + ((brl + brn) * 2))
-            f.write("\nEND OF GRADE SHEET")
 
-        f.close()
-
-        return gv
+        return
 
 if __name__ == "__main__":
     testlogvaridssc = 'NVDA__Y8bdxbfeWiliz3B'
@@ -1020,6 +1002,7 @@ if __name__ == "__main__":
     GS = gradeparsecombinessc.GradeParseCombineSSC()
     passindict = GS.gradeparsecombinessc(ticker, uniqueid)
     Gcollect = GradeCollectionSSC(ticker, passindict, uniqueid)
-    Gcollect.gradecollectionssc()
+    pointvarbinssc = Gcollect.gradecollectionssc()
+    print(pointvarbinssc)
 
 

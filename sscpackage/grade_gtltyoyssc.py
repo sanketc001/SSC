@@ -57,8 +57,6 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
             if statement == "incdat":
                 sourcevalsinc = localincdatssc[nameval]
                 for oldyear, newyear in itertools.pairwise(reversed(localincdatssc[nameval])):
-                    print(newyear)
-                    print(oldyear)
                     keyforprint = [nameval, "Year", str(sourcevalsinc.index(newyear)), "|", "Year",
                                    str(sourcevalsinc.index(oldyear))]
 
