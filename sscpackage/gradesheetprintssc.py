@@ -58,6 +58,7 @@ class GradeSheetPrintSSC():
         statementstring = {"TOTAL CURRENT POINTS": localpoint, "TOTAL POSSIBLE POINTS": localtotal}
 
         sectionend = pandas.DataFrame.from_dict(statementstring, orient="index")
+        sectionend.convert_dtypes()
         wb = openpyxl.load_workbook(self.instancepath)
         wssscgr = wb[self.sheetnamesscgr]
         for rowitem in openpyxl.utils.dataframe.dataframe_to_rows(sectionend, index=True, header=False):

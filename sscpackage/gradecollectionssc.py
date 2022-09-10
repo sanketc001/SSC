@@ -1,6 +1,8 @@
 import time
 import datetime as dt
 import json
+
+import grade_arssc
 import grade_gtltyoyssc
 import grade_gtltratioyoyssc
 import gradesectionthreessc
@@ -14,7 +16,6 @@ class GradeCollectionSSC:
     Grade Process
         *Note: Work In Progress
         Different Grading Algorithms
-
     """
 
     def __init__(self, ticker, parsecombossc, uniqueidssc):
@@ -26,6 +27,7 @@ class GradeCollectionSSC:
         self.gradesectionone = grade_gtltyoyssc.GTLTYoYSSC()
         self.gradesectiontwo = grade_gtltratioyoyssc.GTLTYoYRatioSSC()
         self.gradesectionthree = grade_valratiossc.GradeValRatioSSC()
+        self.gradesectionfour = grade_arssc.GradeArSSC()
         self.awardsystem = awardsystemssc.AwardSystemSSC().fetchawardsystem(industry=self.parsecombossc["Industry"],
                                                                             sector=self.parsecombossc["Sector"])
 
@@ -33,16 +35,16 @@ class GradeCollectionSSC:
         pointbin = []
         pointbin.append(self.gradesectionone.gtltmetricsgradessc(self.ticker, self.parsecombossc, self.uniqueidssc,
                                                                  self.awardsystem))
-        print("ONE")
 
         pointbin.append(self.gradesectiontwo.grade_gtltyoyratiossc(self.ticker, self.parsecombossc, self.uniqueidssc,
                                                                    self.awardsystem))
 
-        print("TWO")
         pointbin.append(self.gradesectionthree.grade_valratiossc(self.ticker, self.parsecombossc, self.uniqueidssc,
-                                                             self.awardsystem))
+                                                                 self.awardsystem))
 
-        print(pointbin)
+        pointbin.append(self.gradesectionfour.grade_arssc(self.ticker, self.parsecombossc, self.uniqueidssc,
+                                                          self.awardsystem))
+
 
         return pointbin
 

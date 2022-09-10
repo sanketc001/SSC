@@ -10,11 +10,8 @@ class AwardSystemSSC(shelverssc.ShelverSSC):
         self.awardsystemcontainerssc = {}
 
     def deleteawardsystem(self, keynamedel):
+        #TODO: make sure the deleteawardsystem works via shelverssc
         self.del_shelvecoreelementssc(self.shelvename, keynamedel)
-
-
-
-
 
     def awardsystemsprimer(self):
         defaultawardnamessc = "DEFAULT"
@@ -27,6 +24,8 @@ class AwardSystemSSC(shelverssc.ShelverSSC):
             awardsystemdict = {}
 
             #Greater Than Less Than Metrics
+
+
             defaultgtltmetrics_ssc = ["Total Revenue", "Net Income", "Gross Margin", "Operating Margin", "Net Margin",
                                "Gross Profit", "EBIT", "Operating Income", "Net Income From Continuing Ops",
                                "Income Before Tax", "Research & Development", "Selling, General & Administrative",
@@ -80,10 +79,16 @@ class AwardSystemSSC(shelverssc.ShelverSSC):
 
             #Analyst Grades
             temp_sscaward = {}
-            defaultanalystmetricsssc = ["AR-GREAT", "AR-GOOD", "AR-NEUTRAL", "AR-BAD", "AR-WORST"]
+            analyst_metric_ssc = {"rating_bin_pos": ["Buy", "Strong Buy", "Overweight", "Market Perform",
+                                                            "Outperform"],
+                                        "rating_bin_neutral": ["Neutral", "Hold", "Perform", "Equal-Weight"]}
 
-            for metric in defaultanalystmetricsssc:
+            for metric in analyst_metric_ssc['rating_bin_pos']:
+                temp_sscaward[metric] = {"points": 2, "weight": 1}
+
+            for metric in analyst_metric_ssc['rating_bin_neutral']:
                 temp_sscaward[metric] = {"points": 1, "weight": 1}
+
 
             awardsystemdict["ARMETRICS"] = temp_sscaward
 
@@ -100,7 +105,9 @@ class AwardSystemSSC(shelverssc.ShelverSSC):
         self.add_shelvesubelement(self.shelvename, systemkeywordssc=awardsystemname_ssc,
                                   coremetricssc=metricgroupkeyword, data=data)
 
+
 # TODO: create separate unittest for awardsystemssc
+
 if __name__ == "__main__":
     AWssc = AwardSystemSSC()
     print(AWssc.awardsystemsprimer())
