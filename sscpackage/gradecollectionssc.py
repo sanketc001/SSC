@@ -6,7 +6,6 @@ import grade_arssc
 import grade_finratiossc
 import grade_gtltyoyssc
 import grade_gtltratioyoyssc
-import gradesectionthreessc
 import awardsystemssc
 import storessc
 import grade_valratiossc
@@ -53,10 +52,12 @@ class GradeCollectionSSC:
         pointbin.append(self.gradesectionfour.grade_arssc(self.ticker, self.parsecombossc, self.uniqueidssc,
                                                           self.awardsystem))
 
+        self.finalgrade.grade_final_ssc(pointbin)
         self.storeclass.db_chksetup()
-        self.storeclass.log_entry(self.parsecombossc, self.finalgrade.grade_final_ssc(pointbin), self.ticker)
+        self.storeclass.log_entry(parsecombo=self.parsecombossc,
+                                  grade_ssc=str(self.finalgrade.final_grade_ssc), ticker_entry=str(self.ticker))
 
-
+        return pointbin
 
 class GradeSSC:
     def __init__(self):

@@ -11,9 +11,12 @@ import parseindssc
 import parsesectorssc
 import parsevalssc
 import parseratiocreatessc
+import json
 
 
 class GradeParseCombineSSC:
+    def __init__(self):
+        self.parsecombo= {}
     def gradeparsecombinessc(self, ticker, logfileidssc):
         PAR = parsearssc.ParseAr()
         PBAL = parsebalancessc.ParseBalance()
@@ -70,12 +73,18 @@ class GradeParseCombineSSC:
 
 
 
-        parsecombo[corekeycombo] = {"AR": ardat, "baldat": baldat, "incdat": incdat,
+        self.parsecombo[corekeycombo] = {"AR": ardat, "baldat": baldat, "incdat": incdat,
                                     "Industry": inddat, "Sector": secdat, "valdat": valdat,
                                     "baldatqual": baldatqual, "incdatqual": incdatqual,
                                     "incasratiodict": incasratiodict, "finratiodict": finratiodict}
 
         return parsecombo
 
+    def parsec_json(self):
+        return json.dumps(self.parsecombo, sort_keys=False)
+
 if __name__ == "__main__":
     testlogvaridssc = 'NVDA__Y8bdxbfeWiliz3B'
+    GS = GradeParseCombineSSC()
+    testdict = GS.gradeparsecombinessc('NVDA', testlogvaridssc)
+    print(testdict)

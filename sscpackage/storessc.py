@@ -98,6 +98,12 @@ class StoreSSC:
         :param res_json:
         :return: None
         """
+
+        log_insertion = {
+            "ticker": ticker_entry,
+            "grade": grade_ssc,
+            "parsecombo": parsecombo
+        }
         # The following sql.connector object adds information from '..._parsetool.py' function attributes to 'logentry'
 
         try:
@@ -113,7 +119,7 @@ class StoreSSC:
                 show_db_ticker = "SELECT * FROM logentry"
 
                 with connection.cursor(buffered=True, cursor_class=MySQLCursorPrepared) as cursor:
-                    cursor.execute(self.insert_db_table, (ticker_entry, grade_ssc, parsecombo))
+                    cursor.execute(self.insert_db_table, (ticker_entry, grade_ssc, parsecombo,))
                     connection.commit()
                     connection.close()
 
@@ -131,6 +137,7 @@ class StoreSSC:
         bound to 'show db' tk.button on user GUI
         :return: results (response string from API - JSON)
         """
+
         try:
             with mysql.connector.connect(
                     host="localhost",

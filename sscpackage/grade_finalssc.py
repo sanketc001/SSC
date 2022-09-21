@@ -4,35 +4,37 @@ import gradesheetprintssc
 class GradeFinalSSC(gradesheetprintssc.GradeSheetPrintSSC):
     def __init__(self):
         super().__init__()
-        self.finalgrade = ""
+        self.final_grade_ssc = ""
 
     def grade_final_ssc(self, pointbin):
         totalpoints = 0
         awardedpoints = 0
-        for basepoints, currentpoints in pointbin:
+        for currentpoints, basepoints in pointbin:
             totalpoints += basepoints
             awardedpoints += currentpoints
 
         ratiores = awardedpoints / totalpoints
 
         if ratiores >= .94:
-            self.finalgrade = "A"
+            self.final_grade_ssc = "A"
         elif ratiores >= .90:
-            self.finalgrade = "AB"
+            self.final_grade_ssc = "AB"
         elif ratiores >= .84:
-            self.finalgrade = "B"
+            self.final_grade_ssc = "B"
         elif ratiores >= .80:
-            self.finalgrade = "BC"
+            self.final_grade_ssc = "BC"
         elif ratiores >= .74:
-            self.finalgrade = "C"
+            self.final_grade_ssc = "C"
         elif ratiores >= .70:
-            self.finalgrade = "CD"
+            self.final_grade_ssc = "CD"
         elif ratiores >= .64:
-            self.finalgrade = "D"
+            self.final_grade_ssc = "D"
         else:
-            self.finalgrade = "F"
+            self.final_grade_ssc = "F"
 
 
-
-
+if __name__ == "__main__":
+    GF = GradeFinalSSC()
+    GF.grade_final_ssc([(2, 2), (2, 2), (2, 2)])
+    print(GF.final_grade_ssc)
 

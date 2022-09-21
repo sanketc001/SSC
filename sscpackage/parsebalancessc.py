@@ -9,7 +9,7 @@ class ParseBalance:
     def __init__(self):
         self.setpathssc_parsesscpb = r"C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\parsebalanceshelf"
 
-    def parsebalance(self, uniquename: 'str', pb_rawdata: 'json') -> None:
+    def parsebalance(self, uniquename: 'str', pb_rawdata: dict) -> None:
         try:
             uniquesplitlist = uniquename.split("__")
             ticker, key, idssc, timestampidpb = uniquesplitlist[0], uniquesplitlist[1], uniquesplitlist[2], \
@@ -46,15 +46,20 @@ class ParseBalance:
             print(str(Er))
 
     def fetch_parsebalance(self, timestampidpb):
+        pushdata = {}
         try:
             with shelve.open(self.setpathssc_parsesscpb) as pibank:
-                for key in pibank.keys():
-                    if timestampidpb in key:
-                        pushdata = pibank[key]
+                if pibank:
+                    for key in pibank.keys():
+                        if timestampidpb in key:
+                            pushdata = pibank[key]
+                        else:
+                            continue
+                    if pushdata:
+                        return pushdata
                     else:
-                        continue
+                        return -1
 
-                return pushdata
         except Exception as Er:
-            print("Exception: 'fetch_parsebalance'\n")
+            print("Exception: 'fetch_parsebalance'")
             print(Er)
