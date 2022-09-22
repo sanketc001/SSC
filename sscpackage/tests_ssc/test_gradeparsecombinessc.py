@@ -6,7 +6,7 @@ class myTestGradeParse(unittest.TestCase):
         testidgradeparsecombo = 'x1jU288DK5DRjWf'
         testtickergradeparsecombo = 'MSFT'
         testansone = ['MSFT__x1jU288DK5DRjWf']
-        testanstwo = ['AR', 'baldat', 'incdat', 'Industry', 'Sector', 'valdat']
+        testanstwo = ['AR', 'baldat', 'incdat', 'Industry', 'Sector', 'valdat', 'baldatqual', 'incdatqual']
         GPD = gradeparsecombinessc.GradeParseCombineSSC()
         combocopy = GPD.gradeparsecombinessc(testtickergradeparsecombo, testidgradeparsecombo)
         testresone = [key for key in combocopy.keys()]

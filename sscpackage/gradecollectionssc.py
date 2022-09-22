@@ -54,7 +54,8 @@ class GradeCollectionSSC:
 
         self.finalgrade.grade_final_ssc(pointbin)
         self.storeclass.db_chksetup()
-        self.storeclass.log_entry(parsecombo=self.parsecombossc,
+        pscombo_tojson = json.dumps(self.parsecombossc,skipkeys=False)
+        self.storeclass.log_entry(parsecombo=pscombo_tojson,
                                   grade_ssc=str(self.finalgrade.final_grade_ssc), ticker_entry=str(self.ticker))
 
         return pointbin
@@ -997,13 +998,24 @@ class GradeSSC:
         return
 
 if __name__ == "__main__":
-    testlogvaridssc = 'NVDA__Y8bdxbfeWiliz3B'
-    ticker, uniqueid = testlogvaridssc.split("__")
     import gradeparsecombinessc
-    GS = gradeparsecombinessc.GradeParseCombineSSC()
-    passindict = GS.gradeparsecombinessc(ticker, uniqueid)
-    Gcollect = GradeCollectionSSC(ticker, passindict, uniqueid)
-    pointvarbinssc = Gcollect.gradecollectionssc()
-    print(pointvarbinssc)
+    testbin_tickers = [
+        "AAPL__iUQNePAoVeFQIPV",
+        "NVDA__HH12TPwnMth9Tet",
+        "GME__AlabRmFaJP9IXEH",
+        "GE__DRLihsPscNaTz0Q",
+        "FORD__VyjP8walEhZzDRh"
+    ]
+    def mini_collectiontest(testlogvaridssc):
+        ticker, uniqueid = testlogvaridssc.split("__")
+        GS = gradeparsecombinessc.GradeParseCombineSSC()
+        passindict = GS.gradeparsecombinessc(ticker, uniqueid)
+        Gcollect = GradeCollectionSSC(ticker, passindict, uniqueid)
+        pointvarbinssc = Gcollect.gradecollectionssc()
+        print(pointvarbinssc)
+
+    for uniquekey in testbin_tickers:
+        mini_collectiontest(uniquekey)
+        import gradeparsecombinessc
 
 

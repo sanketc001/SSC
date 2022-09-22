@@ -78,13 +78,13 @@ class GradeParseCombineSSC:
                                     "baldatqual": baldatqual, "incdatqual": incdatqual,
                                     "incasratiodict": incasratiodict, "finratiodict": finratiodict}
 
-        return parsecombo
+        return self.parsecombo
 
     def parsec_json(self):
         return json.dumps(self.parsecombo, sort_keys=False)
 
 if __name__ == "__main__":
-    testlogvaridssc = 'NVDA__Y8bdxbfeWiliz3B'
+    testlogvaridssc = 'Y8bdxbfeWiliz3B'
     GS = GradeParseCombineSSC()
     testdict = GS.gradeparsecombinessc('NVDA', testlogvaridssc)
     print(testdict)

@@ -10,7 +10,7 @@ class GradeValRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
         localvalratiodict = parsecombo['valdat']
         valratiopointbook = {}
 
-        for rationame in localvalratiodict.keys():
+        for rationame in awardsystem["VALMETRICS"].keys():
             pointsper = awardsystem['VALMETRICS'][rationame]['points']
             weightval = awardsystem['VALMETRICS'][rationame]['weight']
             respointrunner = 0

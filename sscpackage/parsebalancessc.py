@@ -15,7 +15,6 @@ class ParseBalance:
             ticker, key, idssc, timestampidpb = uniquesplitlist[0], uniquesplitlist[1], uniquesplitlist[2], \
                                                 uniquesplitlist[3]
 
-            setpathssc_parsesscpb = r"C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\parsebalanceshelf"
 
             bsheets_data = pb_rawdata
 

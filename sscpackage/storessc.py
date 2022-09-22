@@ -86,25 +86,10 @@ class StoreSSC:
 
 # TODO: fix store process, GradeSSC is no longer the default location for stored info.  Use gradecollectionssc.
     def log_entry(self, parsecombo, grade_ssc, ticker_entry="MSFT"):
-        self.insert_db_table = "INSERT INTO logentry (ticker, grade, parsecombo) VALUES (%s, %s, %s)"
+        insert_db_table = "INSERT INTO logentry (ticker, grade, parsecombo) VALUES (%s, %s, %s)"
+        print(insert_db_table)
 
-        """
-        This function is taking the ticker symbol, fetch data from API, parse data
-        and the rest of the information and storing it in a local mysql db with the
-        following information.
-        DB Name = sscdb
-        Table Name = logentry
-        :param ticker_entry:
-        :param res_json:
-        :return: None
-        """
-
-        log_insertion = {
-            "ticker": ticker_entry,
-            "grade": grade_ssc,
-            "parsecombo": parsecombo
-        }
-        # The following sql.connector object adds information from '..._parsetool.py' function attributes to 'logentry'
+        combo_json = json.dumps(parsecombo, skipkeys=False)
 
         try:
             with mysql.connector.connect(
@@ -114,14 +99,12 @@ class StoreSSC:
                     database="sscdb",
             ) as connection:
 
-                # The following code is mySQL
-
                 show_db_ticker = "SELECT * FROM logentry"
+                insert_db_table = "INSERT INTO logentry (ticker, grade, parsecombo) VALUES (%s, %s, %s)"
 
-                with connection.cursor(buffered=True, cursor_class=MySQLCursorPrepared) as cursor:
-                    cursor.execute(self.insert_db_table, (ticker_entry, grade_ssc, parsecombo,))
+                with connection.cursor(prepared=True) as cursor:
+                    cursor.execute(insert_db_table, (ticker_entry, grade_ssc, combo_json,))
                     connection.commit()
-                    connection.close()
 
         except mysql.connector.Error as e:
             print("Error in ssc_st - TRY2: " + str(e))
@@ -146,7 +129,7 @@ class StoreSSC:
                     database="sscdb",
             ) as connection:
                 show_db_ticker = "SELECT * FROM logentry"
-                with connection.cursor(cursor_class=MySQLCursorPrepared) as cursor:
+                with connection.cursor() as cursor:
                     cursor.execute(show_db_ticker)
                     results = cursor.fetchall()
                     connection.commit()
@@ -161,5 +144,13 @@ class StoreSSC:
 
 
 if __name__ == '__main__':
+    import gradeparsecombinessc
     S_SSC = StoreSSC()
     S_SSC.db_chksetup()
+    testlogvaridssc = 'Y8bdxbfeWiliz3B'
+    GS = gradeparsecombinessc.GradeParseCombineSSC()
+    testdict = GS.gradeparsecombinessc('NVDA', testlogvaridssc)
+    testdict_json = json.dumps(testdict, skipkeys=False)
+    ticker_testssc = "NVDA"
+    S_SSC.log_entry(parsecombo=testdict_json, grade_ssc="BC", ticker_entry="NVDA")
+
