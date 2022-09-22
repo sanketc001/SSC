@@ -5,6 +5,8 @@ import pandas
 import openpyxl
 import openpyxl.utils.dataframe
 import datetime
+import os
+import sys
 
 class GradeSheetPrintSSC():
     def __init__(self):
@@ -21,7 +23,19 @@ class GradeSheetPrintSSC():
     def setinstancepath(self, ticker, uniquerunid):
         self.instancepath = self.permpathtoexcelssc + str(ticker) + "__" + str(uniquerunid) + '.xlsx'
 
+    def create_pathinit(self):
+        try:
+            if os.path.exists(self.permpathtoexcelssc):
+                return 1
+            else:
+                os.makedirs(self.permpathtoexcelssc)
+        except Exception as er:
+            print(f'{self.__name__} - Error at create_pathinit')
+            print(f'This: {er.__class__} occurred')
+
+
     def printprimer(self, sectionname, ticker, uniquerunid, sectorssc, industryssc):
+        self.create_pathinit()
         curdatessc = datetime.datetime.today().strftime("%d_%m_%y")
         self.gradesheetprinterprimer.update({"Ticker": str(ticker), "Unique Run ID": str(uniquerunid),
                                              "Sector": str(sectorssc), "Industry": str(industryssc),

@@ -1,10 +1,7 @@
 import mysql.connector
-from mysql.connector.cursor import MySQLCursorPrepared
-#from mysql.connector import connect, Error
 import json
 import os
-from sscpackage import parsessc as sscp
-import pandas as pd
+
 
 
 class StoreSSC:
@@ -108,9 +105,6 @@ class StoreSSC:
 
         except mysql.connector.Error as e:
             print("Error in ssc_st - TRY2: " + str(e))
-
-        finally:
-            connection.close()
 
         return None
 
