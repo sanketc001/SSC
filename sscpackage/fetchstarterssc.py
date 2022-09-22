@@ -10,12 +10,18 @@ class FetchStarterSSC:
     This class and 'fetch_cycle'
     """
 
-    def __init__(self, tickerlist="MSFT, AMD, TTD, MU, NVDA"):
-        self.tickerlist = tickerlist.split(", ")
+    def __init__(self, tickerlist: list):
+        self.tickerlist = tickerlist
+        self.stoploop: bool = False
+
+    def set_stoptrue(self):
+        self.stoploop = True
 
     async def _fetch_cycle(self, *args, **kwargs):
-        tickerlistvar_fetchssc = self.tickerlist
+        tickerlistvar_fetchssc = self.tickerlist[:]
         while tickerlistvar_fetchssc:
+            if self.stoploop:
+                break
             if len(tickerlistvar_fetchssc) >= 5:
                 await asyncio.gather(
                     FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch(),
@@ -28,4 +34,3 @@ class FetchStarterSSC:
                 for indexno in range(len(tickerlistvar_fetchssc)):
                     await asyncio.gather(FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch())
             await asyncio.sleep(1)
-

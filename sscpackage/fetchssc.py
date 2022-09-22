@@ -45,6 +45,7 @@ def myownrandom(keylength=10):
 
 
 class FetchSSC:
+    ticker_successlist = ""
     def __init__(self, ticker="MSFT", *args, **kwargs):
         self.ticker = ticker
 
@@ -64,6 +65,7 @@ class FetchSSC:
                 FSSC = sscpackage.fetchshelfssc_mod.FetchShelfSSC(ticker=self.ticker)
                 FSSC.fetchstore(key, id(self), self.fetch_data, timestampidfs=timestampidrf)
                 self.statusfetch = True
+                FetchSSC.__class__.ticker_successlist += str(self.ticker) + ", "
             else:
                 self.statusfetch = False
             await asyncio.sleep(1)

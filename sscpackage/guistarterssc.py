@@ -3,7 +3,7 @@ This will start tkinter gui
 """
 
 import tkinter as tk
-import simplestockchecker_fetchtool as sscf
+import fetchstarterssc as sscf
 import os
 from sscpackage import storessc as sst, parsessc as sscp
 import tkinter.font as tk_font
@@ -15,6 +15,7 @@ import random
 import string
 import threading as th
 global ticker_entry
+import itertools
 ticker_entry = []
 global freq
 global d_range
@@ -24,19 +25,25 @@ global error_file
 error_file = None
 global r_keyl
 r_keyl = []
+import mainssc
 
 """
 This is to test branch functionality GIT/Pycharm
 """
 
 class GuiStarterSSC:
+    cancel_start = False
     def __init__(self):
         self.ticker_list = []
+
+    def status_check(self):
+        return GuiStarterSSC.__class__.cancel_start
+        # TODO: test this way of providing 'cancel' with button click event
     def start_gui_ssc(self):
         global text_c
         global ticker_entry  # Setting the local scope ticker_entry as the global scope variable
         window = tk.Tk()  # Setting window as the main tk.Tk() variable
-        window.title("Simple Stock Checker - Rev. Jack Concannon")  # Sets title of window
+        window.title("Simple Stock Checker - Rev. 1.1-a.1")  # Sets title of window
         window.configure(height="600", width="1800", background="LINEN", padx="10", pady="10")  # configures window size
         window.resizable(True, False)  # makes window not changeable
         window.columnconfigure(0, weight=1)  # sets the column length of window I believe for grid
@@ -48,9 +55,6 @@ class GuiStarterSSC:
         # creates frame object at 0, 0
         label_1 = tk.Label(master=mainframe, text="Please select a text file: ", font=fontstyle2, bg="LINEN")
         label_1.grid(column=0, row=0, columnspan=1, sticky="w", pady="5", padx="5")
-
-        # not used
-        prog_msg = tk.StringVar()
 
         # set remaining GUI Tk.Tkinter widgets
         file_btn = tk.Button(master=mainframe, text="Browse", name="file", font=fontstyle2)
@@ -112,7 +116,6 @@ class GuiStarterSSC:
             :param event:
             :return: ticker_entry - although not necessary
             """
-            global ticker_entry
             global error_file
             global stop_thread
 
@@ -123,13 +126,17 @@ class GuiStarterSSC:
 
             fd_raw = fd.askopenfile(filetypes=filetypes)  # this is the open file function saving the chosen file as fd_raw
 
-            # The following code is going to parse the file to ensure it is just a list of comma separated tickers
+            # Validate Chosen List
             flag = True
-            if fd_raw is not None:  # I believe I can just use if fd_raw
+            if fd_raw:  # I believe I can just use if fd_raw
                 fd_l = [x for x in fd_raw.readlines()][0]
-                fd_check = fd_l.replace(" ", "").split(",")  # Remove spaces and split into lists by comma separators
+                for char in fd_l:
+                    chars_notwant = itertools.chain(string.digits, string.punctuation, string.whitespace)
+                    if char in chars_notwant:
+                        fd_l.replace(char, "")
+                fd_check = fd_l.replace(" ", "").split(",")
                 for y in fd_check:
-                    # Check to make sure that there are no ticker symbols with more than 5 characters
+                    # Ticker Symbols <= 5
                     if len(y) > 5:
                         flag = False
                         error_file = fd_check
@@ -149,7 +156,7 @@ class GuiStarterSSC:
                     text_update("You have chosen a valid list - click submit to continue processing")
 
                     # Enable submit click when a minimum list of tickers is given
-                    if len(ticker_entry) >= 1:
+                    if len(self.ticker_list) >= 1:
                         okbutton.state(["!disabled"])
                     else:
                         okbutton.state(["disabled"])
@@ -165,8 +172,7 @@ class GuiStarterSSC:
             else:
                 text_update("You need to choose a valid file to continue.")
 
-            return ticker_entry
-
+            return
         file_btn.bind("<Button-1>", fileopn)  # binding the button file_btn to the fileopn function with press event
 
         def show_contents(event):
@@ -175,11 +181,9 @@ class GuiStarterSSC:
             :param event:
             :return:
             """
-            global ticker_entry
-            global error_file
 
-            if ticker_entry:
-                text_update(ticker_entry)
+            if self.ticker_list:
+                text_update(self.ticker_list)
             elif error_file:
                 text_update(error_file)
             else:
@@ -218,10 +222,9 @@ class GuiStarterSSC:
 
             if okbutton.instate(["!disabled"]):
                 try:
-                    if ticker_entry:
+                    if self.ticker_list:
                         print("Inside if ticker_entry True")
                         okbutton.state(["disabled"])
-                        self.ticker_list = ticker_entry
                         text_update("Ticker List Successfully Enterred")
                         window.update()
 
@@ -229,66 +232,11 @@ class GuiStarterSSC:
                         Place for main program to run on submit click
                         """
 
-                        lchanger = ticker_entry[:]  # Copy of list
+                        lchanger = self.ticker_list[:]  # Copy of list
                         eloglist = []  # Instantiating an error log list
+                        mainssc.FSmain_SSC.rapid_fetch(lchanger)
 
-                        # while loop pops through lchanger list
-                        count = 0
-                        while lchanger:
-                            global stop_thread
-                            count += 1
-                            print("This is top level count:  " + str(count))
-
-                            if stop_thread:
-                                print("made it into stop_thread")
-                                for y in th.enumerate():
-                                    if y.daemon:
-                                        okbutton['state'] = 'disabled'
-                                        text_update("Process Cancelled - Close Button Now Active")
-                                        stop_thread = False
-                                        exit_btn['state'] = 'normal'
-                                        break
-                                    else:
-                                        continue
-                                break
-
-                            try:
-                                x = lchanger.pop(0)  # pops first value in lchanger into variable x
-
-                                text_update("Starting API Fetch with Ticker Symbol: " + str(x))  # updates text with current
-                                window.update()
-
-                                sscf.get_financials(x)  # passes in x to get_financials, starting main program
-
-                                # this if/else checks to see if the get_financials function updated the files
-                                # the function will fail if these two files have no information
-                                if os.path.getsize("balancesheets.json") and os.path.getsize("incomestatements.json") > 100:
-
-                                    sscp.parsetool()  # Calls .parsetool() takes the two JSON files, formats to Python Dict
-
-                                    sscp.grade_tool(sscp.parsetool.bsheets, sscp.parsetool.isheets, sscp.parsetool.idict,
-                                                    sscp.parsetool.bdict)  # passes parsetool attributes to grade_tool
-
-                                    print(str(sscf.get_financials.ticker_entryf))
-                                else:
-                                    text_update("Error with balancesheets.json and/or incomestatements.json for: " + str(x))
-
-                                sst.log_entry(x, sscf.res_direct)
-
-                            except Exception as Ex:
-                                print("Error in ssc_gui submit_click :: " + str(Ex))
-                                eloglist.append(x)
-                                with open("elog.txt", "w") as elog:
-                                    for x in eloglist:
-                                        elog.writelines(str(x) + " \n")
-
-                                    elog.close()
-                                pass
-
-                            continue
-
-                        window.update()
-                        exit_btn['state'] = 'normal'
+                        # TODO: Create a stop process to terminate fetch/parse actions
 
                     else:
                         text_update("File Error - No Stock Ticker List Defined")
@@ -303,8 +251,7 @@ class GuiStarterSSC:
             else:
                 print("we made it to else")
 
-            return ticker_entry
-
+        # TODO: Need to check to see if I still need to create multiple threads to handle the freezing issue on the GUI
         # Trying to see if I can store reference to this thread in a module level variable for close button functionality
         global thread_list
         thread_list = []
@@ -350,6 +297,8 @@ class GuiStarterSSC:
         exit_btn.bind("<Button-1>", exit_click)  # this line of code binds the exit_btn to the exit_click function
 
         def show_db(event):
+            ST = sst.StoreSSC()
+
             """
             This function pulls the table information from the MySQL database and updates Text_c to show
             the contents of the database for review.
@@ -357,8 +306,8 @@ class GuiStarterSSC:
             :return:
             """
             try:
-                if sst.show_db():
-                    results = sst.show_db()
+                if ST.show_db():
+                    results = ST.show_db()
                     newline_results = ""
                     for row in results:
                         newline_results += str(row) + "\n"
@@ -376,3 +325,6 @@ class GuiStarterSSC:
         window.mainloop()
         return ticker_entry
 
+if __name__ == "__main__":
+    GSSC = GuiStarterSSC()
+    GSSC.start_gui_ssc()
