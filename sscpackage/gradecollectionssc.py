@@ -19,10 +19,11 @@ class GradeCollectionSSC:
     """
 
     def __init__(self, ticker, parsecombossc, uniqueidssc):
+        self.grade_cancel: bool = False
         self.totalpointsssc = 0
         self.pointsssc = 0
         self.storeclass = storessc.StoreSSC()
-        self.ticker = ticker
+        self.ticker: str = ticker
         self.uniqueidssc = uniqueidssc
         self.parsecombossc = parsecombossc[ticker + "__" + uniqueidssc]
         self.gradesectionone = grade_gtltyoyssc.GTLTYoYSSC()
@@ -33,6 +34,9 @@ class GradeCollectionSSC:
         self.finalgrade = grade_finalssc.GradeFinalSSC()
         self.awardsystem = awardsystemssc.AwardSystemSSC().fetchawardsystem(industry=self.parsecombossc["Industry"],
                                                                             sector=self.parsecombossc["Sector"])
+
+    def grade_cancel_flag(self):
+        self.grade_cancel = True
 
     def gradecollectionssc(self):
         pointbin = []

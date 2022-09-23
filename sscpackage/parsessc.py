@@ -1,6 +1,7 @@
 import fetchshelfssc_mod
 import fetchlogssc
-import guistarterssc
+import gradecollectionssc
+import gradeparsecombinessc
 import parseincomessc
 import parsebalancessc
 import parsearssc
@@ -10,10 +11,10 @@ import parsevalssc
 
 
 class ParseStart:
-    parse_cancelflag = False
+    parse_cancel: bool = False
 
     def parse_cancel(self):
-        ParseStart.parse_cancelflag = True
+        ParseStart.parse_cancel= True
     def ssc_parselogstart(self):
         """
         1. opens log file with stored list of current keys
@@ -63,8 +64,8 @@ class ParseStart:
                                }
 
         for logentry in local_logcopy:
-            if ParseStart.__class__.parse_cancelflag:
-                guistarterssc.GuiStarterSSC.
+            if ParseStart.__class__.parse_cancel:
+                break
             for tag in tag_container.keys():
                 if tag in logentry:
                     (dict_tagswitchboard[tag_container[tag]])(logentry)

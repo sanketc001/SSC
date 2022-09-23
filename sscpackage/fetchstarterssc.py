@@ -12,15 +12,15 @@ class FetchStarterSSC:
 
     def __init__(self, tickerlist: list):
         self.tickerlist = tickerlist
-        self.stoploop: bool = False
+        self.fetch_cancel: bool = False
 
-    def set_stoptrue(self):
-        self.stoploop = True
+    def fetch_cancel(self):
+        self.fetch_cancel = True
 
     async def _fetch_cycle(self, *args, **kwargs):
         tickerlistvar_fetchssc = self.tickerlist[:]
         while tickerlistvar_fetchssc:
-            if self.stoploop:
+            if self.fetch_cancel:
                 break
             if len(tickerlistvar_fetchssc) >= 5:
                 await asyncio.gather(

@@ -7,15 +7,43 @@ import parsessc
 import gradestarterssc
 import fetchstarterssc
 import schedule
+def gui_ssc_instantiate():
+    print(guistarterssc.GuiStarterSSC.fetch_instcount())
+    if guistarterssc.GuiStarterSSC.fetch_instcount() > 0:
+        pass
+    else:
+        guistarterssc.GuiStarterSSC().start_gui_ssc()
 
-GUISSC = guistarterssc.GuiStarterSSC()
+
+gui_ssc_instantiate()
+
 def cancel_schedule():
-    if GUISSC.__class__.cancel_start:
+    if guistarterssc.GuiStarterSSC.cancel_start:
+        pass
 
 
+class ControlBoardSSC():
+    """
+    Main Control Flow:
+    1. guistarter
+    FROM GUI - INPUT CHOSEN
+    2.
+    """
+    main_cancelf = False
+    def __init__(self):
+        self.gui = guistarterssc.GuiStarterSSC()
+        self.fetch = fetchstarterssc.FetchSSC()
+        self.parse = parsessc.ParseStart()
+        self.grade = gradestarterssc.GradeStartSSC()
+
+        # How methods are called for core application after GUI is instantiated
+        self.controlflow = {
+            "1": self.gui
+        }
 
 
-FSmain_SSC = fetchstarterssc.FetchSSC()
-PSmain_SSC = parsessc.ParseStart()
-PSmain_SSC.ssc_parselogstart()
-GSmain_SSC = gradestarterssc.GradeStartSSC()
+    def run_core(self, ticker_list):
+
+        if ControlBoardSSC.main_cancelf:
+            pass
+

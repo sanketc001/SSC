@@ -14,8 +14,10 @@ import sys
 import random
 import string
 import threading as th
+
 global ticker_entry
 import itertools
+
 ticker_entry = []
 global freq
 global d_range
@@ -25,20 +27,28 @@ global error_file
 error_file = None
 global r_keyl
 r_keyl = []
-import mainssc
 
 """
 This is to test branch functionality GIT/Pycharm
 """
 
-class GuiStarterSSC:
+
+class GuiStarterSSC(object):
     cancel_start = False
+    guissc_instcount = 0
+
     def __init__(self):
         self.ticker_list = []
+        GuiStarterSSC.guissc_instcount += 1
+
+    def fetch_instcount():
+        return GuiStarterSSC.guissc_instcount
+    fetch_instcount = staticmethod(fetch_instcount)
 
     def status_check(self):
-        return GuiStarterSSC.__class__.cancel_start
+        return GuiStarterSSC.cancel_start
         # TODO: test this way of providing 'cancel' with button click event
+
     def start_gui_ssc(self):
         global text_c
         global ticker_entry  # Setting the local scope ticker_entry as the global scope variable
@@ -78,7 +88,6 @@ class GuiStarterSSC:
         exit_btn.grid(column=0, row=5, columnspan=1, sticky="w")
         cancel_btn = tk.Button(master=mainframe, text="CANCEL", font=fontstyle)
         cancel_btn.grid(column=0, row=5, columnspan=1, sticky="e")
-
 
         # setting a tkk style for the submit_click button
         s = ttk.Style()
@@ -124,7 +133,8 @@ class GuiStarterSSC:
                 ('All files', '*.*')
             )
 
-            fd_raw = fd.askopenfile(filetypes=filetypes)  # this is the open file function saving the chosen file as fd_raw
+            fd_raw = fd.askopenfile(
+                filetypes=filetypes)  # this is the open file function saving the chosen file as fd_raw
 
             # Validate Chosen List
             flag = True
@@ -173,6 +183,7 @@ class GuiStarterSSC:
                 text_update("You need to choose a valid file to continue.")
 
             return
+
         file_btn.bind("<Button-1>", fileopn)  # binding the button file_btn to the fileopn function with press event
 
         def show_contents(event):
@@ -324,6 +335,9 @@ class GuiStarterSSC:
             print(str(x))
         window.mainloop()
         return ticker_entry
+
+    # start_gui_ssc = staticmethod(start_gui_ssc)
+
 
 if __name__ == "__main__":
     GSSC = GuiStarterSSC()
