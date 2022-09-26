@@ -28,6 +28,7 @@ class ParseAr:
     def fetch_parsear(self, timestampidar):
         try:
             with shelve.open(self.setpathssc_parsesscar) as pibank:
+                # TODO: look into this, maybe change looping structure, timestamidar in pibank.keys(), no for loop
                 for key in pibank.keys():
                     if timestampidar in key:
                         pushdata = pibank[key]

@@ -28,7 +28,10 @@ class GTLTYoYRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
                 respointrunner = 0
                 pointsper = localawardsectiongtlt[rationame]["points"]
                 ratioweight = localawardsectiongtlt[rationame]["weight"]
-                for oldyear, recenty in itertools.pairwise(reversed(localratiodict[rationame])):
+
+                for old_index in range(len(localratiodict[rationame])-1, 0, -1):
+                    oldyear = localratiodict[rationame][old_index]
+                    recenty = localratiodict[rationame][old_index-1]
 
                     keyforprint = [str(rationame), "Year", str(localratiodict[rationame].index(recenty)), "|", "Year",
                                    str(localratiodict[rationame].index(oldyear))]

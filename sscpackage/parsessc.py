@@ -1,7 +1,5 @@
 import fetchshelfssc_mod
 import fetchlogssc
-import gradecollectionssc
-import gradeparsecombinessc
 import parseincomessc
 import parsebalancessc
 import parsearssc
@@ -12,9 +10,30 @@ import parsevalssc
 
 class ParseStart:
     parse_cancel: bool = False
+    parse_runitem: str = ""
+    parse_header = "PARSE TICKERS-"
 
-    def parse_cancel(self):
+    @staticmethod
+    def set_parse_header(arg_head):
+        ParseStart.parse_header = str(arg_head)
+
+    @staticmethod
+    def pull_parseheader():
+        return ParseStart.parse_header
+
+    @staticmethod
+    def set_parserun(arg):
+        ParseStart.parse_runitem = arg
+
+    @staticmethod
+    def parse_canceler():
+        print("Parse_Cancel")
         ParseStart.parse_cancel= True
+        print(ParseStart.parse_cancel)
+    @staticmethod
+    def parse_runfetch():
+        return ParseStart.parse_runitem
+
     def ssc_parselogstart(self):
         """
         1. opens log file with stored list of current keys
@@ -64,7 +83,9 @@ class ParseStart:
                                }
 
         for logentry in local_logcopy:
-            if ParseStart.__class__.parse_cancel:
+            ticker = logentry.split("__")[0]
+            ParseStart.set_parserun(ticker)
+            if ParseStart.parse_cancel:
                 break
             for tag in tag_container.keys():
                 if tag in logentry:

@@ -76,15 +76,20 @@ class StoreSSC:
                 );"""
 
                 with connection.cursor(buffered=True) as cursor:
-                    cursor.execute(dbtbl_create)
+                    cursor.execute(dbtbl_create, multi=True)
+                    connection.commit()
 
         except mysql.connector.Error as e:
             print("Error in ssc_st - TRY1: " + str(e))
 
+        finally:
+            connection.close()
+
+
 # TODO: fix store process, GradeSSC is no longer the default location for stored info.  Use gradecollectionssc.
     def log_entry(self, parsecombo, grade_ssc, ticker_entry="MSFT"):
-        insert_db_table = "INSERT INTO logentry (ticker, grade, parsecombo) VALUES (%s, %s, %s)"
-        print(insert_db_table)
+        #insert_db_table = "INSERT INTO logentry (ticker, grade, parsecombo) VALUES (%s, %s, %s)"
+        #print(insert_db_table)
 
         combo_json = json.dumps(parsecombo, skipkeys=False)
 
@@ -105,6 +110,9 @@ class StoreSSC:
 
         except mysql.connector.Error as e:
             print("Error in ssc_st - TRY2: " + str(e))
+
+        finally:
+            connection.close()
 
         return None
 

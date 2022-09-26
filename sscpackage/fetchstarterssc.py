@@ -9,13 +9,36 @@ class FetchStarterSSC:
 
     This class and 'fetch_cycle'
     """
+    runlist_tickers = []
+    fetch_cancel = False
+    fetch_header = "FETCH TICKERS: "
+
+    @staticmethod
+    def pull_header():
+        return FetchStarterSSC.fetch_header
+    @staticmethod
+    def update_header(arg_header):
+        FetchStarterSSC.fetch_header = str(arg_header)
+
+    @staticmethod
+    def update_runlist(args):
+        del FetchStarterSSC.runlist_tickers
+        FetchStarterSSC.runlist_tickers = [x for x in args]
+
+    @staticmethod
+    def pull_runlist():
+        return FetchStarterSSC.runlist_tickers
 
     def __init__(self, tickerlist: list):
         self.tickerlist = tickerlist
         self.fetch_cancel: bool = False
+        self.runninglist = []
 
-    def fetch_cancel(self):
-        self.fetch_cancel = True
+    @staticmethod
+    def cancel_fetch():
+        print("entered cancel_fetch :: ")
+        FetchStarterSSC.fetch_cancel = True
+        print(FetchStarterSSC.fetch_cancel)
 
     async def _fetch_cycle(self, *args, **kwargs):
         tickerlistvar_fetchssc = self.tickerlist[:]
@@ -23,6 +46,11 @@ class FetchStarterSSC:
             if self.fetch_cancel:
                 break
             if len(tickerlistvar_fetchssc) >= 5:
+                ticker_runlist = []
+                for indexno in range(0, 5):
+                    ticker_runlist.append(tickerlistvar_fetchssc[indexno])
+                    print(ticker_runlist)
+                    FetchStarterSSC.update_runlist(ticker_runlist)
                 await asyncio.gather(
                     FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch(),
                     FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch(),
@@ -31,6 +59,8 @@ class FetchStarterSSC:
                     FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch(),
                 )
             else:
+                if self.fetch_cancel:
+                    break
                 for indexno in range(len(tickerlistvar_fetchssc)):
                     await asyncio.gather(FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch())
             await asyncio.sleep(1)

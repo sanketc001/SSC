@@ -41,4 +41,3 @@ class FetchShelfSSC:
             else:
                 print("Shelf Empty")
 
-

@@ -1,3 +1,8 @@
+"""
+Core fetching logic - with Requests
+"""
+
+
 import sscpackage.fetchurlssc
 import asyncio
 import requests
@@ -60,12 +65,14 @@ class FetchSSC:
             response = requests.request("GET", url=url, headers=head, params=qs)  # Request data
             self.response = response
             if response.status_code == 200:  # If received 'all good' response from API for first request, continue
+                print(f'{self.ticker} - fetch success')
                 textcast_ssc = response.text
                 self.fetch_data = dict(json.loads(textcast_ssc))
                 FSSC = sscpackage.fetchshelfssc_mod.FetchShelfSSC(ticker=self.ticker)
                 FSSC.fetchstore(key, id(self), self.fetch_data, timestampidfs=timestampidrf)
                 self.statusfetch = True
-                FetchSSC.__class__.ticker_successlist += str(self.ticker) + ", "
+                FetchSSC.ticker_successlist += str(self.ticker) + ", "
             else:
+                print(f'{self.ticker} - failed fetch')
                 self.statusfetch = False
             await asyncio.sleep(1)

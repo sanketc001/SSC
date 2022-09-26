@@ -15,7 +15,9 @@ class GradeValRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
             weightval = awardsystem['VALMETRICS'][rationame]['weight']
             respointrunner = 0
 
-            for recenty, oldery in itertools.pairwise(reversed(localvalratiodict[rationame])):
+            for old_index in range(len(localvalratiodict[rationame])-1, 0, -1):
+                oldery = localvalratiodict[rationame][old_index]
+                recenty = localvalratiodict[rationame][old_index-1]
                 listforkey = [rationame, "YEAR", localvalratiodict[rationame].index(recenty),
                               "|", localvalratiodict[rationame].index(oldery)]
                 if recenty > oldery:

@@ -9,6 +9,11 @@ import os
 import sys
 
 class GradeSheetPrintSSC():
+    gspssc_instcount = 0
+
+    @staticmethod
+    def return_gspssc_count():
+        return GradeSheetPrintSSC.gspssc_instcount
     def __init__(self):
         self.gradesheetprinterprimer = {}
         self.gradesheetprinter = {}

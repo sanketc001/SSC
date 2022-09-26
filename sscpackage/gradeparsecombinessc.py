@@ -15,7 +15,12 @@ import json
 
 
 class GradeParseCombineSSC:
+    inst_count_gpcssc = 0
+    @staticmethod
+    def return_instcount_gpcssc():
+        return GradeParseCombineSSC.inst_count_gpcssc
     def __init__(self):
+        GradeParseCombineSSC.inst_count_gpcssc += 1
         self.parsecombo= {}
     def gradeparsecombinessc(self, ticker, logfileidssc):
         PAR = parsearssc.ParseAr()

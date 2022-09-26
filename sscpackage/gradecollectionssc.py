@@ -9,6 +9,7 @@ import awardsystemssc
 import storessc
 import grade_valratiossc
 import grade_finalssc
+import gradestarterssc
 
 
 class GradeCollectionSSC:
@@ -17,8 +18,14 @@ class GradeCollectionSSC:
         *Note: Work In Progress
         Different Grading Algorithms
     """
+    inst_count_collections: int = 0
+
+    @staticmethod
+    def return_inst_count():
+        return GradeCollectionSSC.inst_count_collections
 
     def __init__(self, ticker, parsecombossc, uniqueidssc):
+        GradeCollectionSSC.inst_count_collections += 1
         self.grade_cancel: bool = False
         self.totalpointsssc = 0
         self.pointsssc = 0
@@ -76,12 +83,17 @@ if __name__ == "__main__":
     ]
 
     def mini_collectiontest(testlogvaridssc):
+        pointvarbinssc = []
         ticker, uniqueid = testlogvaridssc.split("__")
+        print(ticker, uniqueid)
+        print(GradeCollectionSSC.return_inst_count())
         GS = gradeparsecombinessc.GradeParseCombineSSC()
+        print(GradeCollectionSSC.return_inst_count())
         passindict = GS.gradeparsecombinessc(ticker, uniqueid)
         Gcollect = GradeCollectionSSC(ticker, passindict, uniqueid)
         pointvarbinssc = Gcollect.gradecollectionssc()
         print(pointvarbinssc)
+        del pointvarbinssc
 
     for uniquekey in testbin_tickers:
         mini_collectiontest(uniquekey)

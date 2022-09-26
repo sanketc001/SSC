@@ -1,39 +1,62 @@
 """
 This will start tkinter gui
 """
-
-import tkinter as tk
+import fetchstarterssc
+import gradestarterssc
+#sscpackage imports
+from sscpackage import storessc as sst
 import fetchstarterssc as sscf
-import os
-from sscpackage import storessc as sst, parsessc as sscp
-import tkinter.font as tk_font
+import parsessc
+
+
+#The Rest
 from tkinter import filedialog as fd
 from tkinter.messagebox import showinfo
 from tkinter import ttk
+
+import schedule
+import asyncio
+import tkinter as tk
+import tkinter.font as tk_font
 import sys
 import random
 import string
 import threading as th
-
-global ticker_entry
 import itertools
+import time
 
-ticker_entry = []
+# TODO: check into 'globals' use on guistarterssc
 global freq
 global d_range
 global text_c
 global stop_thread
 global error_file
-error_file = None
 global r_keyl
-r_keyl = []
 
+
+r_keyl = []
+error_file = None
 """
 This is to test branch functionality GIT/Pycharm
 """
 
 
 class GuiStarterSSC(object):
+    @staticmethod
+    def schedule_init():
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
+
+    th.Thread(target=schedule_init, daemon=True).start()
+
+    @staticmethod
+    def cancel_init():
+        fetchstarterssc.FetchStarterSSC.cancel_fetch()
+        parsessc.ParseStart.parse_canceler()
+        gradestarterssc.GradeStartSSC.cancel_grade()
+
+
     cancel_start = False
     guissc_instcount = 0
 
@@ -92,17 +115,6 @@ class GuiStarterSSC(object):
         # setting a tkk style for the submit_click button
         s = ttk.Style()
         s.configure('my.TButton', font=('Times New Roman', 18))
-
-        def text_update(msg):
-            """
-            This function uses 'msg' passed in argument to alter contents of text_c
-            :param msg: any text arrangement accepted by a tk.Text widget
-            :return:
-            """
-            text_c.config(state="normal")
-            text_c.delete("1.0", "end")
-            text_c.insert("1.0", str(msg))
-            text_c.config(state="disabled")
 
         def rkey():
             """
@@ -163,6 +175,7 @@ class GuiStarterSSC(object):
 
                     # Update ssc_gui function attribute - ticker_entry
                     self.ticker_list = ticker_entry
+                    print(bool(self.ticker_list))
                     text_update("You have chosen a valid list - click submit to continue processing")
 
                     # Enable submit click when a minimum list of tickers is given
@@ -209,9 +222,10 @@ class GuiStarterSSC(object):
             :return:
             """
 
-            global stop_thread
-            stop_thread = True
-            text_update("Operation cancelling")
+            text_update("Cancel pressed...please wait for current process to finish before closing application")
+
+            GuiStarterSSC.cancel_start = True
+            GuiStarterSSC.cancel_init()
 
             if thread_list:
                 exit_btn['state'] = 'disabled'
@@ -221,6 +235,17 @@ class GuiStarterSSC(object):
 
         cancel_btn.bind("<Button-1>", cancel_click)  # this binds cancel_btn with cancel_click function upon event
 
+        def text_update(msg, header: str = "- DEFAULT -"):
+            """
+            This function uses 'msg' passed in argument to alter contents of text_c
+            :param msg: any text arrangement accepted by a tk.Text widget
+            :return:
+            """
+            text_c.config(state="normal")
+            text_c.delete("1.0", "end")
+            text_c.insert("1.0", str(f'STATUS MESSAGE: {header} -> {msg}'))
+            text_c.config(state="disabled")
+
         def submit_click():
             """
             This function is meant to start a thread with the main code elements of the remaining SSC program.
@@ -228,24 +253,42 @@ class GuiStarterSSC(object):
             attribute, parsetool attribute and storetool attribute.
             :return:
             """
-            global ticker_entry
             exit_btn['state'] = 'disabled'
 
             if okbutton.instate(["!disabled"]):
                 try:
                     if self.ticker_list:
-                        print("Inside if ticker_entry True")
                         okbutton.state(["disabled"])
-                        text_update("Ticker List Successfully Enterred")
+                        text_update("LIST SUBMIT", "Ticker List Successfully Enterred")
                         window.update()
 
                         """
                         Place for main program to run on submit click
                         """
 
-                        lchanger = self.ticker_list[:]  # Copy of list
-                        eloglist = []  # Instantiating an error log list
-                        mainssc.FSmain_SSC.rapid_fetch(lchanger)
+                        #Begin main algorithm
+                        if not GuiStarterSSC.cancel_start:
+                            FS = sscf.FetchStarterSSC(self.ticker_list)
+                            schedule.every(1).seconds.do(lambda: text_update(FS.pull_header(), FS.pull_runlist()))
+                            schedule.run_pending()
+                            asyncio.run(FS._fetch_cycle())
+                            schedule.clear()
+                        if not GuiStarterSSC.cancel_start:
+                            PS = parsessc.ParseStart()
+                            schedule.every(1).seconds.do(lambda: text_update(PS.pull_parseheader(), PS.parse_runfetch()))
+                            schedule.run_pending()
+                            PS.ssc_parselogstart()
+                            schedule.clear()
+                        if not GuiStarterSSC.cancel_start:
+                            GS = gradestarterssc.GradeStartSSC()
+                            schedule.every(1).seconds.do(lambda: text_update(GS.pull_gradeheader(), GS.get_runitem()))
+                            schedule.run_pending()
+                            GS.gradestartssc()
+                            schedule.clear()
+                        #if GuiStarterSSC.cancel_start:
+                            #exit_btn['state'] = "normal"
+
+
 
                         # TODO: Create a stop process to terminate fetch/parse actions
 
@@ -334,7 +377,7 @@ class GuiStarterSSC(object):
         for x in th.enumerate():
             print(str(x))
         window.mainloop()
-        return ticker_entry
+        return
 
     # start_gui_ssc = staticmethod(start_gui_ssc)
 

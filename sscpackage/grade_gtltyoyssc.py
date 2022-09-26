@@ -56,7 +56,9 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
             respointrunner = 0
             if statement == "incdat":
                 sourcevalsinc = localincdatssc[nameval]
-                for oldyear, newyear in itertools.pairwise(reversed(localincdatssc[nameval])):
+                for old_index in range(len(localincdatssc[nameval])-1, 0, -1):
+                    oldyear = localincdatssc[nameval][old_index]
+                    newyear = localincdatssc[nameval][old_index-1]
                     keyforprint = [nameval, "Year", str(sourcevalsinc.index(newyear)), "|", "Year",
                                    str(sourcevalsinc.index(oldyear))]
 
@@ -78,7 +80,9 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
 
             elif statement == "baldat":
                 sourcevalsbal = localbaldatssc[nameval]
-                for oldyear, newyear in itertools.pairwise(localbaldatssc[nameval]):
+                for old_index in range(len(localbaldatssc[nameval]) - 1, 0, -1):
+                    oldyear = localbaldatssc[nameval][old_index]
+                    newyear = localbaldatssc[nameval][old_index - 1]
                     keyforprint = [nameval, "Year", str(sourcevalsbal.index(newyear)), "|", "Year",
                                    str(sourcevalsbal.index(oldyear))]
 
