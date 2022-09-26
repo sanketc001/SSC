@@ -12,6 +12,9 @@ class FetchStarterSSC:
     runlist_tickers = []
     fetch_cancel = False
     fetch_header = "FETCH TICKERS: "
+    init_once = False
+
+
 
     @staticmethod
     def pull_header():
@@ -34,6 +37,7 @@ class FetchStarterSSC:
         self.tickerlist = tickerlist
         self.fetch_cancel: bool = False
         self.runninglist = []
+        FetchStarterSSC.init_once = True
 
     @staticmethod
     def cancel_fetch():

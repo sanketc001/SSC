@@ -30,7 +30,9 @@ global d_range
 global text_c
 global stop_thread
 global error_file
-global r_keyl
+global r_keyl  # At least need this one
+global schedule_bool
+schedule_bool = True
 
 r_keyl = []
 error_file = None
@@ -40,11 +42,26 @@ This is to test branch functionality GIT/Pycharm
 
 
 class GuiStarterSSC(object):
+    #maintain list of threads
+    global_schedule = True
+    thread_list: [th.Thread] = []
+    end_fetchstart = False
+    end_parsestart = False
+    end_gradestart = False
+
+    @staticmethod
+    def schedule_boolfalse():
+        global schedule_bool
+        schedule_bool = False
+
     @staticmethod
     def schedule_init():
-        while True:
+        global schedule_bool
+        while schedule_bool:
             schedule.run_pending()
             time.sleep(1)
+        else:
+            schedule.clear()
 
     th.Thread(target=schedule_init, daemon=True).start()
 
@@ -224,8 +241,10 @@ class GuiStarterSSC(object):
 
             GuiStarterSSC.cancel_start = True
             GuiStarterSSC.cancel_init()
+            GuiStarterSSC.ret_threadlist()
 
-            if thread_list:
+
+            if GuiStarterSSC.thread_list:
                 exit_btn['state'] = 'disabled'
             else:
                 exit_btn['state'] = 'normal'
@@ -271,6 +290,13 @@ class GuiStarterSSC(object):
                             schedule.run_pending()
                             asyncio.run(FS._fetch_cycle())
                             schedule.clear()
+
+                        GuiStarterSSC.end_fetchstart = True
+                        if GuiStarterSSC.cancel_start:
+                            GuiStarterSSC.schedule_boolfalse()
+                            schedule.clear()
+                            exit_btn['state'] = 'normal'
+
                         if not GuiStarterSSC.cancel_start:
                             PS = parsessc.ParseStart()
                             schedule.every(1).seconds.do(
@@ -278,14 +304,25 @@ class GuiStarterSSC(object):
                             schedule.run_pending()
                             PS.ssc_parselogstart()
                             schedule.clear()
+
+                        GuiStarterSSC.end_parsestart = True
+                        if GuiStarterSSC.cancel_start:
+                            GuiStarterSSC.schedule_boolfalse()
+                            schedule.clear()
+                            exit_btn['state'] = 'normal'
+
                         if not GuiStarterSSC.cancel_start:
                             GS = gradestarterssc.GradeStartSSC()
                             schedule.every(1).seconds.do(lambda: text_update(GS.pull_gradeheader(), GS.get_runitem()))
                             schedule.run_pending()
                             GS.gradestartssc()
                             schedule.clear()
-                        # if GuiStarterSSC.cancel_start:
-                        # exit_btn['state'] = "normal"
+
+                        GuiStarterSSC.end_gradestart = True
+                        if GuiStarterSSC.cancel_start:
+                            GuiStarterSSC.schedule_boolfalse()
+                            schedule.clear()
+                            exit_btn['state'] = 'normal'
 
                         # TODO: Create a stop process to terminate fetch/parse actions
 
@@ -303,12 +340,9 @@ class GuiStarterSSC(object):
                 print("we made it to else")
 
         # TODO: Need to check to see if I still need to create multiple threads to handle the freezing issue on the GUI
-        # Trying to see if I can store reference to this thread in a module level variable for close button functionality
-        global thread_list
-        thread_list = []
 
         def sub_threader():
-            thread_list.append(th.Thread(target=submit_click, name=rkey(), daemon=True).start())
+            GuiStarterSSC.thread_list.append(th.Thread(target=submit_click, name=rkey(), daemon=True).start())
 
         okbutton = ttk.Button(master=mainframe, text="SUBMIT", style='my.TButton',
                               command=sub_threader)
@@ -325,15 +359,17 @@ class GuiStarterSSC(object):
             :param event:
             :return:
             """
+            schedule.clear()
+            GuiStarterSSC.schedule_boolfalse()
             print(str(exit_btn['state']))
             if exit_btn['state'] == 'normal':
                 print(len(th.enumerate()))
                 if len(th.enumerate()) > 1:
                     for x in th.enumerate():
                         print(x.name)
-                        if x.daemon:
+                        if x is not th.main_thread():
                             x.join()
-                            print("Thread Joined")
+                            print(f'THREAD JOINED: {x.name}')
                         else:
                             continue
                 else:
@@ -373,7 +409,9 @@ class GuiStarterSSC(object):
 
         for x in th.enumerate():
             print(str(x))
-        window.mainloop()
+
+        if GuiStarterSSC.guissc_instcount == 1:
+            window.mainloop()
         return
 
     # start_gui_ssc = staticmethod(start_gui_ssc)
