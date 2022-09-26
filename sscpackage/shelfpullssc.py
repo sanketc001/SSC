@@ -4,6 +4,7 @@ parse and fetch ssc.
 """
 import shelve
 
+
 class ShelfPullSSC:
     def pullshelfssc(self, pathshelfssc):
         """

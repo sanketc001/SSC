@@ -2,17 +2,18 @@
 Core fetching logic - with Requests
 """
 
-
-import sscpackage.fetchurlssc
 import asyncio
-import requests
-import sscpackage.fetchshelfssc_mod
-import json
-import time
-import string
-import random
-import math
 import datetime
+import json
+import math
+import random
+import string
+import time
+
+import requests
+
+import sscpackage.fetchshelfssc_mod
+import sscpackage.fetchurlssc
 
 
 def theshuffler(basket, countage):
@@ -51,6 +52,7 @@ def myownrandom(keylength=10):
 
 class FetchSSC:
     ticker_successlist = ""
+
     def __init__(self, ticker="MSFT", *args, **kwargs):
         self.ticker = ticker
 
@@ -72,6 +74,9 @@ class FetchSSC:
                 FSSC.fetchstore(key, id(self), self.fetch_data, timestampidfs=timestampidrf)
                 self.statusfetch = True
                 FetchSSC.ticker_successlist += str(self.ticker) + ", "
+            elif response.status_code == 401:
+                print("Invalid API Key - Check User Information")
+                self.statusfetch = False
             else:
                 print(f'{self.ticker} - failed fetch')
                 self.statusfetch = False

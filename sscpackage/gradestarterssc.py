@@ -19,7 +19,6 @@ class GradeStartSSC():
     def set_gradeheader(arg_head):
         GradeStartSSC.grade_header = str(arg_head)
 
-
     @staticmethod
     def set_runitem(arg):
         GradeStartSSC.grade_runitem = arg
@@ -41,7 +40,7 @@ class GradeStartSSC():
         if fiver:
             for indexno in range(0, 5):
                 local_looplist[sorted(localfetchuniquelogcopyssc.keys())[indexno]] = \
-                localfetchuniquelogcopyssc[sorted(localfetchuniquelogcopyssc.keys())[indexno]]
+                    localfetchuniquelogcopyssc[sorted(localfetchuniquelogcopyssc.keys())[indexno]]
                 localfetchuniquelogcopyssc = local_looplist
         else:
             pass
@@ -58,6 +57,7 @@ class GradeStartSSC():
                                                                      logfileidssc=entrysscgs
                                                                  ))
                 GCOL_SSC.gradecollectionssc()
+
 
 if __name__ == "__main__":
     GSS = GradeStartSSC()

@@ -1,5 +1,5 @@
 import gradesheetprintssc
-import itertools
+
 
 class GradeValRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
     def __init__(self):
@@ -15,9 +15,9 @@ class GradeValRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
             weightval = awardsystem['VALMETRICS'][rationame]['weight']
             respointrunner = 0
 
-            for old_index in range(len(localvalratiodict[rationame])-1, 0, -1):
+            for old_index in range(len(localvalratiodict[rationame]) - 1, 0, -1):
                 oldery = localvalratiodict[rationame][old_index]
-                recenty = localvalratiodict[rationame][old_index-1]
+                recenty = localvalratiodict[rationame][old_index - 1]
                 listforkey = [rationame, "YEAR", localvalratiodict[rationame].index(recenty),
                               "|", localvalratiodict[rationame].index(oldery)]
                 if recenty > oldery:
@@ -29,8 +29,8 @@ class GradeValRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
                 valforgrade = [recenty, inlineGVALvar, oldery, "POINTS", pointsper]
                 self.gradeprinterdict[str(listforkey)] = valforgrade
 
-            valratiopointbook[rationame] = {'Base Points': (pointsper * (len(localvalratiodict)-1))*weightval,
-                                            'Current Points': respointrunner*weightval}
+            valratiopointbook[rationame] = {'Base Points': (pointsper * (len(localvalratiodict) - 1)) * weightval,
+                                            'Current Points': respointrunner * weightval}
 
         self.setinstancepath(ticker, uniqueid)
         self.setsheetnamesscgr(ticker)
@@ -38,9 +38,11 @@ class GradeValRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
         self.sectionprinttoexcel()
         return self.sectionendprinttoexcel(**valratiopointbook)
 
+
 if __name__ == "__main__":
     import gradeparsecombinessc
     import awardsystemssc
+
     testlogvaridssc = 'NVDA__Y8bdxbfeWiliz3B'
     ticker, uniqueid = testlogvaridssc.split("__")
     AWS = awardsystemssc.AwardSystemSSC()
@@ -52,12 +54,3 @@ if __name__ == "__main__":
     GVAL = GradeValRatioSSC()
     GVAL.printprimer("INCASRATIO", ticker, uniqueid, "SECTOR", "INDUSTRY")
     GVAL.grade_valratiossc(ticker, gradeparsecombo, uniqueid, awardsystempassin)
-
-
-
-
-
-
-
-
-

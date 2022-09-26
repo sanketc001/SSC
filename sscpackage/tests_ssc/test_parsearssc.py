@@ -1,8 +1,7 @@
-import unittest
-import parsearssc
 import shelve
+import unittest
 
-import parsessc
+import parsearssc
 
 
 class MyTestCase(unittest.TestCase):
@@ -49,8 +48,6 @@ class MyTestCase(unittest.TestCase):
         testvaluetwoar = PARSSC.fetch_parsear(test_parsetimestampid)[0]['action']
         correctvaluetwoar = "main"
         self.assertEqual(testvaluetwoar, correctvaluetwoar)
-
-
 
 
 if __name__ == '__main__':

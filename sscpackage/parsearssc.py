@@ -1,14 +1,16 @@
-import json
-import fetchshelfssc_mod
 import shelve
+
 import dictpullssc
+import fetchshelfssc_mod
+
 
 class ParseAr:
     """
     Process raw JSON data for upgrades-downgrades for grading algorithm
     """
+
     def __init__(self):
-        self.setpathssc_parsesscar= r"C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\parsearshelf"
+        self.setpathssc_parsesscar = r"C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\parsearshelf"
 
     def parsear(self, uniquename, par_rawdata):
         try:

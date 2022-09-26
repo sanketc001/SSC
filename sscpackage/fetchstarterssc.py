@@ -16,6 +16,7 @@ class FetchStarterSSC:
     @staticmethod
     def pull_header():
         return FetchStarterSSC.fetch_header
+
     @staticmethod
     def update_header(arg_header):
         FetchStarterSSC.fetch_header = str(arg_header)
@@ -43,11 +44,15 @@ class FetchStarterSSC:
     async def _fetch_cycle(self, *args, **kwargs):
         tickerlistvar_fetchssc = self.tickerlist[:]
         while tickerlistvar_fetchssc:
-            if self.fetch_cancel:
+            if FetchStarterSSC.fetch_cancel:
+                print("Broke Chain - FetchStarter")
                 break
             if len(tickerlistvar_fetchssc) >= 5:
                 ticker_runlist = []
                 for indexno in range(0, 5):
+                    if FetchStarterSSC.fetch_cancel:
+                        print("Broke Chain - FetchStarter")
+                        break
                     ticker_runlist.append(tickerlistvar_fetchssc[indexno])
                     print(ticker_runlist)
                     FetchStarterSSC.update_runlist(ticker_runlist)
@@ -59,8 +64,12 @@ class FetchStarterSSC:
                     FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch(),
                 )
             else:
-                if self.fetch_cancel:
+                if FetchStarterSSC.fetch_cancel:
+                    print("Broke Chain - FetchStarter")
                     break
                 for indexno in range(len(tickerlistvar_fetchssc)):
+                    if FetchStarterSSC.fetch_cancel:
+                        print("Broke Chain - FetchStarter")
+                        break
                     await asyncio.gather(FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch())
             await asyncio.sleep(1)

@@ -1,10 +1,10 @@
-import gradesheetprintssc
 import time
+
+import gradesheetprintssc
 
 time.time
 
-SECONDS_PER_YEAR = 365.25*24*60*60
-
+SECONDS_PER_YEAR = 365.25 * 24 * 60 * 60
 
 """
             for x in ar_dict_strip:
@@ -40,7 +40,8 @@ class GradeArSSC(gradesheetprintssc.GradeSheetPrintSSC):
                 total_count_analysts += 1
                 if dictnest["toGrade"] in localawardsys.keys():
                     runningtally += localawardsys[dictnest["toGrade"]]["points"]
-                    printer_sourcebin[str(dictnest["firm"])] = [dictnest["toGrade"], localawardsys[dictnest["toGrade"]]["points"]]
+                    printer_sourcebin[str(dictnest["firm"])] = [dictnest["toGrade"],
+                                                                localawardsys[dictnest["toGrade"]]["points"]]
 
         total_count_analysts *= localawardsys["Buy"]["points"]
 
@@ -53,9 +54,11 @@ class GradeArSSC(gradesheetprintssc.GradeSheetPrintSSC):
 
         return self.sectionendprinttoexcel(**total_count_dict)
 
+
 if __name__ == "__main__":
     import gradeparsecombinessc
     import awardsystemssc
+
     testlogvaridssc = 'NVDA__Y8bdxbfeWiliz3B'
     ticker, uniqueid = testlogvaridssc.split("__")
     AWS = awardsystemssc.AwardSystemSSC()
@@ -66,4 +69,3 @@ if __name__ == "__main__":
 
     GAR = GradeArSSC()
     GAR.grade_arssc(ticker, gradeparsecombo, uniqueid, awardsystempassin)
-

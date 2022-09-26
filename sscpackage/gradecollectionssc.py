@@ -1,15 +1,13 @@
-import time
-import datetime as dt
 import json
-import grade_arssc
-import grade_finratiossc
-import grade_gtltyoyssc
-import grade_gtltratioyoyssc
+
 import awardsystemssc
-import storessc
-import grade_valratiossc
+import grade_arssc
 import grade_finalssc
-import gradestarterssc
+import grade_finratiossc
+import grade_gtltratioyoyssc
+import grade_gtltyoyssc
+import grade_valratiossc
+import storessc
 
 
 class GradeCollectionSSC:
@@ -82,6 +80,7 @@ if __name__ == "__main__":
         "FORD__VyjP8walEhZzDRh"
     ]
 
+
     def mini_collectiontest(testlogvaridssc):
         pointvarbinssc = []
         ticker, uniqueid = testlogvaridssc.split("__")
@@ -94,6 +93,7 @@ if __name__ == "__main__":
         pointvarbinssc = Gcollect.gradecollectionssc()
         print(pointvarbinssc)
         del pointvarbinssc
+
 
     for uniquekey in testbin_tickers:
         mini_collectiontest(uniquekey)

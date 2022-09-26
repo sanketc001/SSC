@@ -1,6 +1,8 @@
-import unittest
 import shelve
+import unittest
+
 import parseindssc
+
 
 def quickdeleteop(path):
     with shelve.open(path) as funcdelshelf:
@@ -8,12 +10,14 @@ def quickdeleteop(path):
             del funcdelshelf[key]
         funcdelshelf.close()
 
+
 def shelveexist(path):
     with shelve.open(path) as funcshelf:
         if funcshelf.keys():
             return True
         else:
             return False
+
 
 class MyTestCase(unittest.TestCase):
     def test_parseindustry(self):
@@ -77,7 +81,6 @@ class MyTestCase(unittest.TestCase):
             for key in fd.keys():
                 del fd[key]
             fd.close()
-
 
 
 if __name__ == '__main__':

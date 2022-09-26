@@ -1,5 +1,6 @@
-import unittest
 import shelve
+import unittest
+
 import parseincomessc
 import shelverssc
 

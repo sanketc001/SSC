@@ -1,7 +1,8 @@
-import unittest
-import parsevalssc
 import json
 import shelve
+import unittest
+
+import parsevalssc
 
 
 class MyTestCase(unittest.TestCase):
@@ -48,6 +49,7 @@ class MyTestCase(unittest.TestCase):
                 pvssc.close()
 
         self.assertEqual(0, PPS.fetchparseval(test_parsevaluniquename))
+
 
 if __name__ == '__main__':
     unittest.main()

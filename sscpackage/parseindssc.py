@@ -1,13 +1,14 @@
-import dictpullssc
-import json
-import fetchshelfssc_mod
 import shelve
+
+import dictpullssc
+import fetchshelfssc_mod
 
 
 class ParseIndustry:
     """
     Process 'sector' data to pull stocks industry designation
     """
+
     def __init__(self):
         self.setpathssc_parsesscind = r"C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\parseindshelf"
 

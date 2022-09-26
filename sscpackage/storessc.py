@@ -1,19 +1,21 @@
-import mysql.connector
 import json
 import os
 
+import mysql.connector
 
 
 class StoreSSC:
     """
     Class for checking, storing and fetching data from a local, predefined DB
     """
+
     def __init__(self, host="localhost", user="DB_USER", password="DB_PASS", *args, **kwargs):
         self.host = host
         self.user = user
         self.password = password
 
     """Need to finish"""
+
     def create_table(self, tablename="test", *args, **kwargs):
 
         ctable_assemblyvar = """
@@ -35,7 +37,6 @@ class StoreSSC:
                             elist JSON,
                             arlist JSON
                         );"""
-
 
     def db_chksetup(self):
         """
@@ -59,7 +60,7 @@ class StoreSSC:
                 WHERE SCHEMA_NAME = 'sscdb'
                 """
 
-                table_check="""
+                table_check = """
                 SELECT COUNT(*)
                 FROM INFORMATION_SCHEMA.COLUMNS
                 WHERE TABLE_NAME = {tablename}"""
@@ -85,11 +86,10 @@ class StoreSSC:
         finally:
             connection.close()
 
-
-# TODO: fix store process, GradeSSC is no longer the default location for stored info.  Use gradecollectionssc.
+    # TODO: fix store process, GradeSSC is no longer the default location for stored info.  Use gradecollectionssc.
     def log_entry(self, parsecombo, grade_ssc, ticker_entry="MSFT"):
-        #insert_db_table = "INSERT INTO logentry (ticker, grade, parsecombo) VALUES (%s, %s, %s)"
-        #print(insert_db_table)
+        # insert_db_table = "INSERT INTO logentry (ticker, grade, parsecombo) VALUES (%s, %s, %s)"
+        # print(insert_db_table)
 
         combo_json = json.dumps(parsecombo, skipkeys=False)
 
@@ -147,6 +147,7 @@ class StoreSSC:
 
 if __name__ == '__main__':
     import gradeparsecombinessc
+
     S_SSC = StoreSSC()
     S_SSC.db_chksetup()
     testlogvaridssc = 'Y8bdxbfeWiliz3B'
@@ -155,4 +156,3 @@ if __name__ == '__main__':
     testdict_json = json.dumps(testdict, skipkeys=False)
     ticker_testssc = "NVDA"
     S_SSC.log_entry(parsecombo=testdict_json, grade_ssc="BC", ticker_entry="NVDA")
-

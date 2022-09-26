@@ -1,6 +1,7 @@
-import unittest
-import parsesectorssc
 import shelve
+import unittest
+
+import parsesectorssc
 
 
 def quickdeleteop(path):

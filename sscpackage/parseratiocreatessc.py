@@ -2,6 +2,7 @@
 Create 'hand-made' list of ratios from income statements and balance sheet elements, e.g. "Current Ratio"
 """
 
+
 class ParseRatioCreateSSC:
     def parseratiocreatesssc(self, incomedictssc, balancedictssc, incdatqual, baldatqual):
 
@@ -77,6 +78,7 @@ class ParseRatioCreateSSC:
 
 if __name__ == "__main__":
     import gradeparsecombinessc
+
     ticker = 'NVDA'
     logidssc = 'Y8bdxbfeWiliz3B'
     GS = gradeparsecombinessc.GradeParseCombineSSC()
@@ -87,4 +89,4 @@ if __name__ == "__main__":
     incqualdat = parsecombo["incdatqual"]
     baldatqual = parsecombo["baldatqual"]
     restestssc = PS.parseratiocreatesssc(incomedictssc=incomedictssc, balancedictssc=balancedictssc,
-                                         incdatqual=incqualdat,  baldatqual=baldatqual)
+                                         incdatqual=incqualdat, baldatqual=baldatqual)

@@ -1,10 +1,10 @@
-import fetchshelfssc_mod
 import fetchlogssc
-import parseincomessc
-import parsebalancessc
+import fetchshelfssc_mod
 import parsearssc
-import parsesectorssc
+import parsebalancessc
+import parseincomessc
 import parseindssc
+import parsesectorssc
 import parsevalssc
 
 
@@ -28,8 +28,9 @@ class ParseStart:
     @staticmethod
     def parse_canceler():
         print("Parse_Cancel")
-        ParseStart.parse_cancel= True
+        ParseStart.parse_cancel = True
         print(ParseStart.parse_cancel)
+
     @staticmethod
     def parse_runfetch():
         return ParseStart.parse_runitem
@@ -56,13 +57,13 @@ class ParseStart:
         PSEC_SSC = parsesectorssc.ParseSector()
         PIND_SSC = parseindssc.ParseIndustry()
 
-
         tag_container = {}
         tag_container["url_income"] = "inctag"
         tag_container["url_balance"] = "baltag"
         tag_container["url_val"] = "valtag"
         tag_container["url_ar"] = "artag"
         tag_container["url_sectordata"] = "sectag"
+
         def indsec(tag):
             PSEC_SSC.parsesector(tag, shelvecopy_fromapi[tag]),
             PIND_SSC.parseindustry(tag, shelvecopy_fromapi[tag])

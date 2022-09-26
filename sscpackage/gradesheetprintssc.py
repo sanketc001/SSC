@@ -1,12 +1,13 @@
 """
 Superclass - adding data to Grade Sheet method
 """
-import pandas
-import openpyxl
-import openpyxl.utils.dataframe
 import datetime
 import os
-import sys
+
+import openpyxl
+import openpyxl.utils.dataframe
+import pandas
+
 
 class GradeSheetPrintSSC():
     gspssc_instcount = 0
@@ -14,6 +15,7 @@ class GradeSheetPrintSSC():
     @staticmethod
     def return_gspssc_count():
         return GradeSheetPrintSSC.gspssc_instcount
+
     def __init__(self):
         self.gradesheetprinterprimer = {}
         self.gradesheetprinter = {}
@@ -37,7 +39,6 @@ class GradeSheetPrintSSC():
         except Exception as er:
             print(f'{self.__name__} - Error at create_pathinit')
             print(f'This: {er.__class__} occurred')
-
 
     def printprimer(self, sectionname, ticker, uniquerunid, sectorssc, industryssc):
         self.create_pathinit()
@@ -86,5 +87,3 @@ class GradeSheetPrintSSC():
         wb.save(self.instancepath)
 
         return localpoint, localtotal
-
-

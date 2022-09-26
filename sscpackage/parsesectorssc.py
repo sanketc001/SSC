@@ -1,7 +1,7 @@
-import dictpullssc
-import json
-import fetchshelfssc_mod
 import shelve
+
+import dictpullssc
+import fetchshelfssc_mod
 
 
 class ParseSector:

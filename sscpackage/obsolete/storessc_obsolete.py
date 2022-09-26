@@ -931,6 +931,4 @@ class GradeSSC:
 
             # Overall Grade Scale
 
-
-
         return

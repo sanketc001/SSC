@@ -1,18 +1,21 @@
-import unittest
-from unittest.mock import patch
-from unittest.mock import call
 import shelve
+import unittest
+from unittest.mock import call
+from unittest.mock import patch
 
 import sscpackage.fetchurlssc
 from sscpackage.fetchurlssc import FetchUrlSSC as FSSC
 
 "Need to change this to push again, for some reason it didn't pull on work computer"
+
+
 def dictprinter(d):
     for key in d.keys():
         labelr = "This is KEY: %s,  This is VALUE: %s" % (key, d[key])
         ender = "\n"
         print(labelr)
     return print(ender)
+
 
 class Test_FetchRulSSC(unittest.TestCase):
     @patch('os.path.exists')
@@ -39,7 +42,6 @@ class Test_FetchRulSSC(unittest.TestCase):
             self.assertEqual(str(tempbank_testfsi), str(FSSC1.fetch_apidict))
             test_fd.close()
         del FSSC1
-
 
     def test_addfetchssc(self):
 
@@ -91,7 +93,6 @@ class Test_FetchRulSSC(unittest.TestCase):
                 del testcheck2_fd[str(key)]
             testcheck2_fd.close()
 
-
         self.assertFalse(FSSC5.checkshelfcontent())
         FSSC5.fetchshelfinitialize()
         self.assertTrue(FSSC5.checkshelfcontent())
@@ -100,14 +101,6 @@ class Test_FetchRulSSC(unittest.TestCase):
         FSSC6 = sscpackage.fetchurlssc.FetchUrlSSC()
         FSSC6.fetchshelfinitialize()
         self.assertTrue(FSSC)
-
-
-
-
-
-
-
-
 
 
 if __name__ == '__main__':

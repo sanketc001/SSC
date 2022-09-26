@@ -3,25 +3,28 @@ Class combines all parsed data into a dictionary for access by all grading class
 GradeCollectionSSC.attribute
 """
 
-import gradeparsecombinessc
+import json
+
 import parsearssc
 import parsebalancessc
 import parseincomessc
 import parseindssc
+import parseratiocreatessc
 import parsesectorssc
 import parsevalssc
-import parseratiocreatessc
-import json
 
 
 class GradeParseCombineSSC:
     inst_count_gpcssc = 0
+
     @staticmethod
     def return_instcount_gpcssc():
         return GradeParseCombineSSC.inst_count_gpcssc
+
     def __init__(self):
         GradeParseCombineSSC.inst_count_gpcssc += 1
-        self.parsecombo= {}
+        self.parsecombo = {}
+
     def gradeparsecombinessc(self, ticker, logfileidssc):
         PAR = parsearssc.ParseAr()
         PBAL = parsebalancessc.ParseBalance()
@@ -76,17 +79,16 @@ class GradeParseCombineSSC:
         finratiodict = PRC.parseratiocreatesssc(incomedictssc=incdat, balancedictssc=baldat, incdatqual=incdatqual,
                                                 baldatqual=baldatqual)
 
-
-
         self.parsecombo[corekeycombo] = {"AR": ardat, "baldat": baldat, "incdat": incdat,
-                                    "Industry": inddat, "Sector": secdat, "valdat": valdat,
-                                    "baldatqual": baldatqual, "incdatqual": incdatqual,
-                                    "incasratiodict": incasratiodict, "finratiodict": finratiodict}
+                                         "Industry": inddat, "Sector": secdat, "valdat": valdat,
+                                         "baldatqual": baldatqual, "incdatqual": incdatqual,
+                                         "incasratiodict": incasratiodict, "finratiodict": finratiodict}
 
         return self.parsecombo
 
     def parsec_json(self):
         return json.dumps(self.parsecombo, sort_keys=False)
+
 
 if __name__ == "__main__":
     testlogvaridssc = 'Y8bdxbfeWiliz3B'

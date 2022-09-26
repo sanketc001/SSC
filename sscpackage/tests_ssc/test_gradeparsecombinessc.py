@@ -1,5 +1,7 @@
 import unittest
+
 import gradeparsecombinessc
+
 
 class myTestGradeParse(unittest.TestCase):
     def test_gradeparsecombinessc(self):

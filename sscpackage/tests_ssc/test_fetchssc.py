@@ -1,13 +1,10 @@
 import unittest
-import sscpackage.fetchssc
 from unittest.mock import patch
-from unittest.mock import MagicMock
-from unittest.mock import AsyncMock
-import asyncio
+
+import sscpackage.fetchssc
 
 
 class Test_FetchCyclerTest_Asyncio(unittest.IsolatedAsyncioTestCase):
-
     """
     This class tests FetchCycler using unittest.IsolatedAsyncioTestCase and Mock
     """
@@ -25,11 +22,12 @@ class Test_FetchCyclerTest_Asyncio(unittest.IsolatedAsyncioTestCase):
 
         # FetchUrlShelfRequest Setup mock
         mockfetchvar = MockFetchUrl()
-        fetchshelf = unittest.mock.MagicMock(return_value={"url_income": {"url": "url1", "qs": "qs1", "headers": "headers1"},
-                                                           "url_balance": {"url": "url2", "qs": "qs2", "headers": "headers2"},
-                                                           "url_ar": {"url": "url3", "qs": "qs_ar3", "headers": "headers_ar3"},
-                                                           "url_val": {"url": "url_val4", "qs": "qs_val4", "headers": "headers4"},
-                                                           "url_sectordata": {"url": "url_sectordata", "qs": "qs_sector", "headers": "headers"}})
+        fetchshelf = unittest.mock.MagicMock(
+            return_value={"url_income": {"url": "url1", "qs": "qs1", "headers": "headers1"},
+                          "url_balance": {"url": "url2", "qs": "qs2", "headers": "headers2"},
+                          "url_ar": {"url": "url3", "qs": "qs_ar3", "headers": "headers_ar3"},
+                          "url_val": {"url": "url_val4", "qs": "qs_val4", "headers": "headers4"},
+                          "url_sectordata": {"url": "url_sectordata", "qs": "qs_sector", "headers": "headers"}})
 
         type(mockfetchvar).pullfetchshelf = fetchshelf
 

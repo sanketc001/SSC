@@ -3,6 +3,7 @@ This class is going to house the point award system
 """
 import shelverssc
 
+
 class AwardSystemSSC(shelverssc.ShelverSSC):
     def __init__(self, shelvename: 'str' = "awardsystemssc"):
         super().__init__(shelvename)
@@ -10,7 +11,7 @@ class AwardSystemSSC(shelverssc.ShelverSSC):
         self.awardsystemcontainerssc = {}
 
     def deleteawardsystem(self, keynamedel):
-        #TODO: make sure the deleteawardsystem works via shelverssc
+        # TODO: make sure the deleteawardsystem works via shelverssc
         self.del_shelvecoreelementssc(self.shelvename, keynamedel)
 
     def awardsystemsprimer(self):
@@ -23,23 +24,25 @@ class AwardSystemSSC(shelverssc.ShelverSSC):
             temp_sscaward = {}
             awardsystemdict = {}
 
-            #Greater Than Less Than Metrics
-
+            # Greater Than Less Than Metrics
 
             defaultgtltmetrics_ssc = ["Total Revenue", "Net Income", "Gross Margin", "Operating Margin", "Net Margin",
-                               "Gross Profit", "EBIT", "Operating Income", "Net Income From Continuing Ops",
-                               "Income Before Tax", "Research & Development", "Selling, General & Administrative",
-                               "Other Operating Expenses", "Interest Expense", "Total Operating Expenses",
-                               "Cost Of Revenue", "Total Other Income Expense Net", "Total Assets", "Retained Earnings"]
+                                      "Gross Profit", "EBIT", "Operating Income", "Net Income From Continuing Ops",
+                                      "Income Before Tax", "Research & Development",
+                                      "Selling, General & Administrative",
+                                      "Other Operating Expenses", "Interest Expense", "Total Operating Expenses",
+                                      "Cost Of Revenue", "Total Other Income Expense Net", "Total Assets",
+                                      "Retained Earnings"]
 
             for metric in defaultgtltmetrics_ssc:
                 temp_sscaward[metric] = {"points": 1, "weight": 1}
 
             awardsystemdict["GTLT"] = temp_sscaward
 
-            #FINRATIO METRICS
+            # FINRATIO METRICS
             temp_sscaward = {}
-            defaultfinratiosscmetrics = ["Current Ratio", "Acid Test Ratio", "Cash Ratio", "Debt Ratio", "Debt To Equity Ratio",
+            defaultfinratiosscmetrics = ["Current Ratio", "Acid Test Ratio", "Cash Ratio", "Debt Ratio",
+                                         "Debt To Equity Ratio",
                                          "Operating Cash Flow", "Interest Coverage Ratio", "Return On Assets Ratio",
                                          "Book Value Per Share"]
 
@@ -48,25 +51,25 @@ class AwardSystemSSC(shelverssc.ShelverSSC):
 
             awardsystemdict["FINRATIOS"] = temp_sscaward
 
-            #INCASRATIO Metrics
+            # INCASRATIO Metrics
             temp_sscaward = {}
             defincasratiometrics = ["Total Revenue", "Net Income", "Gross Margin", "Operating Margin",
-                                              "Net Margin",
-                                              "Gross Profit", "EBIT", "Operating Income",
-                                              "Net Income From Continuing Ops",
-                                              "Income Before Tax", "Research & Development",
-                                              "Selling, General & Administrative",
-                                              "Other Operating Expenses",
-                                              "Interest Expense",
-                                              "Total Operating Expenses", "Cost Of Revenue",
-                                              "Total Other Income Expense Net"]
+                                    "Net Margin",
+                                    "Gross Profit", "EBIT", "Operating Income",
+                                    "Net Income From Continuing Ops",
+                                    "Income Before Tax", "Research & Development",
+                                    "Selling, General & Administrative",
+                                    "Other Operating Expenses",
+                                    "Interest Expense",
+                                    "Total Operating Expenses", "Cost Of Revenue",
+                                    "Total Other Income Expense Net"]
 
             for metric in defincasratiometrics:
-                temp_sscaward[metric] = {"points": 1, "weight":1}
+                temp_sscaward[metric] = {"points": 1, "weight": 1}
 
             awardsystemdict["INCASRATIO"] = temp_sscaward
 
-            #VALDATA Metrics
+            # VALDATA Metrics
             temp_sscaward = {}
             defaultvaldatametrics = ["Market Cap (intraday)", "Enterprise Value", "Trailing P/E", "Forward P/E",
                                      "PEG Ratio (5 yr expected)", "Price/Sales (ttm)", "Price/Book (mrq)",
@@ -77,18 +80,17 @@ class AwardSystemSSC(shelverssc.ShelverSSC):
 
             awardsystemdict["VALMETRICS"] = temp_sscaward
 
-            #Analyst Grades
+            # Analyst Grades
             temp_sscaward = {}
             analyst_metric_ssc = {"rating_bin_pos": ["Buy", "Strong Buy", "Overweight", "Market Perform",
-                                                            "Outperform"],
-                                        "rating_bin_neutral": ["Neutral", "Hold", "Perform", "Equal-Weight"]}
+                                                     "Outperform"],
+                                  "rating_bin_neutral": ["Neutral", "Hold", "Perform", "Equal-Weight"]}
 
             for metric in analyst_metric_ssc['rating_bin_pos']:
                 temp_sscaward[metric] = {"points": 2, "weight": 1}
 
             for metric in analyst_metric_ssc['rating_bin_neutral']:
                 temp_sscaward[metric] = {"points": 1, "weight": 1}
-
 
             awardsystemdict["ARMETRICS"] = temp_sscaward
 

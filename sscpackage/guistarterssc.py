@@ -1,29 +1,28 @@
 """
 This will start tkinter gui
 """
-import fetchstarterssc
-import gradestarterssc
-#sscpackage imports
-from sscpackage import storessc as sst
-import fetchstarterssc as sscf
-import parsessc
-
-
-#The Rest
-from tkinter import filedialog as fd
-from tkinter.messagebox import showinfo
-from tkinter import ttk
-
-import schedule
 import asyncio
-import tkinter as tk
-import tkinter.font as tk_font
-import sys
+import itertools
 import random
 import string
+import sys
 import threading as th
-import itertools
 import time
+import tkinter as tk
+import tkinter.font as tk_font
+# The Rest
+from tkinter import filedialog as fd
+from tkinter import ttk
+from tkinter.messagebox import showinfo
+
+import schedule
+
+import fetchstarterssc
+import fetchstarterssc as sscf
+import gradestarterssc
+import parsessc
+# sscpackage imports
+from sscpackage import storessc as sst
 
 # TODO: check into 'globals' use on guistarterssc
 global freq
@@ -32,7 +31,6 @@ global text_c
 global stop_thread
 global error_file
 global r_keyl
-
 
 r_keyl = []
 error_file = None
@@ -56,7 +54,6 @@ class GuiStarterSSC(object):
         parsessc.ParseStart.parse_canceler()
         gradestarterssc.GradeStartSSC.cancel_grade()
 
-
     cancel_start = False
     guissc_instcount = 0
 
@@ -66,6 +63,7 @@ class GuiStarterSSC(object):
 
     def fetch_instcount():
         return GuiStarterSSC.guissc_instcount
+
     fetch_instcount = staticmethod(fetch_instcount)
 
     def status_check(self):
@@ -266,7 +264,7 @@ class GuiStarterSSC(object):
                         Place for main program to run on submit click
                         """
 
-                        #Begin main algorithm
+                        # Begin main algorithm
                         if not GuiStarterSSC.cancel_start:
                             FS = sscf.FetchStarterSSC(self.ticker_list)
                             schedule.every(1).seconds.do(lambda: text_update(FS.pull_header(), FS.pull_runlist()))
@@ -275,7 +273,8 @@ class GuiStarterSSC(object):
                             schedule.clear()
                         if not GuiStarterSSC.cancel_start:
                             PS = parsessc.ParseStart()
-                            schedule.every(1).seconds.do(lambda: text_update(PS.pull_parseheader(), PS.parse_runfetch()))
+                            schedule.every(1).seconds.do(
+                                lambda: text_update(PS.pull_parseheader(), PS.parse_runfetch()))
                             schedule.run_pending()
                             PS.ssc_parselogstart()
                             schedule.clear()
@@ -285,10 +284,8 @@ class GuiStarterSSC(object):
                             schedule.run_pending()
                             GS.gradestartssc()
                             schedule.clear()
-                        #if GuiStarterSSC.cancel_start:
-                            #exit_btn['state'] = "normal"
-
-
+                        # if GuiStarterSSC.cancel_start:
+                        # exit_btn['state'] = "normal"
 
                         # TODO: Create a stop process to terminate fetch/parse actions
 

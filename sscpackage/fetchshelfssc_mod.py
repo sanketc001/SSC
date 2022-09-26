@@ -1,6 +1,7 @@
 import shelve
 import fetchlogssc
 
+
 class FetchShelfSSC:
     """
     Attributes:
@@ -40,4 +41,3 @@ class FetchShelfSSC:
                 return bank
             else:
                 print("Shelf Empty")
-

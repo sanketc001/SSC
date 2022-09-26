@@ -1,15 +1,17 @@
-import tkinter as tk
-import simplestockchecker_fetchtool as sscf
 import os
-from sscpackage import storessc as sst, parsessc as sscp
-import tkinter.font as tk_font
-from tkinter import filedialog as fd
-from tkinter.messagebox import showinfo
-from tkinter import ttk
-import sys
 import random
 import string
+import sys
 import threading as th
+import tkinter as tk
+import tkinter.font as tk_font
+from tkinter import filedialog as fd
+from tkinter import ttk
+from tkinter.messagebox import showinfo
+
+import simplestockchecker_fetchtool as sscf
+from sscpackage import storessc as sst, parsessc as sscp
+
 global ticker_entry
 ticker_entry = []
 global freq
@@ -24,6 +26,7 @@ r_keyl = []
 """
 This is to test branch functionality GIT/Pycharm
 """
+
 
 def ssc_gui():
     """
@@ -89,7 +92,6 @@ def ssc_gui():
     exit_btn.grid(column=0, row=5, columnspan=1, sticky="w")
     cancel_btn = tk.Button(master=mainframe, text="CANCEL", font=fontstyle)
     cancel_btn.grid(column=0, row=5, columnspan=1, sticky="e")
-
 
     # setting a tkk style for the submit_click button
     s = ttk.Style()
@@ -390,6 +392,7 @@ def ssc_gui():
         print(str(x))
     window.mainloop()
     return ticker_entry
+
 
 # Calls self to initiate program
 ssc_gui()

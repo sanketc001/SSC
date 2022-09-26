@@ -1,10 +1,8 @@
 import tkinter as tk
 from tkinter import *
-from tkinter import ttk
-import tcl
 from tkinter import filedialog as fd
-#import simplestockchecker_storetool as SST
-import tkinter.font as tkFont
+# import simplestockchecker_storetool as SST
+
 """
 widgets: 
 tk.Label
@@ -380,15 +378,16 @@ def grid_configure(self,
 
 
 def guiBuilder():
-    root = tk.Tk() # Creating Root Instance - Main Window
-    root.title("Simple Stock Checker") # Naming main window
-    root.config(height="600", width="1200", background="LINEN", padx="10", pady="10") #Set root height/width bg color
-    root.columnconfigure(0, weight=1) #I believe setting the root to only have one column
-    root.rowconfigure(0, weight=1) #I believe setting root to only have one row
-    root.resizable(False, False) # Setting height/width to not resizable
+    root = tk.Tk()  # Creating Root Instance - Main Window
+    root.title("Simple Stock Checker")  # Naming main window
+    root.config(height="600", width="1200", background="LINEN", padx="10", pady="10")  # Set root height/width bg color
+    root.columnconfigure(0, weight=1)  # I believe setting the root to only have one column
+    root.rowconfigure(0, weight=1)  # I believe setting root to only have one row
+    root.resizable(False, False)  # Setting height/width to not resizable
 
     mainframe = tk.Frame(root, padx="10", pady="10", bd="5", background="LINEN"
-                         ).grid(column=0, row=0, sticky=(N, W, E, S)) #Create a frame widget to span entire root window
+                         ).grid(column=0, row=0,
+                                sticky=(N, W, E, S))  # Create a frame widget to span entire root window
 
     """
     Building mainframe to contain 3 columns and 3 rows similar to matrix
@@ -396,7 +395,8 @@ def guiBuilder():
     Filling information for entire row first, then moving to next row
     """
 
-    label_1 = tk.Label(master=mainframe, text="Please Select A Text File\n", bg="LINEN").grid(column=0, row=0, columnspan=2)
+    label_1 = tk.Label(master=mainframe, text="Please Select A Text File\n", bg="LINEN").grid(column=0, row=0,
+                                                                                              columnspan=2)
     browse_btn = tk.Button(master=mainframe, text="Browse", padx="5", pady="5")
     browse_btn.grid(column=0, row=1, columnspan=2, padx="5", pady="5")
     text_1 = tk.Text(master=mainframe, width="50", height="10")

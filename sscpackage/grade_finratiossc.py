@@ -3,7 +3,7 @@ import gradesheetprintssc
 
 class GradeFinRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
     def grade_finratiossc(self, ticker, parsecombo, uniqueid, awardsystem):
-        #TODO: Make the finratio method
+        # TODO: Make the finratio method
 
         # Current  Ratio - Higher Better
         #   1.5-3.0 + 1
@@ -85,6 +85,7 @@ class GradeFinRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
 if __name__ == '__main__':
     import gradeparsecombinessc
     import awardsystemssc
+
     testlogvaridssc = 'NVDA__Y8bdxbfeWiliz3B'
     ticker, uniqueid = testlogvaridssc.split("__")
     AWS = awardsystemssc.AwardSystemSSC()

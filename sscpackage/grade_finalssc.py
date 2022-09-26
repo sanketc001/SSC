@@ -37,4 +37,3 @@ if __name__ == "__main__":
     GF = GradeFinalSSC()
     GF.grade_final_ssc([(2, 2), (2, 2), (2, 2)])
     print(GF.final_grade_ssc)
-

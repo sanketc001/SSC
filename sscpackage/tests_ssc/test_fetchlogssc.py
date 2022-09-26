@@ -1,5 +1,7 @@
 import unittest
+
 import fetchlogssc
+
 
 class TestFetchLog(unittest.TestCase):
     def test_fetchlogwrite(self):

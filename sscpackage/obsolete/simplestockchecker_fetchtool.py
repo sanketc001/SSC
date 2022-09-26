@@ -1,12 +1,10 @@
-import json
-import shelve
 import asyncio
-import requests
+import json
 import os
-import sys
+import shelve
 import unittest
-from unittest.mock import Mock
-from unittest.mock import patch
+
+import requests
 
 
 # fetchurlshelfdb - default
@@ -16,7 +14,7 @@ class FetchDataStoreSSC:
     """
 
     def fetchstore(self, ticker="MSFT", key="url_income", idssc="DEFAULTID", fetch_data="DEFAULTDATA",
-                   fetchstoreshelf = "fetchfiledb", *args, **kwargs):
+                   fetchstoreshelf="fetchfiledb", *args, **kwargs):
         filedb = shelve.open(fetchstoreshelf)
         fetchstorename = str(ticker) + "__" + str(key) + "__" + str(idssc)
         filedb[fetchstorename] = fetch_data
@@ -34,7 +32,7 @@ class FetchUrlAddSSC:
     """
 
     def addfetchssc(self, fetchnamessc="DEFAULTNAME", fetchurlssc="DEFAULTURL", fetchqsssc="DEFAULTSSC",
-                      fetchheadersssc="DEFAULTHEADER", shelfnamessc="fetchurlshelfdb", *args, **kwargs):
+                    fetchheadersssc="DEFAULTHEADER", shelfnamessc="fetchurlshelfdb", *args, **kwargs):
         with shelve.open(shelfnamessc) as fetchshelf:
             temp_bankadd = dict(fetchshelf["fetch_bank"])
             temp_bankadd.update({fetchnamessc: {"url": fetchurlssc, "qs": fetchqsssc, "headers": fetchheadersssc}})
@@ -48,6 +46,7 @@ class FetchUrlDeleteSSC:
     This class deletes a fetch dictionary from the shelf defined
     #5
     """
+
     def deletefetchssc(self, fetchnamessc="DEFAULTNAME", shelfnamessc="fetchrlshelfdb", *args, **kwargs):
         with shelve.open(shelfnamessc) as fetchshelfdel:
             temp_bankdel = dict(fetchshelfdel["fetch_bank"])
@@ -63,7 +62,7 @@ class FetchUrlRequestShelfSSC:
     #4
     """
 
-    def pullfetchshelf(self, fetchurlshelfnamessc = "fetchurlshelfdb", *args, **kwargs):
+    def pullfetchshelf(self, fetchurlshelfnamessc="fetchurlshelfdb", *args, **kwargs):
         FFISSC = FetchFirstInitializeSSC()
         FFISSC.fetchshelfinitialize()
         with shelve.open(fetchurlshelfnamessc) as fetchshelfpullssc:
@@ -107,6 +106,7 @@ class FetchUrlCheckShelfSSC:
     """
     Checks for existence of information on shelf at filepath
     """
+
     def checkshelfcontent(self, shelfname="fetchurlshelfdb"):
         with shelve.open(shelfname) as fetchshelfcheck:
             if fetchshelfcheck:
@@ -122,6 +122,7 @@ class ClearFetchShelfSSC:
 
     You can pass in "fetchfiledb" to clear other shelf
     """
+
     def clearfetchshelfssc(self, path="fetchurlshelfdb"):
         FEPrimerClearFetch = FetchUrlCheckPrimerSSC()
         if FEPrimerClearFetch.checkpaths():
@@ -137,6 +138,7 @@ class FetchFirstInitializeSSC:
     These are the initial hardcoded fetches from API, it packages and stores them in a shelf
     #2 Unit Test
     """
+
     def fetchshelfinitialize(self, ticker="MSFT"):
         self.ticker = ticker
         FCP1 = FetchUrlCheckPrimerSSC()
@@ -147,7 +149,6 @@ class FetchFirstInitializeSSC:
             url_ar = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-upgrades-downgrades"
             url_val = "https://stock-market-data.p.rapidapi.com/stock/valuation/historical-valuation-measures"
             url_sectordata = "https://stock-market-data.p.rapidapi.com/stock/company-info"
-
 
             # These are the two variables necessary to ping the API's, first two take qs, url_ar takes 2
             qs_inc_bal = {"ticker_symbol": self.ticker, "format": "json"}
@@ -170,10 +171,10 @@ class FetchFirstInitializeSSC:
             # Create and prime shelf with core necessary fetches
             fetchshelf = shelve.open("fetchurlshelfdb")
             self.fetch_apidict = {"url_income": {"url": url_income, "qs": qs_inc_bal, "headers": headers},
-                             "url_balance": {"url": url_balance, "qs": qs_inc_bal, "headers": headers},
-                             "url_ar": {"url": url_ar, "qs": qs_ar, "headers": headers_ar},
-                             "url_val": {"url": url_val, "qs": qs_val, "headers": headers},
-                             "url_sectordata": {"url": url_sectordata, "qs": qs_sector, "headers": headers}}
+                                  "url_balance": {"url": url_balance, "qs": qs_inc_bal, "headers": headers},
+                                  "url_ar": {"url": url_ar, "qs": qs_ar, "headers": headers_ar},
+                                  "url_val": {"url": url_val, "qs": qs_val, "headers": headers},
+                                  "url_sectordata": {"url": url_sectordata, "qs": qs_sector, "headers": headers}}
             fetchshelf["fetch_bank"] = self.fetch_apidict
             self.fetchbank = fetchshelf["fetch_bank"]
             fetchshelf.close()
@@ -270,6 +271,7 @@ class TestSSCShelvSystem(unittest.TestCase):
     """
     This test class houses unit tests for each class when possible
     """
+
     def test_fetchcheckprimer(self):
         FCP1 = FetchUrlCheckPrimerSSC()
         self.assertEqual(FCP1.checkpaths(), True, "Files will be created after first run")
@@ -332,7 +334,7 @@ class TestSSCShelvSystem(unittest.TestCase):
         FRS1 = FetchUrlRequestShelfSSC()
         frsssc_bank = FRS1.pullfetchshelf()
         urllistssc = ["url_income", "url_balance", "url_ar", "url_val", "url_sectordata"]
-        resultfetchssc=''
+        resultfetchssc = ''
         for urltestname in urllistssc:
             if urltestname in frsssc_bank.keys():
                 resultfetchssc += "TRUE"
@@ -382,16 +384,3 @@ class TestSSCShelvSystem(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
-
-
-
-
-
-
-
-
-
-
-
-

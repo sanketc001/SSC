@@ -1,5 +1,5 @@
 import shelve
-import json
+
 
 class ShelverSSC:
     def __init__(self, shelvename: 'str'):

@@ -1,14 +1,13 @@
-import json
-import fetchshelfssc_mod
 import shelve
-import shelverssc
 
+import fetchshelfssc_mod
 
 
 class ParseVal:
     """
     Process raw JSON data
     """
+
     def __init__(self):
         self.setpathssc_parsesscval = r"C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\parsevalshelf"
 
@@ -16,7 +15,7 @@ class ParseVal:
 
         uniquesplitlist = uniquename.split("__")
         ticker, name_key, idssc, timestampidpval = uniquesplitlist[0], uniquesplitlist[1], uniquesplitlist[2], \
-                                              uniquesplitlist[3]
+                                                   uniquesplitlist[3]
 
         vals_data = pval_rawdata
         val_dict = dict(vals_data)
@@ -28,7 +27,7 @@ class ParseVal:
 
         for indexer in range(len(datadict)):
             listcollection.append([datadict[indexer][key] for key in datadict[indexer].keys() if
-                                  datadict[indexer][key] != "Date"])
+                                   datadict[indexer][key] != "Date"])
 
         ziplistcollect = list(map(list, zip(*[line for line in listcollection])))
 
@@ -60,5 +59,3 @@ class ParseVal:
         except Exception as Er:
             print("Error: parsevalssc.fetchparseval")
             print(Er)
-
-

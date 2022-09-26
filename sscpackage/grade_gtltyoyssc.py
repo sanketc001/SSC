@@ -3,7 +3,7 @@ Grade the Income Statements
 """
 import grade_gtltyoyssc
 import gradesheetprintssc
-import itertools
+
 
 class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
     def __init__(self):
@@ -25,8 +25,6 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
         runsectorssc = parsecombossc["Sector"]
         runindustryssc = parsecombossc["Industry"]
         self.printprimer(self.sectionname, ticker, uniqueidssc, runsectorssc, runindustryssc)
-
-
 
         def isenoughdatassc(nameval):
             if nameval in localavoidmetricgtltinc.keys():
@@ -56,9 +54,9 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
             respointrunner = 0
             if statement == "incdat":
                 sourcevalsinc = localincdatssc[nameval]
-                for old_index in range(len(localincdatssc[nameval])-1, 0, -1):
+                for old_index in range(len(localincdatssc[nameval]) - 1, 0, -1):
                     oldyear = localincdatssc[nameval][old_index]
-                    newyear = localincdatssc[nameval][old_index-1]
+                    newyear = localincdatssc[nameval][old_index - 1]
                     keyforprint = [nameval, "Year", str(sourcevalsinc.index(newyear)), "|", "Year",
                                    str(sourcevalsinc.index(oldyear))]
 
@@ -74,7 +72,7 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
                     self.printerdictssc[str(keyforprint)] = valueforprint
 
                 respointrunner *= weightind
-                restotpoints = 1 * (count-1)
+                restotpoints = 1 * (count - 1)
                 restotpoints *= weightind
                 runningtotalgtlt[nameval] = {"Base Points": restotpoints, "Current Points": respointrunner}
 
@@ -98,7 +96,7 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
                     self.printerdictssc[str(keyforprint)] = valueforprint
 
                 respointrunner *= weightind
-                restotpoints = 1 * (count-1)
+                restotpoints = 1 * (count - 1)
                 restotpoints *= weightind
                 runningtotalgtlt[nameval] = {"Base Points": restotpoints, "Current Points": respointrunner}
 
@@ -116,14 +114,13 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
         self.gradeprinterssc(**self.printerdictssc)
         self.sectionprinttoexcel()
 
-
         return self.sectionendprinttoexcel(**self.gradestore)
-
 
 
 if __name__ == "__main__":
     import gradeparsecombinessc
     import awardsystemssc
+
     testlogvaridssc = 'NVDA__Y8bdxbfeWiliz3B'
     ticker, uniqueid = testlogvaridssc.split("__")
     AWS = awardsystemssc.AwardSystemSSC()

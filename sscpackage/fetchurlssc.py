@@ -1,5 +1,6 @@
-import shelve
 import os
+import shelve
+
 
 class FetchUrlSSC:
     """
@@ -11,7 +12,7 @@ class FetchUrlSSC:
     setpath_fetchurlssc = r'C:\SSC\SimpleStockChecker_REV1\sscpackage\storage'
 
     def __init__(self, ticker="MSFT", pathnamefetchurls=
-                 setpath_fetchurlssc + r"\fetchurlshelfdb",
+    setpath_fetchurlssc + r"\fetchurlshelfdb",
                  pathbakssc=setpath_fetchurlssc + r"\fetchurlshelfdb.bak",
                  pathdatssc=setpath_fetchurlssc + r"\fetchurlshelfdb.dat",
                  pathdirssc=setpath_fetchurlssc + r"\fetchurlshelfdb.dir",
@@ -27,7 +28,6 @@ class FetchUrlSSC:
         with shelve.open(self.pathnamefetchurls) as shelvefetch:
             shelvefetch.close()
 
-
     def checkpaths(self):
         fetchpaths = [self.pathbakssc, self.pathdatssc, self.pathdirssc]
         count = 0
@@ -41,7 +41,6 @@ class FetchUrlSSC:
             self.firstcreate_fetchurlssc()
             self.checkpaths()
 
-
     def fetchshelfinitialize(self, ticker="MSFT"):
         self.ticker = ticker
         if self.checkpaths():
@@ -51,7 +50,6 @@ class FetchUrlSSC:
             url_ar = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-upgrades-downgrades"
             url_val = "https://stock-market-data.p.rapidapi.com/stock/valuation/historical-valuation-measures"
             url_sectordata = "https://stock-market-data.p.rapidapi.com/stock/company-info"
-
 
             # These are the two variables necessary to ping the API's, first two take qs, url_ar takes 2
             qs_inc_bal = {"ticker_symbol": self.ticker, "format": "json"}
@@ -101,7 +99,7 @@ class FetchUrlSSC:
             fetchshelfdel[self.shelfkey] = temp_bankdel
             fetchshelfdel.close()
 
-    def pullfetchshelf(self, fetchurlshelfnamessc = "fetchurlshelfdb", *args, **kwargs):
+    def pullfetchshelf(self, fetchurlshelfnamessc="fetchurlshelfdb", *args, **kwargs):
         self.fetchshelfinitialize()
         with shelve.open(self.pathnamefetchurls) as fetchshelfpullssc:
             if dict(fetchshelfpullssc[self.shelfkey]):
@@ -124,6 +122,7 @@ class FetchUrlSSC:
                 for key in fetchshelf.keys():
                     del fetchshelf[key]
                 fetchshelf.close()
+
 
 if __name__ == '__main__':
     FS1 = FetchUrlSSC()

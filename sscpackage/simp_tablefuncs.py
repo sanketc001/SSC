@@ -1,8 +1,7 @@
-import mysql
-from mysql.connector import connect, Error
 import os
-import inspect
-import textwrap
+
+import mysql
+from mysql.connector import connect
 
 
 class Simp_TableFuncs:
@@ -81,7 +80,8 @@ class Simp_TableFuncs:
 
         tablevarbody = tablevarbody[0:-1]
 
-        ctable_assemblyvar = """CREATE TABLE {tname} ({tablevarbody});""".format(tname=tablename, tablevarbody=tablevarbody)
+        ctable_assemblyvar = """CREATE TABLE {tname} ({tablevarbody});""".format(tname=tablename,
+                                                                                 tablevarbody=tablevarbody)
 
         return ctable_assemblyvar
 
@@ -117,7 +117,7 @@ class Simp_TableFuncs:
             arglist = [x for x in args]
             while arglist:
                 if len(arglist) > 1:
-                        table_rest += "{argname}', '".format(argname=arglist.pop(0))
+                    table_rest += "{argname}', '".format(argname=arglist.pop(0))
                 else:
                     table_rest += "{argname}')".format(argname=arglist.pop(0))
             table_checkmultiarg = table_beg + table_rest
@@ -139,7 +139,3 @@ if __name__ == '__main__':
     TS1.funcdrop(None)
     TS1.create_sqlfunc(None)
     print(TS1.runfunc())
-
-
-
-

@@ -4,6 +4,7 @@ Main control program - SSC
 """
 import guistarterssc
 
+
 def gui_ssc_instantiate():
     print(guistarterssc.GuiStarterSSC.fetch_instcount())
     if guistarterssc.GuiStarterSSC.fetch_instcount() > 0:
@@ -13,6 +14,7 @@ def gui_ssc_instantiate():
 
 
 gui_ssc_instantiate()
+
 
 def cancel_schedule():
     if guistarterssc.GuiStarterSSC.cancel_start:
@@ -27,6 +29,7 @@ class ControlBoardSSC():
     2.
     """
     main_cancelf = False
+
     def __init__(self):
         self.gui = guistarterssc.GuiStarterSSC()
 

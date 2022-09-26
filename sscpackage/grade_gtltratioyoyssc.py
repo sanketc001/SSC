@@ -1,5 +1,4 @@
 import gradesheetprintssc
-import itertools
 
 
 class GTLTYoYRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
@@ -8,8 +7,10 @@ class GTLTYoYRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
         self.asratioincreasingsections = ["Net Income", "Gross Margin", "Operating Margin", "Net Margin",
                                           "Gross Profit", "EBIT", "Operating Income", "Net Income From Continuing Ops",
                                           "Income Before Tax", "Research & Development"]
-        self.asratiodecreasingsections = ["Selling, General & Administrative", "Other Operating Expenses", "Interest Expense",
-                                         "Total Operating Expenses", "Cost Of Revenue", "Total Other Income Expense Net"]
+        self.asratiodecreasingsections = ["Selling, General & Administrative", "Other Operating Expenses",
+                                          "Interest Expense",
+                                          "Total Operating Expenses", "Cost Of Revenue",
+                                          "Total Other Income Expense Net"]
 
         self.printerdictssc = {}
 
@@ -29,9 +30,9 @@ class GTLTYoYRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
                 pointsper = localawardsectiongtlt[rationame]["points"]
                 ratioweight = localawardsectiongtlt[rationame]["weight"]
 
-                for old_index in range(len(localratiodict[rationame])-1, 0, -1):
+                for old_index in range(len(localratiodict[rationame]) - 1, 0, -1):
                     oldyear = localratiodict[rationame][old_index]
-                    recenty = localratiodict[rationame][old_index-1]
+                    recenty = localratiodict[rationame][old_index - 1]
 
                     keyforprint = [str(rationame), "Year", str(localratiodict[rationame].index(recenty)), "|", "Year",
                                    str(localratiodict[rationame].index(oldyear))]
@@ -49,7 +50,8 @@ class GTLTYoYRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
                         else:
                             inlinesymbol = "<"
 
-                    valueforprint = [str(recenty), inlinesymbol, str(oldyear), "POINTS", str(respointrunner), "POINTVAL",
+                    valueforprint = [str(recenty), inlinesymbol, str(oldyear), "POINTS", str(respointrunner),
+                                     "POINTVAL",
                                      str(pointsper)]
 
                     self.printerdictssc[str(keyforprint)] = valueforprint
@@ -72,6 +74,7 @@ class GTLTYoYRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
 if __name__ == "__main__":
     import gradeparsecombinessc
     import awardsystemssc
+
     testlogvaridssc = 'NVDA__Y8bdxbfeWiliz3B'
     ticker, uniqueid = testlogvaridssc.split("__")
     AWS = awardsystemssc.AwardSystemSSC()

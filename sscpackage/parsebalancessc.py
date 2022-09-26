@@ -1,11 +1,13 @@
-import json
-import fetchshelfssc_mod
 import shelve
+
+import fetchshelfssc_mod
+
 
 class ParseBalance:
     """
     Process raw JSON data for Balance Sheets to prepare for grading algorithm
     """
+
     def __init__(self):
         self.setpathssc_parsesscpb = r"C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\parsebalanceshelf"
 
@@ -14,7 +16,6 @@ class ParseBalance:
             uniquesplitlist = uniquename.split("__")
             ticker, key, idssc, timestampidpb = uniquesplitlist[0], uniquesplitlist[1], uniquesplitlist[2], \
                                                 uniquesplitlist[3]
-
 
             bsheets_data = pb_rawdata
 

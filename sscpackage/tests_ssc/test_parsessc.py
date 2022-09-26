@@ -7,8 +7,8 @@ import parsessc
 
 class MyTestCase(unittest.TestCase):
     storpath = r'C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\test_fetchlog.txt'
-    def setUp(self):
 
+    def setUp(self):
         with open(self.storpath, 'w') as sfile:
             sfile.truncate()
             sfile.close()
@@ -16,10 +16,10 @@ class MyTestCase(unittest.TestCase):
         primedata_testlogfetch = ''
         with open(self.storpath, 'w') as sfile:
             primedata_testlogfetch += "MSFT__url_income__2510381479104__x1jU288DK5DRjWf, " \
-                                     "MSFT__url_balance__2510381479104__x1jU288DK5DRjWf, " \
-                                     "MSFT__url_ar__2510381479104__x1jU288DK5DRjWf, " \
-                                     "MSFT__url_val__2510381479104__x1jU288DK5DRjWf, " \
-                                     "MSFT__url_sectordata__2510381479104__x1jU288DK5DRjWf,"
+                                      "MSFT__url_balance__2510381479104__x1jU288DK5DRjWf, " \
+                                      "MSFT__url_ar__2510381479104__x1jU288DK5DRjWf, " \
+                                      "MSFT__url_val__2510381479104__x1jU288DK5DRjWf, " \
+                                      "MSFT__url_sectordata__2510381479104__x1jU288DK5DRjWf,"
             sfile.write(primedata_testlogfetch)
             sfile.close()
 

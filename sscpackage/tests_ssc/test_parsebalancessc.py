@@ -1,11 +1,12 @@
+import shelve
 import unittest
+
 import parsebalancessc
 import shelverssc
-import shelve
 
 
 class MyTestCase(unittest.TestCase):
-# TODO: Update test_parsebalancessc so it actually tests the damn thing
+    # TODO: Update test_parsebalancessc so it actually tests the damn thing
     def test_parsebalancesssc(self):
         PBSSC_test = parsebalancessc.ParseBalance()
         namevar = "test__test2__test3__test4"

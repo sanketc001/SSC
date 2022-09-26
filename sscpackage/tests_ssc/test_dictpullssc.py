@@ -1,4 +1,5 @@
 import unittest
+
 import sscpackage.dictpullssc as dps
 
 testnest = {"LAYER 1":
@@ -22,7 +23,6 @@ simpletest = ["LL1", ["LL2", "LL3", ["LL4"]], ["LL5"], ["LL6", ["LL7", [{"LL8": 
 simpletest_request = "LL8"
 simpletest_answer = "FOUND IT"
 
-
 complexdict = {
     "LAYER1D": "VALUE1D",
     "LAYER2D": {5, 6, 7},
@@ -45,6 +45,7 @@ class MyTestCase(unittest.TestCase):
     """
     Test for dictpullssc.
     """
+
     def setUp(self):
         self.dictp = dps.DictPullSSC()
 
@@ -61,7 +62,8 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(complexdict_answer, self.dictp.dictpullssc(complexdict, complexdict_request))
 
     def tearDown(self):
-        del(self.dictp)
+        del (self.dictp)
+
 
 if __name__ == '__main__':
     unittest.main()

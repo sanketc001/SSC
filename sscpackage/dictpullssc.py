@@ -1,6 +1,7 @@
 dictpullsscflag = False
 count = 0
 
+
 def dictpull(seq, header):
     """
     Dictpull takes a container as an argument and the name of the key you want to pull.  This only works for a 'key': 'value
@@ -96,9 +97,7 @@ class DictPullSSC:
         return self.answer
 
 
-
 if __name__ == "__main__":
-
     testnest = {"LAYER 1":
                     {"LAYER2-1": "VAL 2-1", "LAYER2-2": "VAL 2-2", "LAYER2-3":
                         {"LAYER3-1":
@@ -134,8 +133,3 @@ if __name__ == "__main__":
     print(DD1.dictpullssc(simpletest, "LL8"))
     print(DD.dictpullssc(testdict, "NEXT LAYER"))
     print(DD.dictpullssc(complexdict, "ANSWER"))
-
-
-
-
-

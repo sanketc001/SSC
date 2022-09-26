@@ -1,6 +1,7 @@
 import json
-import fetchshelfssc_mod
 import shelve
+
+import fetchshelfssc_mod
 
 
 class ParseIncome:
@@ -8,6 +9,7 @@ class ParseIncome:
     Class for parseincome, in case API format changes and needs to be altered in the future, use inheritance without
     breaking application
     """
+
     def __init__(self):
         self.setpathssc_parsessc = r"C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\parseincomeshelf"
 
@@ -43,7 +45,7 @@ class ParseIncome:
 
             isheets_dict = {}
             for x in range(len(isheets_keys)):
-                isheets_dict[isheets_keys[x]] =isheets_zip[x]
+                isheets_dict[isheets_keys[x]] = isheets_zip[x]
 
             FST_SSC = fetchshelfssc_mod.FetchShelfSSC(ticker=ticker, fetchstoreshelf=self.setpathssc_parsessc)
             FST_SSC.fetchstore(key=key, idssc=idssc, fetch_data=isheets_dict, timestampidfs=timestampidpi)

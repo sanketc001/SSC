@@ -1,8 +1,9 @@
+import os
 import unittest
 from unittest.mock import patch
-import os
 
 import sscpackage.storessc
+
 
 def miniprinter(header, obj):
     res = ''
@@ -37,14 +38,13 @@ class Test_StoreSSC(unittest.TestCase):
         mock_json.dumps.assert_called()
         mock_methodvar.connect.assert_called()
         connect_calls = [unittest.mock.call.connect(host='localhost', user=str(os.getenv("DB_USER")),
-                        password=str(os.getenv("DB_PASS")), database='sscdb')]
+                                                    password=str(os.getenv("DB_PASS")), database='sscdb')]
         self.assertEqual(connect_calls, mock_methodvar.method_calls)
 
         assert mock_parse is sscpackage.storessc.sscp.GradeSSC
         # TODO: need to update storetool and test_storetool
         assert mock_json is sscpackage.storessc.json
         assert mock_methodvar is sscpackage.storessc.mysql.connector
-
 
     @patch('sscpackage.storessc.mysql.connector')
     @patch('sscpackage.storessc.mysql.connector.cursor')
@@ -59,7 +59,7 @@ class Test_StoreSSC(unittest.TestCase):
         SC1 = sscpackage.storessc.StoreSSC()
         SC1.show_db()
 
-        mock_connector.connect.return_value.__enter__.return_value.cursor.return_value.\
+        mock_connector.connect.return_value.__enter__.return_value.cursor.return_value. \
             __enter__.return_value.execute.assert_called_with('SELECT * FROM logentry')
 
     @patch('sscpackage.storessc.mysql.connector')
@@ -71,14 +71,13 @@ class Test_StoreSSC(unittest.TestCase):
         :return:
         """
         connect_calls_xls = [unittest.mock.call.connect(host='localhost', user=str(os.getenv("DB_USER")),
-                                                    password=str(os.getenv("DB_PASS")), database='sscdb')]
+                                                        password=str(os.getenv("DB_PASS")), database='sscdb')]
 
         SC2 = sscpackage.storessc.StoreSSC()
         SC2.export_excel()
 
         mock_pd.read_sql.return_value.to_excel.assert_called_with('SSC.xlsx', sheet_name='DATA', index=False)
         self.assertEqual(connect_calls_xls, mock_connector_xls.method_calls)
-
 
 
 if __name__ == '__main__':

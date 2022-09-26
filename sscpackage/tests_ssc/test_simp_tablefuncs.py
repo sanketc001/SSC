@@ -1,6 +1,6 @@
+import os
 import unittest
 from unittest.mock import patch
-import os
 
 import simp_tablefuncs
 
@@ -10,7 +10,7 @@ testarg_create = {'testname': 'varchar(50)', 'testname2': 'json'}
 class TestSimpTableFuncs(unittest.TestCase):
 
     def test_createtable(self):
-        testarg_create = {'testname':'varchar(50)', 'testname2':'json'}
+        testarg_create = {'testname': 'varchar(50)', 'testname2': 'json'}
         STF = simp_tablefuncs.Simp_TableFuncs()
         test_str = STF.create_table('test', True, **testarg_create)
         print(test_str)
@@ -24,10 +24,11 @@ class TestSimpTableFuncs(unittest.TestCase):
         commitstr = STF.create_table('test', True, **testarg_create)
         STF.create_commit(commitstr)
 
-        correctcallconnect = unittest.mock.call(database='sscdb', host='localhost', password=os.getenv("DB_PASS"), user=os.getenv("DB_USER"))
+        correctcallconnect = unittest.mock.call(database='sscdb', host='localhost', password=os.getenv("DB_PASS"),
+                                                user=os.getenv("DB_USER"))
         correctcallexecute = unittest.mock.call(commitstr, multi=True)
         self.assertEqual(mock_connector.connect.call_args, correctcallconnect)
-        mock_execute = mock_connector.connect.return_value.__enter__.return_value.cursor.return_value\
+        mock_execute = mock_connector.connect.return_value.__enter__.return_value.cursor.return_value \
             .__enter__.return_value.execute.call_args
         self.assertEqual(mock_execute, correctcallexecute)
         del STF
