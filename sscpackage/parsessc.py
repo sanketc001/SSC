@@ -32,6 +32,10 @@ class ParseStart:
         print(ParseStart.parse_cancel)
 
     @staticmethod
+    def reset_parse():
+        ParseStart.parse_cancel = False
+
+    @staticmethod
     def parse_runfetch():
         return ParseStart.parse_runitem
 

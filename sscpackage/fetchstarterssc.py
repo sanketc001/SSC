@@ -7,14 +7,15 @@ class FetchStarterSSC:
     This class accepts the tickerlist from user input as an arg, then starts parsing with asyncio and a maximum of 5
     concurrent fetches (max simultaneous RapidAPI will allow for my payment level)
 
-    This class and 'fetch_cycle'
+    Control Flow:
+    From: guistarterssc
+    To: fetchssc
+    On Cancel: returns to guistarterssc
     """
     runlist_tickers = []
     fetch_cancel = False
     fetch_header = "FETCH TICKERS: "
     init_once = False
-
-
 
     @staticmethod
     def pull_header():
@@ -33,17 +34,21 @@ class FetchStarterSSC:
     def pull_runlist():
         return FetchStarterSSC.runlist_tickers
 
-    def __init__(self, tickerlist: list):
-        self.tickerlist = tickerlist
-        self.fetch_cancel: bool = False
-        self.runninglist = []
-        FetchStarterSSC.init_once = True
-
     @staticmethod
     def cancel_fetch():
         print("entered cancel_fetch :: ")
         FetchStarterSSC.fetch_cancel = True
         print(FetchStarterSSC.fetch_cancel)
+
+    @staticmethod
+    def reset_fetch():
+        FetchStarterSSC.fetch_cancel = False
+
+    def __init__(self, tickerlist: list):
+        self.tickerlist = tickerlist
+        self.fetch_cancel = False
+        self.runninglist = []
+        FetchStarterSSC.init_once = True
 
     async def _fetch_cycle(self, *args, **kwargs):
         tickerlistvar_fetchssc = self.tickerlist[:]

@@ -33,6 +33,10 @@ class GradeStartSSC():
         GradeStartSSC.grade_cancel = True
         print(GradeStartSSC.grade_cancel)
 
+    @staticmethod
+    def reset_grade():
+        GradeStartSSC.grade_cancel = False
+
     def gradestartssc(self, fiver: bool = True):
         FS_SSC = fetchlogssc.FetchLogSSC()
         localfetchuniquelogcopyssc = FS_SSC.ssc_fetchloguniqueid()

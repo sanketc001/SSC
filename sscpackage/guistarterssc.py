@@ -36,23 +36,26 @@ schedule_bool = True
 
 r_keyl = []
 error_file = None
-"""
-This is to test branch functionality GIT/Pycharm
-"""
 
 
 class GuiStarterSSC(object):
-    #maintain list of threads
     global_schedule = True
     thread_list: [th.Thread] = []
     end_fetchstart = False
     end_parsestart = False
     end_gradestart = False
+    cancel_start = False
+    guissc_instcount = 0
 
     @staticmethod
     def schedule_boolfalse():
         global schedule_bool
         schedule_bool = False
+
+    @staticmethod
+    def schedule_booltrue():
+        global schedule_bool
+        schedule_bool = True
 
     @staticmethod
     def schedule_init():
@@ -70,22 +73,24 @@ class GuiStarterSSC(object):
         fetchstarterssc.FetchStarterSSC.cancel_fetch()
         parsessc.ParseStart.parse_canceler()
         gradestarterssc.GradeStartSSC.cancel_grade()
+        GuiStarterSSC.schedule_boolfalse()
 
-    cancel_start = False
-    guissc_instcount = 0
+    @staticmethod
+    def reset_init():
+        fetchstarterssc.FetchStarterSSC.reset_fetch()
+        parsessc.ParseStart.reset_parse()
+        gradestarterssc.GradeStartSSC.reset_grade()
+        GuiStarterSSC.schedule_booltrue()
+        GuiStarterSSC.schedule_init()
+        th.Thread(target=GuiStarterSSC.schedule_init(), daemon=True).start()
+
+    @staticmethod
+    def fetch_instcount():
+        return GuiStarterSSC.guissc_instcount
 
     def __init__(self):
         self.ticker_list = []
         GuiStarterSSC.guissc_instcount += 1
-
-    def fetch_instcount():
-        return GuiStarterSSC.guissc_instcount
-
-    fetch_instcount = staticmethod(fetch_instcount)
-
-    def status_check(self):
-        return GuiStarterSSC.cancel_start
-        # TODO: test this way of providing 'cancel' with button click event
 
     def start_gui_ssc(self):
         global text_c
@@ -165,7 +170,7 @@ class GuiStarterSSC(object):
 
             # Validate Chosen List
             flag = True
-            if fd_raw:  # I believe I can just use if fd_raw
+            if fd_raw:
                 fd_l = [x for x in fd_raw.readlines()][0]
                 for char in fd_l:
                     chars_notwant = itertools.chain(string.digits, string.punctuation, string.whitespace)
@@ -191,7 +196,8 @@ class GuiStarterSSC(object):
                     # Update ssc_gui function attribute - ticker_entry
                     self.ticker_list = ticker_entry
                     print(bool(self.ticker_list))
-                    text_update("You have chosen a valid list - click submit to continue processing")
+                    text_update(msg="You have chosen a valid list - click submit to continue processing",
+                                header="")
 
                     # Enable submit click when a minimum list of tickers is given
                     if len(self.ticker_list) >= 1:
@@ -200,7 +206,7 @@ class GuiStarterSSC(object):
                         okbutton.state(["disabled"])
 
                 else:
-                    text_update("There are invalid ticker symbols present, please retry")
+                    text_update(msg="There are invalid ticker symbols present, please retry", header="")
 
                 showinfo(
                     title="Selected File",
@@ -208,7 +214,7 @@ class GuiStarterSSC(object):
                 )
 
             else:
-                text_update("You need to choose a valid file to continue.")
+                text_update(msg="You need to choose a valid file to continue.", header="")
 
             return
 
@@ -241,13 +247,14 @@ class GuiStarterSSC(object):
 
             GuiStarterSSC.cancel_start = True
             GuiStarterSSC.cancel_init()
-            GuiStarterSSC.ret_threadlist()
-
 
             if GuiStarterSSC.thread_list:
                 exit_btn['state'] = 'disabled'
             else:
                 exit_btn['state'] = 'normal'
+                GuiStarterSSC.reset_init()
+                text_update(msg="Cancel Successful:  Please select new list or close.", header="")
+                GuiStarterSSC.cancel_start = False
                 pass
 
         cancel_btn.bind("<Button-1>", cancel_click)  # this binds cancel_btn with cancel_click function upon event
@@ -286,7 +293,7 @@ class GuiStarterSSC(object):
                         # Begin main algorithm
                         if not GuiStarterSSC.cancel_start:
                             FS = sscf.FetchStarterSSC(self.ticker_list)
-                            schedule.every(1).seconds.do(lambda: text_update(FS.pull_header(), FS.pull_runlist()))
+                            schedule.every(1).seconds.do(lambda: text_update(header=FS.pull_header(), msg=FS.pull_runlist()))
                             schedule.run_pending()
                             asyncio.run(FS._fetch_cycle())
                             schedule.clear()
@@ -300,7 +307,7 @@ class GuiStarterSSC(object):
                         if not GuiStarterSSC.cancel_start:
                             PS = parsessc.ParseStart()
                             schedule.every(1).seconds.do(
-                                lambda: text_update(PS.pull_parseheader(), PS.parse_runfetch()))
+                                lambda: text_update(header=PS.pull_parseheader(), msg=PS.parse_runfetch()))
                             schedule.run_pending()
                             PS.ssc_parselogstart()
                             schedule.clear()
@@ -313,7 +320,7 @@ class GuiStarterSSC(object):
 
                         if not GuiStarterSSC.cancel_start:
                             GS = gradestarterssc.GradeStartSSC()
-                            schedule.every(1).seconds.do(lambda: text_update(GS.pull_gradeheader(), GS.get_runitem()))
+                            schedule.every(1).seconds.do(lambda: text_update(header=GS.pull_gradeheader(), msg=GS.get_runitem()))
                             schedule.run_pending()
                             GS.gradestartssc()
                             schedule.clear()
