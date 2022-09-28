@@ -2,7 +2,9 @@
 Rev. 1.1-a.1
 Main control program - SSC
 """
+import fetchlogssc
 import guistarterssc
+import parsessc
 
 
 def gui_ssc_instantiate():
@@ -10,6 +12,7 @@ def gui_ssc_instantiate():
     if guistarterssc.GuiStarterSSC.fetch_instcount() > 0:
         pass
     else:
+        fetchlogssc.FetchLogSSC.ssc_fetchlogclear()
         guistarterssc.GuiStarterSSC().start_gui_ssc()
 
 
@@ -29,6 +32,10 @@ class ControlBoardSSC():
     2.
     """
     main_cancelf = False
+
+    @staticmethod
+    def clearlog():
+        fetchlogssc.FetchLogSSC.ssc_fetchlogclear()
 
     def __init__(self):
         self.gui = guistarterssc.GuiStarterSSC()

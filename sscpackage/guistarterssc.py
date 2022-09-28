@@ -193,8 +193,14 @@ class GuiStarterSSC(object):
                     ticker_entry = fd_check
                     stop_thread = False
 
+                    # ticker_list to set and remove quotations
+                    setticker_list = set()
+                    for ticker in ticker_entry:
+                        temp_ticker = ticker.replace('"', '')
+                        setticker_list.add(temp_ticker)
+
                     # Update ssc_gui function attribute - ticker_entry
-                    self.ticker_list = ticker_entry
+                    self.ticker_list = sorted(setticker_list)
                     print(bool(self.ticker_list))
                     text_update(msg="You have chosen a valid list - click submit to continue processing",
                                 header="")

@@ -88,17 +88,19 @@ class ParseStart:
                                }
 
         for logentry in local_logcopy:
-            ticker = logentry.split("__")[0]
-            ParseStart.set_parserun(ticker)
-            if ParseStart.parse_cancel:
-                break
-            for tag in tag_container.keys():
-                if tag in logentry:
-                    (dict_tagswitchboard[tag_container[tag]])(logentry)
-                    print("ENTRY: TAG - {tag}::::: LOGENTRY - {logentry}::".format(logentry=logentry, tag=tag))
+            if len(logentry) >= 1:
+                print(logentry.split("__"))
+                ticker = logentry.split("__")[0]
+                ParseStart.set_parserun(ticker)
+                if ParseStart.parse_cancel:
                     break
-                else:
-                    continue
+                for tag in tag_container.keys():
+                    if tag in logentry:
+                        (dict_tagswitchboard[tag_container[tag]])(logentry)
+                        print("ENTRY: TAG - {tag}::::: LOGENTRY - {logentry}::".format(logentry=logentry, tag=tag))
+                        break
+                    else:
+                        continue
 
         del PI_SSC
         del PB_SSC

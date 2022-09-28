@@ -53,7 +53,7 @@ def myownrandom(keylength=10):
 class FetchSSC:
     ticker_successlist = ""
 
-    def __init__(self, ticker="MSFT", *args, **kwargs):
+    def __init__(self, ticker, *args, **kwargs):
         self.ticker = ticker
 
     async def rapid_fetch(self, *args, **kwargs):
@@ -73,6 +73,8 @@ class FetchSSC:
                 FSSC = sscpackage.fetchshelfssc_mod.FetchShelfSSC(ticker=self.ticker)
                 FSSC.fetchstore(key, id(self), self.fetch_data, timestampidfs=timestampidrf)
                 self.statusfetch = True
+                if key == list(self.url_bank.keys())[-1:]:
+                    FetchSSC.ticker_successlist += str(self.ticker)
                 FetchSSC.ticker_successlist += str(self.ticker) + ", "
             elif response.status_code == 401:
                 print("Invalid API Key - Check User Information")

@@ -41,3 +41,13 @@ class FetchShelfSSC:
                 return bank
             else:
                 print("Shelf Empty")
+
+    def fetch_shelvepurge(self):
+        with shelve.open(self.fetchstoreshelf) as fetchstoreshelf_del:
+            if fetchstoreshelf_del.keys():
+                for key in fetchstoreshelf_del.keys():
+                    del fetchstoreshelf_del[key]
+            if fetchstoreshelf_del.keys():
+                return 1
+            else:
+                return 0

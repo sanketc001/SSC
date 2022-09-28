@@ -1,21 +1,26 @@
 class FetchLogSSC:
+    _fetchlogpath = r'C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\fetchlog.txt'
+    @staticmethod
+    def ssc_fetchlogclear():
+        with open(FetchLogSSC._fetchlogpath, 'w') as fl2:
+            fl2.truncate()
+            fl2.close()
+            print("MADE IT PAST THIS BIRCHTREE")
+
     def __init__(self):
-        self.fetchlogpath = r'C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\fetchlog.txt'
+        pass
 
     def ssc_fetchlogwrite(self, fetchstorename):
-        with open(self.fetchlogpath, 'a') as fl:
+        with open(FetchLogSSC._fetchlogpath, 'a') as fl:
             fl.seek(0, 2)
             fl.write(fetchstorename + ", ")
             fl.close()
 
-    def ssc_fetchlogclear(self):
-        with open(self.fetchlogpath, 'w') as fl2:
-            fl2.truncate()
-            fl2.close()
+
 
     def ssc_logfetch(self):
         logfetch_retval = []
-        with open(self.fetchlogpath, 'r') as fl3:
+        with open(FetchLogSSC._fetchlogpath, 'r') as fl3:
             fl3.seek(0, 0)
             data = fl3.read().split(", ")
             for logentry in data:
@@ -26,7 +31,7 @@ class FetchLogSSC:
     def ssc_fetchloguniqueid(self):
         logfetchunique_retval = []
         logfetchuniquename_retval = {}
-        with open(self.fetchlogpath, 'r') as fl4:
+        with open(FetchLogSSC._fetchlogpath, 'r') as fl4:
             fl4.seek(0, 0)
             data = fl4.read().split(", ")
             for val in data:

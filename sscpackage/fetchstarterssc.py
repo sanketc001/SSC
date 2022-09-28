@@ -58,13 +58,13 @@ class FetchStarterSSC:
                 break
             if len(tickerlistvar_fetchssc) >= 5:
                 ticker_runlist = []
-                for indexno in range(0, 5):
-                    if FetchStarterSSC.fetch_cancel:
-                        print("Broke Chain - FetchStarter")
-                        break
-                    ticker_runlist.append(tickerlistvar_fetchssc[indexno])
-                    print(ticker_runlist)
-                    FetchStarterSSC.update_runlist(ticker_runlist)
+                if FetchStarterSSC.fetch_cancel:
+                    print("Broke Chain - FetchStarter")
+                    break
+                ticker_runlist.append(tickerlistvar_fetchssc[:5])
+                print(ticker_runlist)
+                FetchStarterSSC.update_runlist(ticker_runlist)
+                print(tickerlistvar_fetchssc)
                 await asyncio.gather(
                     FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch(),
                     FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch(),
@@ -76,9 +76,7 @@ class FetchStarterSSC:
                 if FetchStarterSSC.fetch_cancel:
                     print("Broke Chain - FetchStarter")
                     break
-                for indexno in range(len(tickerlistvar_fetchssc)):
-                    if FetchStarterSSC.fetch_cancel:
-                        print("Broke Chain - FetchStarter")
-                        break
-                    await asyncio.gather(FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch())
+                ticker_runlist = tickerlistvar_fetchssc[0]
+                FetchStarterSSC.update_runlist(ticker_runlist)
+                await asyncio.gather(FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch())
             await asyncio.sleep(1)
