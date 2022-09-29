@@ -13,6 +13,16 @@ class ParseIncome:
     def __init__(self):
         self.setpathssc_parsessc = r"C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\parseincomeshelf"
 
+    def parse_incomepurge(self):
+        with shelve.open(self.setpathssc_parsessc) as purge_inc:
+            if purge_inc.keys():
+                for key in purge_inc.keys():
+                    del purge_inc[key]
+                if purge_inc.keys():
+                    return 1
+                else:
+                    return 0
+
     def parseincome(self, uniquename: 'str', pi_rawdata: 'json') -> None:
         """
         Converts raw json string to usable format for grading purposes

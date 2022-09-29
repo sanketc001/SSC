@@ -12,6 +12,16 @@ class ParseSector:
     def __init__(self):
         self.setpathssc_parsesscsec = r"C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\parsesecshelf"
 
+    def parse_sectpurge(self):
+        with shelve.open(self.setpathssc_parsesscsec) as purge_sec:
+            if purge_sec.keys():
+                for key in purge_sec.keys():
+                    del purge_sec[key]
+                if purge_sec.keys():
+                    return 1
+                else:
+                    return 0
+
     def parsesector(self, uniquename, ps_rawdata):
         uniquesplitlist = uniquename.split("__")
         ticker, key, idssc, timestampidpsec = uniquesplitlist[0], uniquesplitlist[1], uniquesplitlist[2], \

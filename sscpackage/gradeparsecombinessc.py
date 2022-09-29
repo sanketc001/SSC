@@ -91,7 +91,29 @@ class GradeParseCombineSSC:
 
 
 if __name__ == "__main__":
-    testlogvaridssc = 'Y8bdxbfeWiliz3B'
-    GS = GradeParseCombineSSC()
-    testdict = GS.gradeparsecombinessc('NVDA', testlogvaridssc)
-    print(testdict)
+    import json
+    import fetchlogssc
+    # TODO: Look into .ENV file and replacing hord-coded paths
+    tempfilelocation = r'C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\\'
+    FLOG = fetchlogssc.FetchLogSSC()
+    local_fetchlog = FLOG.ssc_logfetch()
+    testdict = {}
+    cleanlog = set()
+    for entry in local_fetchlog[:-1]:
+        temp = entry.split("__")
+        ticker = temp[0]
+        uniqueid = temp[3]
+        cleanlog.add(ticker + "__" + uniqueid)
+    test_parsedictcont = {}
+    for entry in cleanlog:
+        entry_tolist = entry.split("__")
+        ticker = entry_tolist[0]
+        testlogvaridssc = entry_tolist[1]
+        GS = GradeParseCombineSSC()
+        testdict = GS.gradeparsecombinessc(ticker, testlogvaridssc)
+        test_parsedictcont[entry] = testdict
+        with open(tempfilelocation + ticker, 'w') as tp:
+            json.dump(testdict, tp, indent=5, separators=(", ", ": "), sort_keys=False)
+
+
+

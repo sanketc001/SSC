@@ -89,15 +89,14 @@ class ParseStart:
 
         for logentry in local_logcopy:
             if len(logentry) >= 1:
-                print(logentry.split("__"))
-                ticker = logentry.split("__")[0]
+                if len(logentry.split("__")) > 1:
+                    ticker = logentry.split("__")[0]
                 ParseStart.set_parserun(ticker)
                 if ParseStart.parse_cancel:
                     break
                 for tag in tag_container.keys():
                     if tag in logentry:
                         (dict_tagswitchboard[tag_container[tag]])(logentry)
-                        print("ENTRY: TAG - {tag}::::: LOGENTRY - {logentry}::".format(logentry=logentry, tag=tag))
                         break
                     else:
                         continue
@@ -108,3 +107,7 @@ class ParseStart:
         del PAR_SSC
         del PVAL_SSC
         del PIND_SSC
+
+if __name__ == "__main__":
+    PS = ParseStart()
+    PS.ssc_parselogstart()

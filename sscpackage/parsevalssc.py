@@ -11,6 +11,16 @@ class ParseVal:
     def __init__(self):
         self.setpathssc_parsesscval = r"C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\parsevalshelf"
 
+    def parse_valpurge(self):
+        with shelve.open(self.setpathssc_parsesscval) as purge_val:
+            if purge_val.keys():
+                for key in purge_val.keys():
+                    del purge_val[key]
+                if purge_val.keys():
+                    return 1
+                else:
+                    return 0
+
     def parseval(self, uniquename, pval_rawdata):
 
         uniquesplitlist = uniquename.split("__")

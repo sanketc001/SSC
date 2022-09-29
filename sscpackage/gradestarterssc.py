@@ -37,27 +37,24 @@ class GradeStartSSC():
     def reset_grade():
         GradeStartSSC.grade_cancel = False
 
-    def gradestartssc(self, fiver: bool = True):
+    def gradestartssc(self):
         FS_SSC = fetchlogssc.FetchLogSSC()
-        localfetchuniquelogcopyssc = FS_SSC.ssc_fetchloguniqueid()
-        local_looplist = {}
-        if fiver:
-            for indexno in range(0, 5):
-                local_looplist[sorted(localfetchuniquelogcopyssc.keys())[indexno]] = \
-                    localfetchuniquelogcopyssc[sorted(localfetchuniquelogcopyssc.keys())[indexno]]
-                localfetchuniquelogcopyssc = local_looplist
-        else:
-            pass
-
-        for entrysscgs in localfetchuniquelogcopyssc.keys():
+        local_logforticker = FS_SSC.ssc_logfetch()[:-1]
+        clean_copyssc = set()
+        for val in local_logforticker:
+            splitcopy = val.split("__")
+            clean_copyssc.add(splitcopy[0] + "__" + splitcopy[3])
+        for val in clean_copyssc:
+            print(val)
+        for item in clean_copyssc:
             if not GradeStartSSC.grade_cancel:
-                ticker = entrysscgs.split("__")[0]
+                ticker, entrysscgs = item.split("__")
                 GradeStartSSC.set_runitem(ticker)
                 PCOMBO = gradeparsecombinessc.GradeParseCombineSSC()
-                GCOL_SSC = gradecollectionssc.GradeCollectionSSC(ticker=localfetchuniquelogcopyssc[entrysscgs],
+                GCOL_SSC = gradecollectionssc.GradeCollectionSSC(ticker=ticker,
                                                                  uniqueidssc=entrysscgs,
                                                                  parsecombossc=PCOMBO.gradeparsecombinessc(
-                                                                     ticker=localfetchuniquelogcopyssc[entrysscgs],
+                                                                     ticker=ticker,
                                                                      logfileidssc=entrysscgs
                                                                  ))
                 GCOL_SSC.gradecollectionssc()
@@ -65,4 +62,4 @@ class GradeStartSSC():
 
 if __name__ == "__main__":
     GSS = GradeStartSSC()
-    GSS.gradestartssc(fiver=True)
+    GSS.gradestartssc()

@@ -12,6 +12,16 @@ class ParseIndustry:
     def __init__(self):
         self.setpathssc_parsesscind = r"C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\parseindshelf"
 
+    def parse_indpurge(self):
+        with shelve.open(self.setpathssc_parsesscind) as purge_ind:
+            if purge_ind.keys():
+                for key in purge_ind.keys():
+                    del purge_ind[key]
+                if purge_ind.keys():
+                    return 1
+                else:
+                    return 0
+
     def parseindustry(self, uniquename, ind_rawdata):
 
         uniquesplitlist = uniquename.split("__")

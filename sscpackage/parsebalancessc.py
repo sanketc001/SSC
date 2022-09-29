@@ -11,6 +11,15 @@ class ParseBalance:
     def __init__(self):
         self.setpathssc_parsesscpb = r"C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\parsebalanceshelf"
 
+    def parse_balancepurge(self):
+        with shelve.open(self.setpathssc_parsesscpb) as purge_bal:
+            if purge_bal.keys():
+                for key in purge_bal.keys():
+                    del purge_bal[key]
+                if purge_bal.keys():
+                    return 1
+                else:
+                    return 0
     def parsebalance(self, uniquename: 'str', pb_rawdata: dict) -> None:
         try:
             uniquesplitlist = uniquename.split("__")
