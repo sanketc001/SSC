@@ -17,6 +17,7 @@ from tkinter.messagebox import showinfo
 
 import schedule
 
+import fetchssc
 import fetchstarterssc
 import fetchstarterssc as sscf
 import gradestarterssc
@@ -315,7 +316,7 @@ class GuiStarterSSC(object):
                             schedule.every(1).seconds.do(
                                 lambda: text_update(header=PS.pull_parseheader(), msg=PS.parse_runfetch()))
                             schedule.run_pending()
-                            PS.ssc_parselogstart()
+                            PS.ssc_parselogstart(fetchssc.FetchSSC.pull_fetchfaillist())
                             schedule.clear()
 
                         GuiStarterSSC.end_parsestart = True

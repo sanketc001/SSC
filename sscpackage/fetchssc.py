@@ -50,36 +50,56 @@ def myownrandom(keylength=10):
     return keyresult
 
 
+
+
 class FetchSSC:
-    ticker_successlist = ""
+    ticker_fail = ""
+
+    @staticmethod
+    def pull_fetchfaillist():
+        return FetchSSC.ticker_fail
 
     def __init__(self, ticker, *args, **kwargs):
         self.ticker = ticker
 
-    async def rapid_fetch(self, *args, **kwargs):
-        timestampidrf = myownrandom(15)
-        FetchRF = sscpackage.fetchurlssc.FetchUrlSSC()
-        self.url_bank = FetchRF.pullfetchshelf()
-        for key in self.url_bank.keys():
-            url = self.url_bank[key]["url"]
-            qs = self.url_bank[key]["qs"]
-            head = self.url_bank[key]["headers"]
-            response = requests.request("GET", url=url, headers=head, params=qs)  # Request data
-            self.response = response
-            if response.status_code == 200:  # If received 'all good' response from API for first request, continue
-                print(f'{self.ticker} - fetch success')
-                textcast_ssc = response.text
-                self.fetch_data = dict(json.loads(textcast_ssc))
-                FSSC = sscpackage.fetchshelfssc_mod.FetchShelfSSC(ticker=self.ticker)
-                FSSC.fetchstore(key, id(self), self.fetch_data, timestampidfs=timestampidrf)
-                self.statusfetch = True
-                if key == list(self.url_bank.keys())[-1:]:
-                    FetchSSC.ticker_successlist += str(self.ticker)
-                FetchSSC.ticker_successlist += str(self.ticker) + ", "
-            elif response.status_code == 401:
-                print("Invalid API Key - Check User Information")
-                self.statusfetch = False
-            else:
-                print(f'{self.ticker} - failed fetch')
-                self.statusfetch = False
-            await asyncio.sleep(1)
+    try:
+        async def rapid_fetch(self, *args, **kwargs):
+            try:
+                print(self.ticker)
+                timestampidrf = myownrandom(15)
+                FetchRF = sscpackage.fetchurlssc.FetchUrlSSC(self.ticker)
+                FetchRF.fetchshelfinitialize()
+                self.url_bank = FetchRF.pullfetchshelf()
+            except Exception as er:
+                print("Inner Exception: Block 1: Fetchssc")
+
+            for key in self.url_bank.keys():
+                print(key)
+                url = self.url_bank[key]["url"]
+                qs = self.url_bank[key]["qs"]
+                head = self.url_bank[key]["headers"]
+                response = requests.request("GET", url=url, headers=head, params=qs)  # Request data
+                self.response = response
+                if response.status_code == 200:  # If received 'all good' response from API for first request, continue
+                    print(f'{self.ticker} - fetch success')
+                    textcast_ssc = response.text
+                    self.fetch_data = dict(json.loads(textcast_ssc))
+                    FSSC = sscpackage.fetchshelfssc_mod.FetchShelfSSC(ticker=self.ticker)
+                    FSSC.fetchstore(key, id(self), self.fetch_data, timestampidfs=timestampidrf)
+                    self.statusfetch = True
+                elif response.status_code == 401:
+                    if key == list(self.url_bank.keys())[-1:]:
+                        FetchSSC.ticker_fail += str(self.ticker) + "__" + str(url)
+                    FetchSSC.ticker_fail += str(self.ticker) + "__" + str(url) + ", "
+                    print("Invalid API Key - Check User Information")
+                    self.statusfetch = False
+                else:
+                    if key == list(self.url_bank.keys())[-1:]:
+                        FetchSSC.ticker_fail += str(self.ticker) + "__" + str(url)
+                    FetchSSC.ticker_fail += str(self.ticker) + "__" + str(url) + ", "
+                    print(f'{self.ticker} - failed fetch')
+                    self.statusfetch = False
+                await asyncio.sleep(1)
+
+    except Exception as er:
+        print("Outer Level Exception: fetchssc - rapid_fetch")

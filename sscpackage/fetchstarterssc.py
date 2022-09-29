@@ -62,9 +62,7 @@ class FetchStarterSSC:
                     print("Broke Chain - FetchStarter")
                     break
                 ticker_runlist.append(tickerlistvar_fetchssc[:5])
-                print(ticker_runlist)
                 FetchStarterSSC.update_runlist(ticker_runlist)
-                print(tickerlistvar_fetchssc)
                 await asyncio.gather(
                     FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch(),
                     FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch(),
@@ -80,3 +78,10 @@ class FetchStarterSSC:
                 FetchStarterSSC.update_runlist(ticker_runlist)
                 await asyncio.gather(FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch())
             await asyncio.sleep(1)
+
+
+if __name__ == "__main__":
+    test_pathfile = r'C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\storageticker_sixlist.txt'
+    with open(test_pathfile, 'r') as tpf:
+        FS = FetchStarterSSC(tpf.read().split(", "))
+        asyncio.run(FS._fetch_cycle())

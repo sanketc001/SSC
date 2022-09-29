@@ -11,7 +11,7 @@ class FetchUrlSSC:
     """
     setpath_fetchurlssc = r'C:\SSC\SimpleStockChecker_REV1\sscpackage\storage'
 
-    def __init__(self, ticker="MSFT", pathnamefetchurls=
+    def __init__(self, ticker, pathnamefetchurls=
     setpath_fetchurlssc + r"\fetchurlshelfdb",
                  pathbakssc=setpath_fetchurlssc + r"\fetchurlshelfdb.bak",
                  pathdatssc=setpath_fetchurlssc + r"\fetchurlshelfdb.dat",
@@ -41,46 +41,60 @@ class FetchUrlSSC:
             self.firstcreate_fetchurlssc()
             self.checkpaths()
 
-    def fetchshelfinitialize(self, ticker="MSFT"):
-        self.ticker = ticker
-        if self.checkpaths():
-            # These are variables holding the API locations for the information calls
-            url_income = "https://stock-market-data.p.rapidapi.com/stock/financials/income-statement/annual-historical"
-            url_balance = "https://stock-market-data.p.rapidapi.com/stock/financials/balance-sheet/annual-historical"
-            url_ar = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-upgrades-downgrades"
-            url_val = "https://stock-market-data.p.rapidapi.com/stock/valuation/historical-valuation-measures"
-            url_sectordata = "https://stock-market-data.p.rapidapi.com/stock/company-info"
+    def purge_fetchurlshelf(self):
+        with shelve.open(self.setpath_fetchurlssc) as pfs:
+            if pfs.keys():
+                for entry in pfs.keys():
+                    del pfs[entry]
+                if pfs.keys():
+                    return 1
+                else:
+                    return 0
 
-            # These are the two variables necessary to ping the API's, first two take qs, url_ar takes 2
-            qs_inc_bal = {"ticker_symbol": self.ticker, "format": "json"}
-            qs_ar = {"symbol": self.ticker, "region": "US"}
-            qs_val = {"ticker_symbol": self.ticker, "format": "json"}
-            qs_sector = {"ticker_symbol": self.ticker}
+    def fetchshelfinitialize(self):
+        try:
+            if self.checkpaths():
+                self.purge_fetchurlshelf()
+                # These are variables holding the API locations for the information calls
+                url_income = "https://stock-market-data.p.rapidapi.com/stock/financials/income-statement/annual-historical"
+                url_balance = "https://stock-market-data.p.rapidapi.com/stock/financials/balance-sheet/annual-historical"
+                url_ar = "https://yh-finance.p.rapidapi.com/stock/v2/get-upgrades-downgrades"
+                url_val = "https://stock-market-data.p.rapidapi.com/stock/valuation/historical-valuation-measures"
+                url_sectordata = "https://stock-market-data.p.rapidapi.com/stock/company-info"
 
-            # header information including RAPI_key environment variable, necessary for API data fetch
-            headers = {
-                'x-rapidapi-host': "stock-market-data.p.rapidapi.com",
-                'x-rapidapi-key': os.getenv("RAPI_key")
-            }
+                # These are the two variables necessary to ping the API's, first two take qs, url_ar takes 2
+                qs_inc_bal = {"ticker_symbol": self.ticker, "format": "json"}
+                qs_ar = {"symbol": self.ticker, "region": "US"}
+                qs_val = {"ticker_symbol": self.ticker, "format": "json"}
+                qs_sector = {"ticker_symbol": self.ticker}
 
-            # Header for the _ar request
-            headers_ar = {
-                'x-rapidapi-host': "apidojo-yahoo-finance-v1.p.rapidapi.com",
-                'x-rapidapi-key': os.getenv("RAPI_key")
-            }
+                # header information including RAPI_key environment variable, necessary for API data fetch
+                headers = {
+                    'x-rapidapi-host': "stock-market-data.p.rapidapi.com",
+                    'x-rapidapi-key': os.getenv("RAPI_key")
+                }
 
-            # Create and prime shelf with core necessary fetches
-            fetchshelf = shelve.open(self.pathnamefetchurls)
-            self.fetch_apidict = {"url_income": {"url": url_income, "qs": qs_inc_bal, "headers": headers},
-                                  "url_balance": {"url": url_balance, "qs": qs_inc_bal, "headers": headers},
-                                  "url_ar": {"url": url_ar, "qs": qs_ar, "headers": headers_ar},
-                                  "url_val": {"url": url_val, "qs": qs_val, "headers": headers},
-                                  "url_sectordata": {"url": url_sectordata, "qs": qs_sector, "headers": headers}}
-            fetchshelf[self.shelfkey] = self.fetch_apidict
-            self.fetchbank = fetchshelf[self.shelfkey]
-            fetchshelf.close()
-        else:
-            return 1
+                # Header for the _ar request
+                headers_ar = {
+                    'x-rapidapi-host': "yh-finance.p.rapidapi.com",
+                    'x-rapidapi-key': os.getenv("RAPI_key")
+                }
+
+                # Create and prime shelf with core necessary fetches
+                fetchshelf = shelve.open(self.pathnamefetchurls)
+                self.fetch_apidict = {"url_income": {"url": url_income, "qs": qs_inc_bal, "headers": headers},
+                                      "url_balance": {"url": url_balance, "qs": qs_inc_bal, "headers": headers},
+                                      "url_ar": {"url": url_ar, "qs": qs_ar, "headers": headers_ar},
+                                      "url_val": {"url": url_val, "qs": qs_val, "headers": headers},
+                                      "url_sectordata": {"url": url_sectordata, "qs": qs_sector, "headers": headers}}
+                fetchshelf[self.shelfkey] = self.fetch_apidict
+                self.fetchbank = fetchshelf[self.shelfkey]
+                fetchshelf.close()
+            else:
+                return 1
+        except Exception as er:
+            print("Exception in FetchUrlSSC:")
+            print(er)
 
     def addfetchssc(self, addfetchnamessc="DEFAULTNAME", fetchurlssc="DEFAULTURL", fetchqsssc="DEFAULTSSC",
                     fetchheadersssc="DEFAULTHEADER", *args, **kwargs):
@@ -125,5 +139,5 @@ class FetchUrlSSC:
 
 
 if __name__ == '__main__':
-    FS1 = FetchUrlSSC()
+    FS1 = FetchUrlSSC("MSFT")
     FS1.clearfetchshelfssc()

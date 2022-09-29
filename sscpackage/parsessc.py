@@ -39,12 +39,14 @@ class ParseStart:
     def parse_runfetch():
         return ParseStart.parse_runitem
 
-    def ssc_parselogstart(self):
+    def ssc_parselogstart(self, ticker_fail):
         """
         1. opens log file with stored list of current keys
         2. for loop through list to access fetchstore shelve and pull data
         3. Filter data into respective instance variables for parsing.
         """
+
+
 
         FS_SSC = fetchshelfssc_mod.FetchShelfSSC()
         shelvecopy_fromapi = FS_SSC.fetchdbpull()
@@ -60,6 +62,7 @@ class ParseStart:
         PAR_SSC = parsearssc.ParseAr()
         PSEC_SSC = parsesectorssc.ParseSector()
         PIND_SSC = parseindssc.ParseIndustry()
+
 
         tag_container = {}
         tag_container["url_income"] = "inctag"
@@ -86,20 +89,30 @@ class ParseStart:
 
                                "sectag": lambda logentrylamb: indsec(logentrylamb)
                                }
-
-        for logentry in local_logcopy:
-            if len(logentry) >= 1:
-                if len(logentry.split("__")) > 1:
-                    ticker = logentry.split("__")[0]
-                ParseStart.set_parserun(ticker)
-                if ParseStart.parse_cancel:
-                    break
-                for tag in tag_container.keys():
-                    if tag in logentry:
-                        (dict_tagswitchboard[tag_container[tag]])(logentry)
-                        break
-                    else:
-                        continue
+        try:
+            for logentry in local_logcopy:
+                if len(logentry) >= 1:
+                    if len(logentry.split("__")) > 1:
+                        tempsplit = logentry.split("__")
+                        ticker = tempsplit[0]
+                        urlbinding = tempsplit[1]
+                        temp_logentry = ticker + "__" + urlbinding
+                        if temp_logentry in ticker_fail:
+                            continue
+                        else:
+                            ParseStart.set_parserun(ticker)
+                            if ParseStart.parse_cancel:
+                                break
+                            for tag in tag_container.keys():
+                                if tag in logentry:
+                                    (dict_tagswitchboard[tag_container[tag]])(logentry)
+                                    break
+                                else:
+                                    continue
+        except Exception as er:
+            print("Exception in parsessc during loop:")
+            if logentry and ticker and tag:
+                print(f'Logentry: {logentry} \n Ticker: {ticker} \n Tag: {tag}')
 
         del PI_SSC
         del PB_SSC

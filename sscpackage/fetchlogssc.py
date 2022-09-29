@@ -5,7 +5,6 @@ class FetchLogSSC:
         with open(FetchLogSSC._fetchlogpath, 'w') as fl2:
             fl2.truncate()
             fl2.close()
-            print("MADE IT PAST THIS BIRCHTREE")
 
     def __init__(self):
         pass
@@ -15,8 +14,6 @@ class FetchLogSSC:
             fl.seek(0, 2)
             fl.write(fetchstorename + ", ")
             fl.close()
-
-
 
     def ssc_logfetch(self):
         logfetch_retval = []

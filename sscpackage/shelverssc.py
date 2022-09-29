@@ -6,6 +6,10 @@ class ShelverSSC:
         self.permstorpathssc = r'C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\\'
         self.shelvename = shelvename
 
+    def add_singleshelf(self, path, key, value):
+        with shelve.open(path) as addss:
+            addss[key] = value
+
     def pull_shelverssc(self, shelvename, gradesystemname="DEFAULT"):
         with shelve.open(self.permstorpathssc + shelvename) as sscshelvemanager:
             if gradesystemname in sscshelvemanager.keys():

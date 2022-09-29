@@ -43,7 +43,6 @@ class GradeParseCombineSSC:
         del PAR, PBAL, PINC, PIND, PSEC, PVAL
 
         corekeycombo = ticker + "__" + logfileidssc
-        parsecombo = {}
 
         def incbalqualssc(datadictssc):
             returndictqualssc = {}

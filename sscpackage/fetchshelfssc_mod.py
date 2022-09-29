@@ -15,23 +15,29 @@ class FetchShelfSSC:
     """
     setpath_fetchshelfssc = r'C:\SSC\SimpleStockChecker_REV1\sscpackage\storage'
 
-    def __init__(self, ticker="MSFT",
+    def __init__(self, ticker,
                  fetchstoreshelf=setpath_fetchshelfssc + r"\fetchfiledb"):
         self.ticker = ticker
         self.fetchstoreshelf = fetchstoreshelf
         self.fetchstorename = ""
 
+
     def fetchstore(self, key="url_income", idssc="DEFAULTID", fetch_data="DEFAULTDATA", timestampidfs="DEFTSID",
                    *args, **kwargs):
-        filedb = shelve.open(self.fetchstoreshelf)
-        fetchstorename = str(self.ticker) + "__" + str(key) + "__" + str(idssc) + "__" + str(timestampidfs)
-        filedb[fetchstorename] = fetch_data
-        filedb.close()
-        self.fetchstorename = fetchstorename
-        FS_SSC = fetchlogssc.FetchLogSSC()
-        FS_SSC.ssc_fetchlogwrite(self.fetchstorename)
-        del FS_SSC
-        return fetchstorename
+        try:
+            filedb = shelve.open(self.fetchstoreshelf)
+            fetchstorename = str(self.ticker) + "__" + str(key) + "__" + str(idssc) + "__" + str(timestampidfs)
+            filedb[fetchstorename] = fetch_data
+            filedb.close()
+            self.fetchstorename = fetchstorename
+            FS_SSC = fetchlogssc.FetchLogSSC()
+            FS_SSC.ssc_fetchlogwrite(self.fetchstorename)
+            del FS_SSC
+            return fetchstorename
+        except Exception as er:
+            print("Exception Fetchstore Method:")
+            print(er)
+
 
     def fetchdbpull(self, *args, **kwargs):
         with shelve.open(self.fetchstoreshelf) as fetchshelf_pull:
