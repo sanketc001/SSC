@@ -13,27 +13,35 @@ class ParseSector:
         self.setpathssc_parsesscsec = r"C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\parsesecshelf"
 
     def parse_sectpurge(self):
-        with shelve.open(self.setpathssc_parsesscsec) as purge_sec:
-            if purge_sec.keys():
-                for key in purge_sec.keys():
-                    del purge_sec[key]
+        try:
+            with shelve.open(self.setpathssc_parsesscsec) as purge_sec:
                 if purge_sec.keys():
-                    return 1
-                else:
-                    return 0
+                    for key in purge_sec.keys():
+                        del purge_sec[key]
+                    if purge_sec.keys():
+                        return 1
+                    else:
+                        return 0
+        except Exception as er:
+            print("Exception in ParseSector: method 'parse_sectpurge' ")
+            print(er)
 
     def parsesector(self, uniquename, ps_rawdata):
-        uniquesplitlist = uniquename.split("__")
-        ticker, key, idssc, timestampidpsec = uniquesplitlist[0], uniquesplitlist[1], uniquesplitlist[2], \
-                                              uniquesplitlist[3]
+        try:
+            uniquesplitlist = uniquename.split("__")
+            ticker, key, idssc, timestampidpsec = uniquesplitlist[0], uniquesplitlist[1], uniquesplitlist[2], \
+                                                  uniquesplitlist[3]
 
-        DP_SSCPSEC = dictpullssc.DictPullSSC()
-        secdata = DP_SSCPSEC.dictpullssc(ps_rawdata, "Sector")
+            DP_SSCPSEC = dictpullssc.DictPullSSC()
+            secdata = DP_SSCPSEC.dictpullssc(ps_rawdata, "Sector")
 
-        FST_SSC = fetchshelfssc_mod.FetchShelfSSC(fetchstoreshelf=self.setpathssc_parsesscsec)
-        FST_SSC.fetchstore(ticker=ticker, key=key, idssc=idssc, fetch_data=secdata, timestampidfs=timestampidpsec)
-        del FST_SSC
-        del DP_SSCPSEC
+            FST_SSC = fetchshelfssc_mod.FetchShelfSSC(fetchstoreshelf=self.setpathssc_parsesscsec)
+            FST_SSC.fetchstore(ticker=ticker, key=key, idssc=idssc, fetch_data=secdata, timestampidfs=timestampidpsec)
+            del FST_SSC
+            del DP_SSCPSEC
+        except Exception as er:
+            print("Exception in ParseSector: method 'parsesector' ")
+            print(er)
 
     def fetch_parsesector(self, timestampidpsec):
         try:

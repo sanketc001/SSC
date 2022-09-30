@@ -7,18 +7,26 @@ class ShelverSSC:
         self.shelvename = shelvename
 
     def add_singleshelf(self, path, key, value):
-        with shelve.open(path) as addss:
-            addss[key] = value
+        try:
+            with shelve.open(path) as addss:
+                addss[key] = value
+        except Exception as er:
+            print("Exception in ShelverSSC: method 'add_singleshelf' ")
+            print(er)
 
     def pull_shelverssc(self, shelvename, gradesystemname="DEFAULT"):
-        with shelve.open(self.permstorpathssc + shelvename) as sscshelvemanager:
-            if gradesystemname in sscshelvemanager.keys():
-                tempsscshelv = sscshelvemanager[gradesystemname]
-                sscshelvemanager.close()
-                return tempsscshelv
-            else:
-                sscshelvemanager.close()
-                return 0
+        try:
+            with shelve.open(self.permstorpathssc + shelvename) as sscshelvemanager:
+                if gradesystemname in sscshelvemanager.keys():
+                    tempsscshelv = sscshelvemanager[gradesystemname]
+                    sscshelvemanager.close()
+                    return tempsscshelv
+                else:
+                    sscshelvemanager.close()
+                    return 0
+        except Exception as er:
+            print("Exception in ShelverSSC: method 'pull_shelverssc'")
+            print(er)
 
     def inkeys_shelvercorekeysssc(self, shelvename, keyname):
         with shelve.open(self.permstorpathssc + shelvename) as sscshelvemanager:
@@ -132,8 +140,12 @@ class ShelverSSC:
         :param keysearch: string key value
         :return:
         """
-        with shelve.open(path) as fpshelf_ssc:
-            if keysearch in fpshelf_ssc.keys():
-                return True
-            else:
-                return False
+        try:
+            with shelve.open(path) as fpshelf_ssc:
+                if keysearch in fpshelf_ssc.keys():
+                    return True
+                else:
+                    return False
+        except Exception as er:
+            print("Exception in ShelverSSC: method 'fetchpeek' ")
+            print(er)

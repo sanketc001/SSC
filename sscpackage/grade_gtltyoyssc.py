@@ -14,108 +14,121 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
                                    "Income Before Tax", "Research & Development", "Total Assets", "Retained Earnings"]
         self.printerdictssc = {}
         self.gradestore = {}
+    try:
+        def gtltmetricsgradessc(self, ticker, parsecombossc, uniqueidssc, awardsystemssc):
+            runningtotalgtlt = {}
+            localawardsectiongtlt = awardsystemssc['GTLT']
+            localincdatssc = parsecombossc['incdat']
+            localbaldatssc = parsecombossc['baldat']
+            localavoidmetricgtltinc = parsecombossc["incdatqual"]
+            localavoidmetricgtltbal = parsecombossc["baldatqual"]
+            runsectorssc = parsecombossc["Sector"]
+            runindustryssc = parsecombossc["Industry"]
+            self.printprimer(self.sectionname, ticker, uniqueidssc, runsectorssc, runindustryssc)
 
-    def gtltmetricsgradessc(self, ticker, parsecombossc, uniqueidssc, awardsystemssc):
-        runningtotalgtlt = {}
-        localawardsectiongtlt = awardsystemssc['GTLT']
-        localincdatssc = parsecombossc['incdat']
-        localbaldatssc = parsecombossc['baldat']
-        localavoidmetricgtltinc = parsecombossc["incdatqual"]
-        localavoidmetricgtltbal = parsecombossc["baldatqual"]
-        runsectorssc = parsecombossc["Sector"]
-        runindustryssc = parsecombossc["Industry"]
-        self.printprimer(self.sectionname, ticker, uniqueidssc, runsectorssc, runindustryssc)
-
-        def isenoughdatassc(nameval):
-            if nameval in localavoidmetricgtltinc.keys():
-                inlinecount = len(localavoidmetricgtltinc[nameval])
-                if inlinecount >= 2:
-                    return nameval, inlinecount, "incdat"
-                else:
-                    return False
-            elif nameval in localavoidmetricgtltbal.keys():
-                inlinecount = len(localavoidmetricgtltbal[nameval])
-                if inlinecount >= 2:
-                    return nameval, inlinecount, "baldat"
-                else:
-                    return False
-            elif nameval in localincdatssc:
-                inlinecount = len(localincdatssc[nameval])
-                return nameval, inlinecount, "incdat"
-            elif nameval in localbaldatssc.keys():
-                inlinecount = len(localbaldatssc[nameval])
-                return nameval, inlinecount, "baldat"
-            else:
-                return False
-
-        def increasinggtltssc(nameval, count, statement):
-            pointsper = int(localawardsectiongtlt[nameval]["points"])
-            weightind = int(localawardsectiongtlt[nameval]["weight"])
-            respointrunner = 0
-            if statement == "incdat":
-                sourcevalsinc = localincdatssc[nameval]
-                for old_index in range(len(localincdatssc[nameval]) - 1, 0, -1):
-                    oldyear = localincdatssc[nameval][old_index]
-                    newyear = localincdatssc[nameval][old_index - 1]
-                    keyforprint = [nameval, "Year", str(sourcevalsinc.index(newyear)), "|", "Year",
-                                   str(sourcevalsinc.index(oldyear))]
-
-                    if newyear > oldyear:
-                        respointrunner += pointsper
-                        inlinesymbol = ">"
+            try:
+                def isenoughdatassc(nameval):
+                    if nameval in localavoidmetricgtltinc.keys():
+                        inlinecount = len(localavoidmetricgtltinc[nameval])
+                        if inlinecount >= 2:
+                            return nameval, inlinecount, "incdat"
+                        else:
+                            return False
+                    elif nameval in localavoidmetricgtltbal.keys():
+                        inlinecount = len(localavoidmetricgtltbal[nameval])
+                        if inlinecount >= 2:
+                            return nameval, inlinecount, "baldat"
+                        else:
+                            return False
+                    elif nameval in localincdatssc:
+                        inlinecount = len(localincdatssc[nameval])
+                        return nameval, inlinecount, "incdat"
+                    elif nameval in localbaldatssc.keys():
+                        inlinecount = len(localbaldatssc[nameval])
+                        return nameval, inlinecount, "baldat"
                     else:
-                        inlinesymbol = "<"
+                        return False
+            except Exception as er:
+                print("Exception in 'isenoughdatassc' function: ")
+                print(er)
 
-                    valueforprint = [newyear, inlinesymbol, oldyear, "POINTS", respointrunner, "POINTVAL",
-                                     pointsper]
+            try:
+                def increasinggtltssc(nameval, count, statement):
+                    pointsper = int(localawardsectiongtlt[nameval]["points"])
+                    weightind = int(localawardsectiongtlt[nameval]["weight"])
+                    respointrunner = 0
+                    if statement == "incdat":
+                        sourcevalsinc = localincdatssc[nameval]
+                        for old_index in range(len(localincdatssc[nameval]) - 1, 0, -1):
+                            oldyear = localincdatssc[nameval][old_index]
+                            newyear = localincdatssc[nameval][old_index - 1]
+                            keyforprint = [nameval, "Year", str(sourcevalsinc.index(newyear)), "|", "Year",
+                                           str(sourcevalsinc.index(oldyear))]
 
-                    self.printerdictssc[str(keyforprint)] = valueforprint
+                            if newyear > oldyear:
+                                respointrunner += pointsper
+                                inlinesymbol = ">"
+                            else:
+                                inlinesymbol = "<"
 
-                respointrunner *= weightind
-                restotpoints = 1 * (count - 1)
-                restotpoints *= weightind
-                runningtotalgtlt[nameval] = {"Base Points": restotpoints, "Current Points": respointrunner}
+                            valueforprint = [newyear, inlinesymbol, oldyear, "POINTS", respointrunner, "POINTVAL",
+                                             pointsper]
 
-            elif statement == "baldat":
-                sourcevalsbal = localbaldatssc[nameval]
-                for old_index in range(len(localbaldatssc[nameval]) - 1, 0, -1):
-                    oldyear = localbaldatssc[nameval][old_index]
-                    newyear = localbaldatssc[nameval][old_index - 1]
-                    keyforprint = [nameval, "Year", str(sourcevalsbal.index(newyear)), "|", "Year",
-                                   str(sourcevalsbal.index(oldyear))]
+                            self.printerdictssc[str(keyforprint)] = valueforprint
 
-                    if newyear > oldyear:
-                        respointrunner += pointsper
-                        inlinesymbol = ">"
+                        respointrunner *= weightind
+                        restotpoints = 1 * (count - 1)
+                        restotpoints *= weightind
+                        runningtotalgtlt[nameval] = {"Base Points": restotpoints, "Current Points": respointrunner}
+
+                    elif statement == "baldat":
+                        sourcevalsbal = localbaldatssc[nameval]
+                        for old_index in range(len(localbaldatssc[nameval]) - 1, 0, -1):
+                            oldyear = localbaldatssc[nameval][old_index]
+                            newyear = localbaldatssc[nameval][old_index - 1]
+                            keyforprint = [nameval, "Year", str(sourcevalsbal.index(newyear)), "|", "Year",
+                                           str(sourcevalsbal.index(oldyear))]
+
+                            if newyear > oldyear:
+                                respointrunner += pointsper
+                                inlinesymbol = ">"
+                            else:
+                                inlinesymbol = "<"
+
+                            valueforprint = [newyear, inlinesymbol, oldyear, "POINTS", respointrunner, "POINTVAL",
+                                             pointsper]
+
+                            self.printerdictssc[str(keyforprint)] = valueforprint
+
+                        respointrunner *= weightind
+                        restotpoints = 1 * (count - 1)
+                        restotpoints *= weightind
+                        runningtotalgtlt[nameval] = {"Base Points": restotpoints, "Current Points": respointrunner}
+
+                    return runningtotalgtlt
+            except Exception as er:
+                print("Exception in 'increasinggtltssc' : ")
+                print(er)
+
+            try:
+                for nameval in self.increasingsections:
+                    if isenoughdatassc(nameval):
+                        valueholderlist = [*isenoughdatassc(nameval)]
+                        if len(valueholderlist) == 3:
+                            self.gradestore.update(increasinggtltssc(*valueholderlist))
                     else:
-                        inlinesymbol = "<"
+                        continue
+            except Exception as er:
+                print("Exception during Loop Structure in gtltmetricsgrade function: ")
+                print(er)
 
-                    valueforprint = [newyear, inlinesymbol, oldyear, "POINTS", respointrunner, "POINTVAL",
-                                     pointsper]
+            self.gradeprinterssc(**self.printerdictssc)
+            self.sectionprinttoexcel()
 
-                    self.printerdictssc[str(keyforprint)] = valueforprint
-
-                respointrunner *= weightind
-                restotpoints = 1 * (count - 1)
-                restotpoints *= weightind
-                runningtotalgtlt[nameval] = {"Base Points": restotpoints, "Current Points": respointrunner}
-
-            return runningtotalgtlt
-
-        outputstoressc = {}
-        for nameval in self.increasingsections:
-            if isenoughdatassc(nameval):
-                valueholderlist = [*isenoughdatassc(nameval)]
-                if len(valueholderlist) == 3:
-                    self.gradestore.update(increasinggtltssc(*valueholderlist))
-            else:
-                continue
-
-        self.gradeprinterssc(**self.printerdictssc)
-        self.sectionprinttoexcel()
-
-        return self.sectionendprinttoexcel(**self.gradestore)
-
+            return self.sectionendprinttoexcel(**self.gradestore)
+    except Exception as er:
+        print("Exception in GTLTYOYSSC: Outermost Scope ")
+        print(er)
 
 if __name__ == "__main__":
     import gradeparsecombinessc

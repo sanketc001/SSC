@@ -45,20 +45,41 @@ class GradeCollectionSSC:
 
     def gradecollectionssc(self):
         pointbin = []
-        pointbin.append(self.gradesectionone.gtltmetricsgradessc(self.ticker, self.parsecombossc, self.uniqueidssc,
-                                                                 self.awardsystem))
+        try:
+            pointbin.append(self.gradesectionone.gtltmetricsgradessc(self.ticker, self.parsecombossc, self.uniqueidssc,
+                                                                     self.awardsystem))
+        except Exception as er:
+            print("Exception Point: gradecollectionsssc - gtltmetricsgradessc")
+            print(er)
 
-        pointbin.append(self.gradesectionfive.grade_finratiossc(self.ticker, self.parsecombossc, self.uniqueidssc,
-                                                                self.awardsystem))
+        try:
+            pointbin.append(self.gradesectionfive.grade_finratiossc(self.ticker, self.parsecombossc, self.uniqueidssc,
+                                                                    self.awardsystem))
+        except Exception as er:
+            print("Exception Point: gradecollectionssc - grade_finratiossc")
+            print(er)
 
-        pointbin.append(self.gradesectiontwo.grade_gtltyoyratiossc(self.ticker, self.parsecombossc, self.uniqueidssc,
-                                                                   self.awardsystem))
+        try:
+            pointbin.append(self.gradesectiontwo.grade_gtltyoyratiossc(self.ticker, self.parsecombossc, self.uniqueidssc,
+                                                                       self.awardsystem))
+        except Exception as er:
+            print("Exception Point: gradecollectionssc - grade_gtltyoyratiossc")
+            print(er)
 
-        pointbin.append(self.gradesectionthree.grade_valratiossc(self.ticker, self.parsecombossc, self.uniqueidssc,
-                                                                 self.awardsystem))
+        try:
+            pointbin.append(self.gradesectionthree.grade_valratiossc(self.ticker, self.parsecombossc, self.uniqueidssc,
+                                                                     self.awardsystem))
+        except Exception as er:
+            print("Exception Point: gradecollectionssc - grade_valratiossc")
+            print(er)
 
-        pointbin.append(self.gradesectionfour.grade_arssc(self.ticker, self.parsecombossc, self.uniqueidssc,
-                                                          self.awardsystem))
+        try:
+            pointbin.append(self.gradesectionfour.grade_arssc(self.ticker, self.parsecombossc, self.uniqueidssc,
+                                                              self.awardsystem))
+        except Exception as er:
+            print("Exception Point: gradecollectionssc - grade_arssc")
+            print(er)
+
 
         self.finalgrade.grade_final_ssc(pointbin)
         self.storeclass.db_chksetup()

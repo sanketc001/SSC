@@ -38,26 +38,30 @@ class GradeStartSSC():
         GradeStartSSC.grade_cancel = False
 
     def gradestartssc(self):
-        FS_SSC = fetchlogssc.FetchLogSSC()
-        local_logforticker = FS_SSC.ssc_logfetch()[:-1]
-        clean_copyssc = set()
-        for val in local_logforticker:
-            splitcopy = val.split("__")
-            clean_copyssc.add(splitcopy[0] + "__" + splitcopy[3])
-        for val in clean_copyssc:
-            print(val)
-        for item in clean_copyssc:
-            if not GradeStartSSC.grade_cancel:
-                ticker, entrysscgs = item.split("__")
-                GradeStartSSC.set_runitem(ticker)
-                PCOMBO = gradeparsecombinessc.GradeParseCombineSSC()
-                GCOL_SSC = gradecollectionssc.GradeCollectionSSC(ticker=ticker,
-                                                                 uniqueidssc=entrysscgs,
-                                                                 parsecombossc=PCOMBO.gradeparsecombinessc(
-                                                                     ticker=ticker,
-                                                                     logfileidssc=entrysscgs
-                                                                 ))
-                GCOL_SSC.gradecollectionssc()
+        try:
+            FS_SSC = fetchlogssc.FetchLogSSC()
+            local_logforticker = FS_SSC.ssc_logfetch()[:-1]
+            clean_copyssc = set()
+            for val in local_logforticker:
+                splitcopy = val.split("__")
+                clean_copyssc.add(splitcopy[0] + "__" + splitcopy[3])
+            for val in clean_copyssc:
+                print(val)
+            for item in clean_copyssc:
+                if not GradeStartSSC.grade_cancel:
+                    ticker, entrysscgs = item.split("__")
+                    GradeStartSSC.set_runitem(ticker)
+                    PCOMBO = gradeparsecombinessc.GradeParseCombineSSC()
+                    GCOL_SSC = gradecollectionssc.GradeCollectionSSC(ticker=ticker,
+                                                                     uniqueidssc=entrysscgs,
+                                                                     parsecombossc=PCOMBO.gradeparsecombinessc(
+                                                                         ticker=ticker,
+                                                                         logfileidssc=entrysscgs
+                                                                     ))
+                    GCOL_SSC.gradecollectionssc()
+        except Exception as er:
+            print("Exception in GradeStarterSSC: function 'gradestartssc' ")
+            print(er)
 
 
 if __name__ == "__main__":

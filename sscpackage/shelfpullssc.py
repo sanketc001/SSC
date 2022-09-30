@@ -12,14 +12,18 @@ class ShelfPullSSC:
         :param pathshelfssc:
         :return: shelve at path
         """
-        with shelve.open(pathshelfssc) as psssc:
-            if psssc.keys():
-                ret = dict(psssc)
-                psssc.close()
-                return ret
-            else:
-                psssc.close()
-                return 0
+        try:
+            with shelve.open(pathshelfssc) as psssc:
+                if psssc.keys():
+                    ret = dict(psssc)
+                    psssc.close()
+                    return ret
+                else:
+                    psssc.close()
+                    return 0
+        except Exception as er:
+            print("Exception in ShelfPullSSC: method 'pullshelfssc' ")
+            print(er)
 
     def pullshelfkeylistssc(self, pathshelfssc):
         """
@@ -27,14 +31,18 @@ class ShelfPullSSC:
         :param pathshelfssc:
         :return: list of keys in shelve
         """
-        with shelve.open(pathshelfssc) as psssc:
-            if psssc.keys():
-                ret = [keypsssc for keypsssc in psssc.keys()]
-                psssc.close()
-                return ret
-            else:
-                psssc.close()
-                return 0
+        try:
+            with shelve.open(pathshelfssc) as psssc:
+                if psssc.keys():
+                    ret = [keypsssc for keypsssc in psssc.keys()]
+                    psssc.close()
+                    return ret
+                else:
+                    psssc.close()
+                    return 0
+        except Exception as er:
+            print("Exception in ShelfPullSSC: method 'pullshelfkeylistssc' ")
+            print(er)
 
     def pullvalueinshelfssc(self, pathshelfssc, keyshelfssc):
         """
@@ -43,12 +51,16 @@ class ShelfPullSSC:
         :param keyshelfssc: key variable in shelve
         :return:
         """
-        with shelve.open(pathshelfssc) as psssc:
-            if psssc.keys():
-                if keyshelfssc in psssc.keys():
-                    retvalssc = psssc[keyshelfssc]
-                    psssc.close()
-                    return retvalssc
-                else:
-                    psssc.close()
-                    return 0
+        try:
+            with shelve.open(pathshelfssc) as psssc:
+                if psssc.keys():
+                    if keyshelfssc in psssc.keys():
+                        retvalssc = psssc[keyshelfssc]
+                        psssc.close()
+                        return retvalssc
+                    else:
+                        psssc.close()
+                        return 0
+        except Exception as er:
+            print("Exception in ShelfPullSSC: method 'pullvalueinshelfssc'")
+            print(er)

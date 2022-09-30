@@ -3,7 +3,6 @@ import gradesheetprintssc
 
 class GradeFinRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
     def grade_finratiossc(self, ticker, parsecombo, uniqueid, awardsystem):
-        # TODO: Make the finratio method
 
         # Current  Ratio - Higher Better
         #   1.5-3.0 + 1
@@ -27,59 +26,64 @@ class GradeFinRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
         # Book Value Per Share or shareholders equity divided by shares outstanding
         #   Value under 1 could indicate undervalued stock
 
-        finlogname = ticker + "__" + uniqueid
-        localvardict = parsecombo['finratiodict']
-        runningtotalbin = {}
+        try:
+            finlogname = ticker + "__" + uniqueid
+            localvardict = parsecombo['finratiodict']
+            runningtotalbin = {}
 
-        fingradedict = {
-            "Current Ratio": lambda finval: pg if finval > 1.4 else pn if 1.4 > finval >= 1 else pb,
-            "Acid Test Ratio": lambda finval: pg if finval >= .9 else pb,
-            "Cash Ratio": lambda finval: pg if finval > 1 else pb,
-            "Debt Ratio": lambda finval: pg if finval <= .4 else pb,
-            "Debt To Equity Ratio": lambda finval: pg if finval <= 2.0 else pn if 2.5 <= finval > 2 else pb,
-            "Operating Cash Flow": lambda finval: pn,  # TODO: need to update to Sector specific grading
-            "Interest Coverage Ratio": lambda finval: pg if finval >= 3.0 else pn if 3.0 > finval > 1.0 else pb,
-            "Return On Assets Ratio": lambda finval: pg if finval >= .20 else pn if .20 > finval >= .05 else pb,
-            "Book Value Per Share": lambda finval: pg if finval < 1.0 else pb
-        }
+            fingradedict = {
+                "Current Ratio": lambda finval: pg if finval > 1.4 else pn if 1.4 > finval >= 1 else pb,
+                "Acid Test Ratio": lambda finval: pg if finval >= .9 else pb,
+                "Cash Ratio": lambda finval: pg if finval > 1 else pb,
+                "Debt Ratio": lambda finval: pg if finval <= .4 else pb,
+                "Debt To Equity Ratio": lambda finval: pg if finval <= 2.0 else pn if 2.5 <= finval > 2 else pb,
+                "Operating Cash Flow": lambda finval: pn,  # TODO: need to update to Sector specific grading
+                "Interest Coverage Ratio": lambda finval: pg if finval >= 3.0 else pn if 3.0 > finval > 1.0 else pb,
+                "Return On Assets Ratio": lambda finval: pg if finval >= .20 else pn if .20 > finval >= .05 else pb,
+                "Book Value Per Share": lambda finval: pg if finval < 1.0 else pb
+            }
 
-        statementdict = {
-            "Current Ratio": ["GOOD: > 1.5", "NEUTRAL: 1.4 > X >= 1", "BAD: X < 1"],
-            "Acid Test Ratio": ["GOOD: X >= .9", "BAD: X < .9"],
-            "Cash Ratio": ["GOOD: X > 1", "BAD: X < 1"],
-            "Debt Ratio": ["GOOD: X <= .4", "BAD: X > .4"],
-            "Debt To Equity Ratio": ["GOOD: X <= 2.0", "NEUTRAL: 2.5 <= X > 2", "BAD: X < 2"],
-            "Operating Cash Flow": ["NOT YET GRADING"],
-            "Interest Coverage Ratio": ["GOOD: X >= 3", "NEUTRAL: 1 < X < 3.0", "BAD: X < 1"],
-            "Return On Assets Ratio": ["GOOD: X >= .20", "NEUTRAL: .20 > X >= .05", "BAD: X <= .05"],
-            "Book Value Per Share": ["GOOD: X < 1", "BAD: X > 1"]
-        }
+            statementdict = {
+                "Current Ratio": ["GOOD: > 1.5", "NEUTRAL: 1.4 > X >= 1", "BAD: X < 1"],
+                "Acid Test Ratio": ["GOOD: X >= .9", "BAD: X < .9"],
+                "Cash Ratio": ["GOOD: X > 1", "BAD: X < 1"],
+                "Debt Ratio": ["GOOD: X <= .4", "BAD: X > .4"],
+                "Debt To Equity Ratio": ["GOOD: X <= 2.0", "NEUTRAL: 2.5 <= X > 2", "BAD: X < 2"],
+                "Operating Cash Flow": ["NOT YET GRADING"],
+                "Interest Coverage Ratio": ["GOOD: X >= 3", "NEUTRAL: 1 < X < 3.0", "BAD: X < 1"],
+                "Return On Assets Ratio": ["GOOD: X >= .20", "NEUTRAL: .20 > X >= .05", "BAD: X <= .05"],
+                "Book Value Per Share": ["GOOD: X < 1", "BAD: X > 1"]
+            }
 
-        printerdictssc = {}
+            printerdictssc = {}
 
-        for rationame in localvardict.keys():
-            finratpoints = 0
+            for rationame in localvardict.keys():
+                finratpoints = 0
 
-            pg = awardsystem['FINRATIOS'][rationame]['pointsgood']
-            pn = awardsystem['FINRATIOS'][rationame]['pointsneutral']
-            pb = awardsystem['FINRATIOS'][rationame]['pointsbad']
+                pg = awardsystem['FINRATIOS'][rationame]['pointsgood']
+                pn = awardsystem['FINRATIOS'][rationame]['pointsneutral']
+                pb = awardsystem['FINRATIOS'][rationame]['pointsbad']
 
-            for yearindex in reversed(range(len(localvardict[rationame]))):
-                localpoints = fingradedict[rationame](localvardict[rationame][yearindex])
-                finratpoints += localpoints
-                fintotpoints = pg * len(localvardict[rationame])
+                for yearindex in reversed(range(len(localvardict[rationame]))):
+                    localpoints = fingradedict[rationame](localvardict[rationame][yearindex])
+                    finratpoints += localpoints
+                    fintotpoints = pg * len(localvardict[rationame])
 
-                keystatement = [rationame, "|", yearindex, "|", localvardict[rationame][yearindex]]
-                valstatement = ["POINTS AWARDED", localpoints, *statementdict[rationame]]
-                printerdictssc[str(keystatement)] = valstatement
+                    keystatement = [rationame, "|", yearindex, "|", localvardict[rationame][yearindex]]
+                    valstatement = ["POINTS AWARDED", localpoints, *statementdict[rationame]]
+                    printerdictssc[str(keystatement)] = valstatement
 
-            runningtotalbin[rationame] = {'Base Points': fintotpoints, 'Current Points': finratpoints}
+                runningtotalbin[rationame] = {'Base Points': fintotpoints, 'Current Points': finratpoints}
 
-        self.setinstancepath(ticker, uniqueid)
-        self.setsheetnamesscgr(ticker)
-        self.gradeprinterssc(**printerdictssc)
-        self.sectionprinttoexcel()
-        return self.sectionendprinttoexcel(**runningtotalbin)
+            self.setinstancepath(ticker, uniqueid)
+            self.setsheetnamesscgr(ticker)
+            self.gradeprinterssc(**printerdictssc)
+            self.sectionprinttoexcel()
+            return self.sectionendprinttoexcel(**runningtotalbin)
+        except Exception as er:
+
+            print("Exception in GradeFinRatioSSC: grade_finratiossc: ")
+            print(er)
 
 
 if __name__ == '__main__':

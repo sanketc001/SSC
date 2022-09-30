@@ -27,33 +27,37 @@ class GradeArSSC(gradesheetprintssc.GradeSheetPrintSSC):
     def __init__(self):
         super().__init__()
 
+
     def grade_arssc(self, ticker, parsecombo, uniqueid, awardsystemssc):
-        localardict = parsecombo["AR"]
-        localawardsys = awardsystemssc["ARMETRICS"]
-        runningtally = 0
-        total_count_analysts = 0
-        printer_sourcebin = {}
-        total_count_dict = {}
+        try:
+            localardict = parsecombo["AR"]
+            localawardsys = awardsystemssc["ARMETRICS"]
+            runningtally = 0
+            total_count_analysts = 0
+            printer_sourcebin = {}
+            total_count_dict = {}
 
-        for dictnest in localardict:
-            if dictnest["epochGradeDate"] > time.time() - SECONDS_PER_YEAR:
-                total_count_analysts += 1
-                if dictnest["toGrade"] in localawardsys.keys():
-                    runningtally += localawardsys[dictnest["toGrade"]]["points"]
-                    printer_sourcebin[str(dictnest["firm"])] = [dictnest["toGrade"],
-                                                                localawardsys[dictnest["toGrade"]]["points"]]
+            for dictnest in localardict:
+                if dictnest["epochGradeDate"] > time.time() - SECONDS_PER_YEAR:
+                    total_count_analysts += 1
+                    if dictnest["toGrade"] in localawardsys.keys():
+                        runningtally += localawardsys[dictnest["toGrade"]]["points"]
+                        printer_sourcebin[str(dictnest["firm"])] = [dictnest["toGrade"],
+                                                                    localawardsys[dictnest["toGrade"]]["points"]]
 
-        total_count_analysts *= localawardsys["Buy"]["points"]
+            total_count_analysts *= localawardsys["Buy"]["points"]
 
-        total_count_dict["ARGRADE"] = {"Base Points": total_count_analysts, "Current Points": runningtally}
+            total_count_dict["ARGRADE"] = {"Base Points": total_count_analysts, "Current Points": runningtally}
 
-        self.setinstancepath(ticker, uniqueid)
-        self.setsheetnamesscgr(ticker)
-        self.gradeprinterssc(**printer_sourcebin)
-        self.sectionprinttoexcel()
+            self.setinstancepath(ticker, uniqueid)
+            self.setsheetnamesscgr(ticker)
+            self.gradeprinterssc(**printer_sourcebin)
+            self.sectionprinttoexcel()
 
-        return self.sectionendprinttoexcel(**total_count_dict)
-
+            return self.sectionendprinttoexcel(**total_count_dict)
+        except Exception as er:
+            print("Exception In Grade_ARSSC: grade_arssc: ")
+            print(er)
 
 if __name__ == "__main__":
     import gradeparsecombinessc

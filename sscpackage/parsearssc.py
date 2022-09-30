@@ -14,14 +14,18 @@ class ParseAr:
 
 
     def purge_parsear(self):
-        with shelve.open(self.setpathssc_parsesscar) as purge_parse:
-            if purge_parse.keys():
-                for item in purge_parse.keys():
-                    del purge_parse[item]
+        try:
+            with shelve.open(self.setpathssc_parsesscar) as purge_parse:
                 if purge_parse.keys():
-                    return 1
-                else:
-                    return 0
+                    for item in purge_parse.keys():
+                        del purge_parse[item]
+                    if purge_parse.keys():
+                        return 1
+                    else:
+                        return 0
+        except Exception as er:
+            print("Exception in ParseAr: method 'purge_parsear' ")
+            print(er)
 
     def parsear(self, uniquename, par_rawdata):
         try:

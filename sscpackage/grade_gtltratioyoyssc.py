@@ -15,60 +15,64 @@ class GTLTYoYRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
         self.printerdictssc = {}
 
     def grade_gtltyoyratiossc(self, ticker, parsecombo, uniqueid, awardsystem):
-        runningtotalgtlt = {}
-        localawardsectiongtlt = awardsystem['INCASRATIO']
-        localratiodict = parsecombo['incasratiodict']
+        try:
+            runningtotalgtlt = {}
+            localawardsectiongtlt = awardsystem['INCASRATIO']
+            localratiodict = parsecombo['incasratiodict']
 
-        def increaseordecrease(identifier):
-            if identifier == "increasing":
-                binser = self.asratioincreasingsections
-            else:
-                binser = self.asratiodecreasingsections
+            def increaseordecrease(identifier):
+                if identifier == "increasing":
+                    binser = self.asratioincreasingsections
+                else:
+                    binser = self.asratiodecreasingsections
 
-            for rationame in binser:
-                respointrunner = 0
-                pointsper = localawardsectiongtlt[rationame]["points"]
-                ratioweight = localawardsectiongtlt[rationame]["weight"]
+                for rationame in binser:
+                    respointrunner = 0
+                    pointsper = localawardsectiongtlt[rationame]["points"]
+                    ratioweight = localawardsectiongtlt[rationame]["weight"]
 
-                for old_index in range(len(localratiodict[rationame]) - 1, 0, -1):
-                    oldyear = localratiodict[rationame][old_index]
-                    recenty = localratiodict[rationame][old_index - 1]
+                    for old_index in range(len(localratiodict[rationame]) - 1, 0, -1):
+                        oldyear = localratiodict[rationame][old_index]
+                        recenty = localratiodict[rationame][old_index - 1]
 
-                    keyforprint = [str(rationame), "Year", str(localratiodict[rationame].index(recenty)), "|", "Year",
-                                   str(localratiodict[rationame].index(oldyear))]
+                        keyforprint = [str(rationame), "Year", str(localratiodict[rationame].index(recenty)), "|", "Year",
+                                       str(localratiodict[rationame].index(oldyear))]
 
-                    if identifier == "increasing":
-                        if recenty > oldyear:
-                            respointrunner += pointsper
-                            inlinesymbol = ">"
+                        if identifier == "increasing":
+                            if recenty > oldyear:
+                                respointrunner += pointsper
+                                inlinesymbol = ">"
+                            else:
+                                inlinesymbol = "<"
                         else:
-                            inlinesymbol = "<"
-                    else:
-                        if recenty < oldyear:
-                            respointrunner += pointsper
-                            inlinesymbol = ">"
-                        else:
-                            inlinesymbol = "<"
+                            if recenty < oldyear:
+                                respointrunner += pointsper
+                                inlinesymbol = ">"
+                            else:
+                                inlinesymbol = "<"
 
-                    valueforprint = [str(recenty), inlinesymbol, str(oldyear), "POINTS", str(respointrunner),
-                                     "POINTVAL",
-                                     str(pointsper)]
+                        valueforprint = [str(recenty), inlinesymbol, str(oldyear), "POINTS", str(respointrunner),
+                                         "POINTVAL",
+                                         str(pointsper)]
 
-                    self.printerdictssc[str(keyforprint)] = valueforprint
+                        self.printerdictssc[str(keyforprint)] = valueforprint
 
-                respointrunner *= ratioweight
-                restotpoints = 1 * (len(localratiodict[rationame]) - 1)
-                restotpoints *= ratioweight
-                runningtotalgtlt[rationame] = {"Base Points": restotpoints, "Current Points": respointrunner}
+                    respointrunner *= ratioweight
+                    restotpoints = 1 * (len(localratiodict[rationame]) - 1)
+                    restotpoints *= ratioweight
+                    runningtotalgtlt[rationame] = {"Base Points": restotpoints, "Current Points": respointrunner}
 
-        increaseordecrease("increasing")
-        increaseordecrease("decreasing")
+            increaseordecrease("increasing")
+            increaseordecrease("decreasing")
 
-        self.setinstancepath(ticker, uniqueid)
-        self.setsheetnamesscgr(ticker)
-        self.gradeprinterssc(**self.printerdictssc)
-        self.sectionprinttoexcel()
-        return self.sectionendprinttoexcel(**runningtotalgtlt)
+            self.setinstancepath(ticker, uniqueid)
+            self.setsheetnamesscgr(ticker)
+            self.gradeprinterssc(**self.printerdictssc)
+            self.sectionprinttoexcel()
+            return self.sectionendprinttoexcel(**runningtotalgtlt)
+        except Exception as er:
+            print("Exception In GTLTRatioYoYSSC: ")
+            print(er)
 
 
 if __name__ == "__main__":

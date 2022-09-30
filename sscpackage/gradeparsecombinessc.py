@@ -26,65 +26,76 @@ class GradeParseCombineSSC:
         self.parsecombo = {}
 
     def gradeparsecombinessc(self, ticker, logfileidssc):
-        PAR = parsearssc.ParseAr()
-        PBAL = parsebalancessc.ParseBalance()
-        PINC = parseincomessc.ParseIncome()
-        PIND = parseindssc.ParseIndustry()
-        PSEC = parsesectorssc.ParseSector()
-        PVAL = parsevalssc.ParseVal()
+        try:
+            PAR = parsearssc.ParseAr()
+            PBAL = parsebalancessc.ParseBalance()
+            PINC = parseincomessc.ParseIncome()
+            PIND = parseindssc.ParseIndustry()
+            PSEC = parsesectorssc.ParseSector()
+            PVAL = parsevalssc.ParseVal()
 
-        ardat = PAR.fetch_parsear(logfileidssc)
-        baldat = PBAL.fetch_parsebalance(logfileidssc)
-        incdat = PINC.fetch_parseincome(logfileidssc)
-        inddat = PIND.fetch_parseindustry(logfileidssc)
-        secdat = PSEC.fetch_parsesector(logfileidssc)
-        valdat = PVAL.fetchparseval(logfileidssc)
+            ardat = PAR.fetch_parsear(logfileidssc)
+            baldat = PBAL.fetch_parsebalance(logfileidssc)
+            incdat = PINC.fetch_parseincome(logfileidssc)
+            inddat = PIND.fetch_parseindustry(logfileidssc)
+            secdat = PSEC.fetch_parsesector(logfileidssc)
+            valdat = PVAL.fetchparseval(logfileidssc)
 
-        del PAR, PBAL, PINC, PIND, PSEC, PVAL
+            del PAR, PBAL, PINC, PIND, PSEC, PVAL
 
-        corekeycombo = ticker + "__" + logfileidssc
+            corekeycombo = ticker + "__" + logfileidssc
 
-        def incbalqualssc(datadictssc):
-            returndictqualssc = {}
-            for key in datadictssc.keys():
-                templist = []
-                for val in range(len(datadictssc[key])):
-                    if datadictssc[key][val] != 0:
-                        continue
-                    else:
-                        templist.append(val)
-                        continue
-                if templist:
-                    returndictqualssc[key] = templist
-                else:
-                    continue
+            try:
+                def incbalqualssc(datadictssc):
+                    returndictqualssc = {}
+                    for key in datadictssc.keys():
+                        templist = []
+                        for val in range(len(datadictssc[key])):
+                            if datadictssc[key][val] != 0:
+                                continue
+                            else:
+                                templist.append(val)
+                                continue
+                        if templist:
+                            returndictqualssc[key] = templist
+                        else:
+                            continue
 
-            return returndictqualssc
+                    return returndictqualssc
+            except Exception as er:
+                print("Exception in ParseCombineSSC: incbalqualssc")
+                print(er)
 
-        baldatqual = incbalqualssc(baldat)
-        incdatqual = incbalqualssc(incdat)
+            baldatqual = incbalqualssc(baldat)
+            incdatqual = incbalqualssc(incdat)
 
-        def ratiolisterssc(datadictssc):
-            returndictratiossc = {}
-            for key in datadictssc.keys():
-                returndictratiossc[key] = [datadictssc[key][x] / datadictssc["Total Revenue"][x] for x in
-                                           list(range(len(datadictssc["Total Revenue"]))) if not
-                                           isinstance(datadictssc[key][x], str)]
-            return returndictratiossc
+            try:
+                def ratiolisterssc(datadictssc):
+                    returndictratiossc = {}
+                    for key in datadictssc.keys():
+                        returndictratiossc[key] = [datadictssc[key][x] / datadictssc["Total Revenue"][x] for x in
+                                                   list(range(len(datadictssc["Total Revenue"]))) if not
+                                                   isinstance(datadictssc[key][x], str)]
+                    return returndictratiossc
+            except Exception as er:
+                print("Exception in GradeParseCombineSSC: function ratiolisterssc")
+                print(er)
 
-        incasratiodict = ratiolisterssc(incdat)
+            incasratiodict = ratiolisterssc(incdat)
 
-        PRC = parseratiocreatessc.ParseRatioCreateSSC()
-        finratiodict = PRC.parseratiocreatesssc(incomedictssc=incdat, balancedictssc=baldat, incdatqual=incdatqual,
-                                                baldatqual=baldatqual)
+            PRC = parseratiocreatessc.ParseRatioCreateSSC()
+            finratiodict = PRC.parseratiocreatesssc(incomedictssc=incdat, balancedictssc=baldat, incdatqual=incdatqual,
+                                                    baldatqual=baldatqual)
 
-        self.parsecombo[corekeycombo] = {"AR": ardat, "baldat": baldat, "incdat": incdat,
-                                         "Industry": inddat, "Sector": secdat, "valdat": valdat,
-                                         "baldatqual": baldatqual, "incdatqual": incdatqual,
-                                         "incasratiodict": incasratiodict, "finratiodict": finratiodict}
+            self.parsecombo[corekeycombo] = {"AR": ardat, "baldat": baldat, "incdat": incdat,
+                                             "Industry": inddat, "Sector": secdat, "valdat": valdat,
+                                             "baldatqual": baldatqual, "incdatqual": incdatqual,
+                                             "incasratiodict": incasratiodict, "finratiodict": finratiodict}
 
-        return self.parsecombo
-
+            return self.parsecombo
+        except Exception as er:
+            print("Exception in GradeParseCombineSSC: outer scope")
+            print(er)
     def parsec_json(self):
         return json.dumps(self.parsecombo, sort_keys=False)
 
