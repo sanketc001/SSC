@@ -30,8 +30,8 @@ class ParseSector:
         DP_SSCPSEC = dictpullssc.DictPullSSC()
         secdata = DP_SSCPSEC.dictpullssc(ps_rawdata, "Sector")
 
-        FST_SSC = fetchshelfssc_mod.FetchShelfSSC(ticker=ticker, fetchstoreshelf=self.setpathssc_parsesscsec)
-        FST_SSC.fetchstore(key=key, idssc=idssc, fetch_data=secdata, timestampidfs=timestampidpsec)
+        FST_SSC = fetchshelfssc_mod.FetchShelfSSC(fetchstoreshelf=self.setpathssc_parsesscsec)
+        FST_SSC.fetchstore(ticker=ticker, key=key, idssc=idssc, fetch_data=secdata, timestampidfs=timestampidpsec)
         del FST_SSC
         del DP_SSCPSEC
 

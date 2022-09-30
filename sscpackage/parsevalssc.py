@@ -46,8 +46,8 @@ class ParseVal:
         for indexno in range(len(keylist)):
             keyedlistcollect[keylist[indexno]] = ziplistcollect[indexno]
 
-        FST_SSC = fetchshelfssc_mod.FetchShelfSSC(ticker=ticker, fetchstoreshelf=self.setpathssc_parsesscval)
-        FST_SSC.fetchstore(key=name_key, idssc=idssc, fetch_data=keyedlistcollect, timestampidfs=timestampidpval)
+        FST_SSC = fetchshelfssc_mod.FetchShelfSSC(fetchstoreshelf=self.setpathssc_parsesscval)
+        FST_SSC.fetchstore(ticker=ticker, key=name_key, idssc=idssc, fetch_data=keyedlistcollect, timestampidfs=timestampidpval)
         del FST_SSC
 
     def fetchparseval(self, timestampidpval):

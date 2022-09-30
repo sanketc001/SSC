@@ -59,12 +59,13 @@ class FetchSSC:
     def pull_fetchfaillist():
         return FetchSSC.ticker_fail
 
-    def __init__(self, ticker, *args, **kwargs):
-        self.ticker = ticker
+    def __init__(self, *args, **kwargs):
+        pass
 
     try:
-        async def rapid_fetch(self, *args, **kwargs):
+        async def rapid_fetch(self, ticker, *args, **kwargs):
             try:
+                self.ticker = ticker
                 print(self.ticker)
                 timestampidrf = myownrandom(15)
                 FetchRF = sscpackage.fetchurlssc.FetchUrlSSC(self.ticker)
@@ -74,18 +75,16 @@ class FetchSSC:
                 print("Inner Exception: Block 1: Fetchssc")
 
             for key in self.url_bank.keys():
-                print(key)
                 url = self.url_bank[key]["url"]
                 qs = self.url_bank[key]["qs"]
                 head = self.url_bank[key]["headers"]
                 response = requests.request("GET", url=url, headers=head, params=qs)  # Request data
                 self.response = response
                 if response.status_code == 200:  # If received 'all good' response from API for first request, continue
-                    print(f'{self.ticker} - fetch success')
                     textcast_ssc = response.text
                     self.fetch_data = dict(json.loads(textcast_ssc))
-                    FSSC = sscpackage.fetchshelfssc_mod.FetchShelfSSC(ticker=self.ticker)
-                    FSSC.fetchstore(key, id(self), self.fetch_data, timestampidfs=timestampidrf)
+                    FSSC = sscpackage.fetchshelfssc_mod.FetchShelfSSC()
+                    FSSC.fetchstore(ticker=ticker, key=key, idssc=id(self), fetch_data=self.fetch_data, timestampidfs=timestampidrf)
                     self.statusfetch = True
                 elif response.status_code == 401:
                     if key == list(self.url_bank.keys())[-1:]:

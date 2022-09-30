@@ -31,8 +31,8 @@ class ParseAr:
             DPssc = dictpullssc.DictPullSSC()
             ardict = DPssc.dictpullssc(par_rawdata, "history")
 
-            FST_SSC = fetchshelfssc_mod.FetchShelfSSC(ticker=ticker, fetchstoreshelf=self.setpathssc_parsesscar)
-            FST_SSC.fetchstore(key=key, idssc=idssc, fetch_data=ardict, timestampidfs=timestampidar)
+            FST_SSC = fetchshelfssc_mod.FetchShelfSSC(fetchstoreshelf=self.setpathssc_parsesscar)
+            FST_SSC.fetchstore(ticker=ticker, key=key, idssc=idssc, fetch_data=ardict, timestampidfs=timestampidar)
             del FST_SSC
         except Exception as Er:
             print("Exception in parsearssc.ParseAr.parsear")

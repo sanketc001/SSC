@@ -64,11 +64,11 @@ class FetchStarterSSC:
                 ticker_runlist.append(tickerlistvar_fetchssc[:5])
                 FetchStarterSSC.update_runlist(ticker_runlist)
                 await asyncio.gather(
-                    FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch(),
-                    FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch(),
-                    FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch(),
-                    FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch(),
-                    FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch(),
+                    FetchSSC().rapid_fetch(tickerlistvar_fetchssc.pop(0)),
+                    FetchSSC().rapid_fetch(tickerlistvar_fetchssc.pop(0)),
+                    FetchSSC().rapid_fetch(tickerlistvar_fetchssc.pop(0)),
+                    FetchSSC().rapid_fetch(tickerlistvar_fetchssc.pop(0)),
+                    FetchSSC().rapid_fetch(tickerlistvar_fetchssc.pop(0)),
                 )
             else:
                 if FetchStarterSSC.fetch_cancel:
@@ -76,7 +76,7 @@ class FetchStarterSSC:
                     break
                 ticker_runlist = tickerlistvar_fetchssc[0]
                 FetchStarterSSC.update_runlist(ticker_runlist)
-                await asyncio.gather(FetchSSC(tickerlistvar_fetchssc.pop(0)).rapid_fetch())
+                await asyncio.gather(FetchSSC().rapid_fetch(tickerlistvar_fetchssc.pop(0)))
             await asyncio.sleep(1)
 
 

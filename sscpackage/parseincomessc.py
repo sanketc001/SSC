@@ -57,8 +57,8 @@ class ParseIncome:
             for x in range(len(isheets_keys)):
                 isheets_dict[isheets_keys[x]] = isheets_zip[x]
 
-            FST_SSC = fetchshelfssc_mod.FetchShelfSSC(ticker=ticker, fetchstoreshelf=self.setpathssc_parsessc)
-            FST_SSC.fetchstore(key=key, idssc=idssc, fetch_data=isheets_dict, timestampidfs=timestampidpi)
+            FST_SSC = fetchshelfssc_mod.FetchShelfSSC(fetchstoreshelf=self.setpathssc_parsessc)
+            FST_SSC.fetchstore(ticker=ticker, key=key, idssc=idssc, fetch_data=isheets_dict, timestampidfs=timestampidpi)
             del FST_SSC
 
         except Exception as Er:

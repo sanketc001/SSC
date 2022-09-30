@@ -31,8 +31,8 @@ class ParseIndustry:
         DP_SSC = dictpullssc.DictPullSSC()
         secdata = DP_SSC.dictpullssc(ind_rawdata, "Industry")
 
-        FST_SSC = fetchshelfssc_mod.FetchShelfSSC(ticker=ticker, fetchstoreshelf=self.setpathssc_parsesscind)
-        FST_SSC.fetchstore(key=key, idssc=idssc, fetch_data=secdata, timestampidfs=timestampidpind)
+        FST_SSC = fetchshelfssc_mod.FetchShelfSSC(fetchstoreshelf=self.setpathssc_parsesscind)
+        FST_SSC.fetchstore(ticker=ticker, key=key, idssc=idssc, fetch_data=secdata, timestampidfs=timestampidpind)
         del FST_SSC
         del DP_SSC
 

@@ -1,44 +1,41 @@
+import shelve
+
 class FetchLogSSC:
-    _fetchlogpath = r'C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\fetchlog.txt'
+    _fetchlogpath = r'C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\fetchlog'
     @staticmethod
     def ssc_fetchlogclear():
-        with open(FetchLogSSC._fetchlogpath, 'w') as fl2:
-            fl2.truncate()
-            fl2.close()
+        with shelve.open(FetchLogSSC._fetchlogpath) as flc:
+            if flc.keys():
+                for key in flc:
+                    del flc[key]
+            if flc.keys():
+                return 0
+            else:
+                return 1
 
     def __init__(self):
+        self.logname = "fetchlog"
         pass
 
     def ssc_fetchlogwrite(self, fetchstorename):
-        with open(FetchLogSSC._fetchlogpath, 'a') as fl:
-            fl.seek(0, 2)
-            fl.write(fetchstorename + ", ")
-            fl.close()
+        #Put in Store
+        with shelve.open(FetchLogSSC._fetchlogpath) as shelvelog:
+            if shelvelog.keys():
+                if self.logname in shelvelog.keys():
+                    temp_log = list(shelvelog[self.logname])
+                    temp_log.append(fetchstorename)
+                    shelvelog[self.logname] = temp_log
+            else:
+                temp_log = []
+                temp_log.append(fetchstorename)
+                shelvelog[self.logname] = [x for x in temp_log]
+
 
     def ssc_logfetch(self):
-        logfetch_retval = []
-        with open(FetchLogSSC._fetchlogpath, 'r') as fl3:
-            fl3.seek(0, 0)
-            data = fl3.read().split(", ")
-            for logentry in data:
-                logfetch_retval.append(logentry)
-            fl3.close()
-        return logfetch_retval
-
-    def ssc_fetchloguniqueid(self):
-        logfetchunique_retval = []
-        logfetchuniquename_retval = {}
-        with open(FetchLogSSC._fetchlogpath, 'r') as fl4:
-            fl4.seek(0, 0)
-            data = fl4.read().split(", ")
-            for val in data:
-                if len(val) == 0:
-                    data.pop(data.index(val))
+        with shelve.open(FetchLogSSC._fetchlogpath) as fl3:
+            if fl3.keys():
+                if fl3[self.logname]:
+                    return fl3[self.logname]
                 else:
-                    continue
-            for line in data:
-                if line.split("__")[3] not in logfetchunique_retval:
-                    logfetchunique_retval.append(line.split("__")[3])
-                    logfetchuniquename_retval[line.split("__")[3]] = line.split("__")[0]
-            fl4.close()
-        return logfetchuniquename_retval
+                    return 0
+

@@ -46,8 +46,8 @@ class ParseBalance:
             for x in range(len(bsheets_keys)):
                 bsheets_dict[bsheets_keys[x]] = bsheets_zip[x]
 
-            FST_SSC_PB = fetchshelfssc_mod.FetchShelfSSC(ticker=ticker, fetchstoreshelf=self.setpathssc_parsesscpb)
-            FST_SSC_PB.fetchstore(key=key, idssc=idssc, fetch_data=bsheets_dict, timestampidfs=timestampidpb)
+            FST_SSC_PB = fetchshelfssc_mod.FetchShelfSSC(fetchstoreshelf=self.setpathssc_parsesscpb)
+            FST_SSC_PB.fetchstore(ticker=ticker, key=key, idssc=idssc, fetch_data=bsheets_dict, timestampidfs=timestampidpb)
             del FST_SSC_PB
 
         except Exception as Er:

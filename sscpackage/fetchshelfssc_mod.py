@@ -15,15 +15,15 @@ class FetchShelfSSC:
     """
     setpath_fetchshelfssc = r'C:\SSC\SimpleStockChecker_REV1\sscpackage\storage'
 
-    def __init__(self, ticker,
+    def __init__(self,
                  fetchstoreshelf=setpath_fetchshelfssc + r"\fetchfiledb"):
-        self.ticker = ticker
         self.fetchstoreshelf = fetchstoreshelf
         self.fetchstorename = ""
 
 
-    def fetchstore(self, key="url_income", idssc="DEFAULTID", fetch_data="DEFAULTDATA", timestampidfs="DEFTSID",
+    def fetchstore(self, ticker, key="url_income", idssc="DEFAULTID", fetch_data="DEFAULTDATA", timestampidfs="DEFTSID",
                    *args, **kwargs):
+        self.ticker = ticker
         try:
             filedb = shelve.open(self.fetchstoreshelf)
             fetchstorename = str(self.ticker) + "__" + str(key) + "__" + str(idssc) + "__" + str(timestampidfs)
