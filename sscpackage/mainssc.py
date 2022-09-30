@@ -4,7 +4,6 @@ Main control program - SSC
 """
 import fetchlogssc
 import guistarterssc
-import parsessc
 
 
 def gui_ssc_instantiate():

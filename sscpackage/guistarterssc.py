@@ -329,8 +329,11 @@ class GuiStarterSSC(object):
                             print("Just Before Grade Start")
                             # TODO: unsuported operand type(s) for /: 'float' and 'tuple' - check into
                             GS = gradestarterssc.GradeStartSSC()
+                            print("After Instantiation of GS")
                             schedule.every(1).seconds.do(lambda: text_update(header=GS.pull_gradeheader(), msg=GS.get_runitem()))
+                            print("After Grade schedule lambda")
                             schedule.run_pending()
+                            print("After schedule.run_pending")
                             GS.gradestartssc()
                             schedule.clear()
 

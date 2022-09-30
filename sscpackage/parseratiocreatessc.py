@@ -8,7 +8,8 @@ class ParseRatioCreateSSC:
         try:
             dictratiossclamb = {
                 "Current Ratio": lambda totalcurrentassetsx, totalcurrentliabilitiesy:
-                totalcurrentassetsx / totalcurrentliabilitiesy,
+                totalcurrentassetsx / totalcurrentliabilitiesy
+                if totalcurrentassetsx > 0 and totalcurrentliabilitiesy > 0 else 0,
                 "Acid Test Ratio": lambda totalcurrentassetsx, inventoryy, totalcurrentliabilitiesz:
                 (totalcurrentassetsx - inventoryy) / totalcurrentliabilitiesz,
                 "Cash Ratio": lambda cashx, totalcurrentliabilitiesy: cashx / totalcurrentliabilitiesy,

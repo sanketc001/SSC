@@ -10,11 +10,14 @@ class StoreSSC:
     """
 
     def __init__(self, host="localhost", user="DB_USER", password="DB_PASS", *args, **kwargs):
-        self.host = host
-        self.user = user
-        self.password = password
+        try:
+            self.host = host
+            self.user = user
+            self.password = password
+        except Exception as er:
+            print("Exception in StoreSSC: constructor ")
+            print(er)
 
-    """Need to finish"""
 
     def create_table(self, tablename="test", *args, **kwargs):
 
@@ -47,11 +50,12 @@ class StoreSSC:
         *Note: Fails if no server 'localhost' exists.
         :return:
         """
+        print("In db_chksetup")
         try:
             with mysql.connector.connect(
                     host=self.host,
                     user=str(os.getenv(self.user)),
-                    password=str(os.getenv(self.password)),
+                    password=str(os.getenv(self.password))
             ) as connection:
 
                 db_check = """
@@ -79,6 +83,7 @@ class StoreSSC:
                 with connection.cursor(buffered=True) as cursor:
                     cursor.execute(dbtbl_create, multi=True)
                     connection.commit()
+                    cursor.close()
 
         except mysql.connector.Error as e:
             print("Error in ssc_st - TRY1: " + str(e))
