@@ -6,6 +6,13 @@ import gradesheetprintssc
 
 
 class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
+    """
+    This class grades the Income Statement and Balance Sheet Statement Data, awarding points when the oldest+1 year is
+    greater than the oldest year.
+
+    The point increment awarded is determined by the passed in 'awardsystemssc' that can be altered based on user choice
+    and/or altered to reflect the ideal company outlook based on Sector/Industry.
+    """
     def __init__(self):
         super().__init__()
         self.sectionname = 'GTLT'
@@ -16,6 +23,14 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
         self.gradestore = {}
     try:
         def gtltmetricsgradessc(self, ticker, parsecombossc, uniqueidssc, awardsystemssc):
+            """
+
+            :param ticker: Ticker symbol passed in from 'gradecollectionssc'
+            :param parsecombossc: A dictionary of financial information, from 'gradeparsecombinessc'
+            :param uniqueidssc: A unique id generated and paired with each ticker symbol and stored in shelve and log
+            :param awardsystemssc: A default awardsystem, can be changed
+            :return:
+            """
             runningtotalgtlt = {}
             localawardsectiongtlt = awardsystemssc['GTLT']
             localincdatssc = parsecombossc['incdat']
@@ -26,6 +41,7 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
             runindustryssc = parsecombossc["Industry"]
             self.printprimer(self.sectionname, ticker, uniqueidssc, runsectorssc, runindustryssc)
 
+            # This is 'pre-screening' the data sets to ensure that variables/data for a certain year are available first
             try:
                 def isenoughdatassc(nameval):
                     if nameval in localavoidmetricgtltinc.keys():
@@ -52,8 +68,18 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
                 print("Exception in 'isenoughdatassc' function: ")
                 print(er)
 
+            # Initiates the main grading loop
             try:
                 def increasinggtltssc(nameval, count, statement):
+                    """
+                    The total points awarded for this section should be 39 with default awardsystem in place
+
+                    :param nameval:
+                    :param count:
+                    :param statement:
+                    :return:
+                    """
+                    # Pulls points to award as 'pointsper' and weight as 'weightind'
                     pointsper = int(localawardsectiongtlt[nameval]["points"])
                     weightind = int(localawardsectiongtlt[nameval]["weight"])
                     respointrunner = 0
@@ -65,6 +91,7 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
                             keyforprint = [nameval, "Year", str(sourcevalsinc.index(newyear)), "|", "Year",
                                            str(sourcevalsinc.index(oldyear))]
 
+                            # With default 'awardsystem' all points awarded are 1
                             if newyear > oldyear:
                                 respointrunner += pointsper
                                 inlinesymbol = ">"
@@ -76,6 +103,7 @@ class GTLTYoYSSC(gradesheetprintssc.GradeSheetPrintSSC):
 
                             self.printerdictssc[str(keyforprint)] = valueforprint
 
+                        # Optional 'weight' can be attributed to alter overall weight/score of individual metric
                         respointrunner *= weightind
                         restotpoints = 1 * (count - 1)
                         restotpoints *= weightind

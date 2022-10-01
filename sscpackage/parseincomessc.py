@@ -13,6 +13,10 @@ class ParseIncome:
     def __init__(self):
         self.setpathssc_parsessc = r"C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\parseincomeshelf"
 
+    def parseincome_shelvkeys(self):
+        with shelve.open(self.setpathssc_parsessc) as svinc:
+            if svinc.keys():
+                return [x for x in svinc.keys()]
     def parse_incomepurge(self):
         try:
             with shelve.open(self.setpathssc_parsessc) as purge_inc:

@@ -11,6 +11,11 @@ class ParseBalance:
     def __init__(self):
         self.setpathssc_parsesscpb = r"C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\parsebalanceshelf"
 
+    def parse_shelvepullkeys(self):
+        with shelve.open(self.setpathssc_parsesscpb) as svpk:
+            if svpk.keys():
+                return [x for x in svpk.keys()]
+
     def parse_balancepurge(self):
         with shelve.open(self.setpathssc_parsesscpb) as purge_bal:
             if purge_bal.keys():

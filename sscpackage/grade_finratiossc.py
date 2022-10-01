@@ -3,6 +3,14 @@ import gradesheetprintssc
 
 class GradeFinRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
     def grade_finratiossc(self, ticker, parsecombo, uniqueid, awardsystem):
+        """
+        Total Point Max = 36
+        :param ticker:
+        :param parsecombo:
+        :param uniqueid:
+        :param awardsystem:
+        :return:
+        """
 
         # Current  Ratio - Higher Better
         #   1.5-3.0 + 1
@@ -27,7 +35,6 @@ class GradeFinRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
         #   Value under 1 could indicate undervalued stock
 
         try:
-            finlogname = ticker + "__" + uniqueid
             localvardict = parsecombo['finratiodict']
             runningtotalbin = {}
 
@@ -57,6 +64,7 @@ class GradeFinRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
 
             printerdictssc = {}
 
+            # Main looping construct for grade_finratio, loops by metric
             for rationame in localvardict.keys():
                 finratpoints = 0
 
@@ -67,7 +75,7 @@ class GradeFinRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
                 for yearindex in reversed(range(len(localvardict[rationame]))):
                     localpoints = fingradedict[rationame](localvardict[rationame][yearindex])
                     finratpoints += localpoints
-                    fintotpoints = pg * len(localvardict[rationame])
+                    fintotpoints = pg * len(localvardict[rationame])  # Sets the total
 
                     keystatement = [rationame, "|", yearindex, "|", localvardict[rationame][yearindex]]
                     valstatement = ["POINTS AWARDED", localpoints, *statementdict[rationame]]

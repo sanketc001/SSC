@@ -15,6 +15,15 @@ class GTLTYoYRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
         self.printerdictssc = {}
 
     def grade_gtltyoyratiossc(self, ticker, parsecombo, uniqueid, awardsystem):
+        """
+        16 * 3 = 48
+
+        :param ticker:
+        :param parsecombo:
+        :param uniqueid:
+        :param awardsystem:
+        :return:
+        """
         try:
             runningtotalgtlt = {}
             localawardsectiongtlt = awardsystem['INCASRATIO']

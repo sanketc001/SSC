@@ -7,6 +7,14 @@ class GradeValRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
         self.gradeprinterdict = {}
 
     def grade_valratiossc(self, ticker, parsecombo, uniqueid, awardsystem):
+        """
+        27 Total Base Points - 9 metrics at 1 for 3 year comparisons
+        :param ticker:
+        :param parsecombo:
+        :param uniqueid:
+        :param awardsystem:
+        :return:
+        """
         try:
             localvalratiodict = parsecombo['valdat']
             valratiopointbook = {}
@@ -21,6 +29,7 @@ class GradeValRatioSSC(gradesheetprintssc.GradeSheetPrintSSC):
                     recenty = localvalratiodict[rationame][old_index - 1]
                     listforkey = [rationame, "YEAR", localvalratiodict[rationame].index(recenty),
                                   "|", localvalratiodict[rationame].index(oldery)]
+
                     if recenty > oldery:
                         respointrunner += pointsper
                         inlineGVALvar = ">"

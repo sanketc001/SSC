@@ -4,24 +4,38 @@ Create 'hand-made' list of ratios from income statements and balance sheet eleme
 
 
 class ParseRatioCreateSSC:
-    def parseratiocreatesssc(self, incomedictssc, balancedictssc, incdatqual, baldatqual):
+    def parseratiocreatesssc(self, incomedictssc, balancedictssc):
+        """
+
+        :param incomedictssc: intended for data from ParseIncSSC
+        :param balancedictssc: intended for data from ParseBalSSC
+        :param incdatqual: may not be needed
+        :param baldatqual: may not be needed
+        :return:
+        """
+
         try:
             dictratiossclamb = {
                 "Current Ratio": lambda totalcurrentassetsx, totalcurrentliabilitiesy:
                 totalcurrentassetsx / totalcurrentliabilitiesy
-                if totalcurrentassetsx > 0 and totalcurrentliabilitiesy > 0 else 0,
+                if totalcurrentassetsx != 0 and totalcurrentliabilitiesy != 0 else 0,
                 "Acid Test Ratio": lambda totalcurrentassetsx, inventoryy, totalcurrentliabilitiesz:
-                (totalcurrentassetsx - inventoryy) / totalcurrentliabilitiesz,
-                "Cash Ratio": lambda cashx, totalcurrentliabilitiesy: cashx / totalcurrentliabilitiesy,
-                "Debt Ratio": lambda totalliabilitiesx, totalassetsy: totalliabilitiesx / totalassetsy,
+                (totalcurrentassetsx - inventoryy) / totalcurrentliabilitiesz
+                if totalcurrentassetsx != 0 and inventoryy != 0 and totalcurrentliabilitiesz != 0 else 0,
+                "Cash Ratio": lambda cashx, totalcurrentliabilitiesy: cashx / totalcurrentliabilitiesy
+                if cashx != 0 and totalcurrentliabilitiesy != 0 else 0,
+                "Debt Ratio": lambda totalliabilitiesx, totalassetsy: totalliabilitiesx / totalassetsy
+                if totalliabilitiesx != 0 and totalassetsy != 0 else 0,
                 "Debt To Equity Ratio": lambda totalstockholderequity, totalliabilities:
-                totalliabilities / totalstockholderequity,
-                "Operating Cash Flow": lambda operatingincome, interestexpense: operatingincome / interestexpense,
-                "Interest Coverage Ratio": lambda netincome, totalassets: netincome / totalassets,
+                totalliabilities / totalstockholderequity if totalliabilities != 0 and totalstockholderequity != 0 else 0,
+                "Operating Cash Flow": lambda operatingincome, interestexpense: operatingincome / interestexpense if
+                operatingincome != 0 and interestexpense != 0 else 0,
+                "Interest Coverage Ratio": lambda netincome, totalassets: netincome / totalassets if netincome != 0 and
+                totalassets != 0 else 0,
                 "Return On Assets Ratio": lambda totalstockholderequity, netincome:
-                netincome / totalstockholderequity,
+                netincome / totalstockholderequity if netincome != 0 and totalstockholderequity != 0 else 0,
                 "Book Value Per Share": lambda treasurystock, otherstockholderquity, totalstockholderquity, commonstock:
-                (totalstockholderquity - treasurystock - otherstockholderquity) / commonstock,
+                (totalstockholderquity - treasurystock - otherstockholderquity) / commonstock if commonstock != 0 else 0,
             }
 
             dictratiosscverbal = {
@@ -41,31 +55,29 @@ class ParseRatioCreateSSC:
             interimratiodictssc = {}
 
             varnamepulltemplist = {}
+
+            # Loop through ratios
             for key in dictratiossclamb.keys():
                 calctemplistforzipper = []
+
+                # Loop through each required variable name for ratio
                 for varname in dictratiosscverbal[key]:
+
+                    # Logic test to see if variable name present in income statements or balance sheets
                     if varname in incomedictssc.keys():
+
+                        # Create copy of variable value from income dictionary
                         datatemplistssc = incomedictssc[varname]
-                        if varname in incdatqual.keys():
-                            qualtemplistssc = incdatqual[varname]
-                            varnamepulltemplist[str(varname)] = [datatemplistssc, qualtemplistssc]
-                            calctemplistforzipper.append(varnamepulltemplist[varname])
-                            continue
-                        else:
-                            varnamepulltemplist[str(varname)] = [datatemplistssc]
-                            calctemplistforzipper.append(datatemplistssc)
-                            continue
+                        varnamepulltemplist[str(varname)] = [datatemplistssc]
+                        calctemplistforzipper.append(datatemplistssc)
+                        continue
+
                     elif varname in balancedictssc.keys():
                         datatempballistssc = balancedictssc[varname]
-                        if varname in baldatqual.keys():
-                            qualbaltemplistssc = baldatqual[varname]
-                            calctemplistforzipper.append([datatempballistssc, qualbaltemplistssc])
-                            varnamepulltemplist[str(varname)] = [datatempballistssc, qualbaltemplistssc]
-                            continue
-                        else:
-                            varnamepulltemplist[str(varname)] = [datatempballistssc]
-                            calctemplistforzipper.append(list(datatempballistssc))
-                            continue
+                        varnamepulltemplist[str(varname)] = [datatempballistssc]
+                        calctemplistforzipper.append(list(datatempballistssc))
+                        continue
+
                 interimratiodictssc[key] = calctemplistforzipper
 
             for ratio in dictratiossclamb.keys():

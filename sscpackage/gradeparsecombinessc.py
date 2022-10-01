@@ -84,8 +84,7 @@ class GradeParseCombineSSC:
             incasratiodict = ratiolisterssc(incdat)
 
             PRC = parseratiocreatessc.ParseRatioCreateSSC()
-            finratiodict = PRC.parseratiocreatesssc(incomedictssc=incdat, balancedictssc=baldat, incdatqual=incdatqual,
-                                                    baldatqual=baldatqual)
+            finratiodict = PRC.parseratiocreatesssc(incomedictssc=incdat, balancedictssc=baldat)
 
             self.parsecombo[corekeycombo] = {"AR": ardat, "baldat": baldat, "incdat": incdat,
                                              "Industry": inddat, "Sector": secdat, "valdat": valdat,
