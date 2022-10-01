@@ -1,7 +1,7 @@
 import shelve
 
 class FetchLogSSC:
-    _fetchlogpath = r'C:\SSC\SimpleStockChecker_REV1\sscpackage\storage\fetchlog'
+    _fetchlogpath = r'.\storage\fetchlog'
     @staticmethod
     def ssc_fetchlogclear():
         with shelve.open(FetchLogSSC._fetchlogpath) as flc:

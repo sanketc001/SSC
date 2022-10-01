@@ -23,7 +23,7 @@ import fetchstarterssc as sscf
 import gradestarterssc
 import parsessc
 # sscpackage imports
-from sscpackage import storessc as sst
+import storessc as sst
 
 # TODO: check into 'globals' use on guistarterssc
 global freq

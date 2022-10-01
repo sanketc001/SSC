@@ -12,8 +12,8 @@ import time
 
 import requests
 
-import sscpackage.fetchshelfssc_mod
-import sscpackage.fetchurlssc
+import fetchshelfssc_mod
+import fetchurlssc
 
 
 def theshuffler(basket, countage):
